@@ -26,7 +26,7 @@ export function createDirectionsRequest (coordinateList) {
   return parameters
 }
 
-export function getLegsFromResponse(response) {
+export function getLegsFromResponse (response) {
   return response?.routes.at(0)?.legs
 }
 

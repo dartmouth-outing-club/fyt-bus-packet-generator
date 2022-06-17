@@ -1,12 +1,15 @@
 {
-  "name": "fyt-bus-packet-creator",
+  "name": "fyt-bus-packet-generator",
   "version": "1.0.0",
   "description": "",
   "main": "src/main.js",
   "scripts": {
-    "test": "node --test",
-    "format": "npx standard --fix"
+    "test": "standard && node --test",
+    "format": "standard --fix"
   },
   "author": "Alexander Petros",
-  "type": "module"
+  "type": "module",
+  "devDependencies": {
+    "standard": "^17.0.0"
+  }
 }
