@@ -1,0 +1,12 @@
+{
+  "name": "fyt-bus-packet-creator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/main.js",
+  "scripts": {
+    "test": "node --test",
+    "format": "npx standard --fix"
+  },
+  "author": "Alexander Petros",
+  "type": "module"
+}
