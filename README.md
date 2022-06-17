@@ -1,4 +1,12 @@
 # Trips Busing Packet Creator
+A simple webapp to generate the the bus packets for each trip.
+
+A example of the kind of packet that this generates can be found in the `samples` directory.
+
+## Development
+* `npm test` - Run the linter and the test suite
+* `npm run format` Run the linter in `--fix` mode to format the codebase
+
 ## Packet Parameters
 The “busing packet” is a human-readable document containing all the information that the bus driver will require to succesfully complete their trip. A separate packet is required for each trip "direction" i.e. picking up, dropping off, and taking from the lodge require three distinct packets.
 
