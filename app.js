@@ -1,7 +1,7 @@
 import http from 'http'
 import fs from 'fs/promises'
-import { createLeg } from './html-elements.js'
-import { getLegsFromResponse } from './directions-api.js'
+import { createLeg } from './server/html-elements.js'
+import { getLegsFromResponse } from './server/directions-api.js'
 
 const port = process.env.PORT || 3000
 const host = 'localhost'

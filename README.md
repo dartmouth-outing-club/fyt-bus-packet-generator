@@ -7,6 +7,7 @@ A example of the kind of packet that this generates can be found in the `samples
 
 ## Development
 * `npm start` - Run the webapp
+* `npm run dev` - Run the webapp in dev mode, with hot-reloading
 * `npm test` - Run the linter and the test suite
 * `npm run format` Run the linter in `--fix` mode to format the codebase
 

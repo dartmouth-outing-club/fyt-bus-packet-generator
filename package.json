@@ -2,9 +2,10 @@
   "name": "fyt-bus-packet-generator",
   "version": "1.0.0",
   "description": "",
-  "main": "src/main.js",
+  "main": "app.js",
   "scripts": {
-    "start": "node src/main.js",
+    "start": "node app.js",
+    "dev": "npx nodemon app.js",
     "test": "standard && node --test",
     "format": "standard --fix"
   },
