@@ -56,5 +56,5 @@ test('test getLegsFromResponse', async () => {
   const API_RESPONSE_FILE = './samples/sample-directions-api-response.json'
   const file = await fs.readFile(API_RESPONSE_FILE, { encoding: 'utf8' })
   const legs = getLegsFromResponse(JSON.parse(file))
-  assert(legs[0].end_address.includes('Ravine Lodge Trailhead'))
+  assert(legs[1].startAddress.includes('Ravine Lodge Trailhead'))
 })
