@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/main.js",
   "scripts": {
-    "dev": "node src/main.js",
+    "start": "node src/main.js",
     "test": "standard && node --test",
     "format": "standard --fix"
   },
