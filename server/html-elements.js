@@ -1,3 +1,11 @@
+import { loadFile } from './utils.js'
+const EMPTY_PACKET_FP = './static/empty-packet.html'
+const emptyPacket = await loadFile(EMPTY_PACKET_FP)
+
+export function createFile (bodyHtml) {
+  return emptyPacket + bodyHtml
+}
+
 export function createTitle (title) {
   return `<h1>${title}</h1>`
 }
