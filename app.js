@@ -1,4 +1,5 @@
 import fs from 'fs'
+import path from 'path'
 import http from 'http'
 import { loadFile } from './server/utils.js'
 import { createFile, createLeg } from './server/html-elements.js'
@@ -23,8 +24,10 @@ const server = http.createServer(async (req, res) => {
     res.write(createFile(steps))
     res.end()
   } else if (requestUrl.pathname.startsWith('/static/')) {
-    // TODO Protect against directory traversal
-    const stream = fs.createReadStream('./' + requestUrl.pathname)
+    // This pathname is protected from directory traversal based on how URL parses pathnames
+    // See https://url.spec.whatwg.org/#path-state
+    const filepath = path.join(path.resolve(), '/', requestUrl.pathname)
+    const stream = fs.createReadStream(filepath)
     res.statusCode = 200
     stream.pipe(res)
   } else {
