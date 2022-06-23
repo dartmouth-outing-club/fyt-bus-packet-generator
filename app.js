@@ -1,4 +1,4 @@
-import fs from 'fs/promises'
+import fs from 'fs'
 import http from 'http'
 import { loadFile } from './server/utils.js'
 import { createFile, createLeg } from './server/html-elements.js'
@@ -15,23 +15,23 @@ const steps = getLegsFromResponse(response).flatMap(createLeg).join('\n')
 const server = http.createServer(async (req, res) => {
 
   const requestUrl = new URL(req.url, `http://${req.headers.host}`)
-  const routes = requestUrl.pathname.split('/')
   console.log(`Request receieved for ${requestUrl}`)
 
   if (requestUrl.pathname === '/'){
     res.setHeader('Content-Type', 'text/html; charset=UTF-8')
     res.statusCode = 200
     res.write(createFile(steps))
-  } else if (routes.at(1) === 'static') {
+    res.end()
+  } else if (requestUrl.pathname.startsWith('/static/')) {
     // TODO Protect against directory traversal
-    const file = await fs.readFile('./' + requestUrl.pathname)
+    const stream = fs.createReadStream('./' + requestUrl.pathname)
     res.statusCode = 200
-    res.write(file)
+    stream.pipe(res)
   } else {
     res.statusCode = 404
+    res.end()
   }
 
-  res.end()
 })
 
 server.listen(port, host, () => {
