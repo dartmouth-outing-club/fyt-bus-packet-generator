@@ -1,3 +1,4 @@
+import fs from 'fs/promises'
 import http from 'http'
 import { loadFile } from './server/utils.js'
 import { createFile, createLeg } from './server/html-elements.js'
@@ -17,15 +18,15 @@ const server = http.createServer(async (req, res) => {
   const routes = requestUrl.pathname.split('/')
   console.log(`Request receieved for ${requestUrl}`)
 
-  // TODO Protect against directory traversal
-  if (routes.at(1) === 'static') {
-    const file = await loadFile('./' + requestUrl.pathname)
-    res.statusCode = 200
-    res.write(file)
-  } else if (requestUrl.pathname === '/'){
+  if (requestUrl.pathname === '/'){
     res.setHeader('Content-Type', 'text/html; charset=UTF-8')
     res.statusCode = 200
     res.write(createFile(steps))
+  } else if (routes.at(1) === 'static') {
+    // TODO Protect against directory traversal
+    const file = await fs.readFile('./' + requestUrl.pathname)
+    res.statusCode = 200
+    res.write(file)
   } else {
     res.statusCode = 404
   }
