@@ -20,7 +20,7 @@ const server = http.createServer(async (req, res) => {
   if (requestUrl.pathname === '/') {
     res.setHeader('Content-Type', 'text/html; charset=UTF-8')
     res.statusCode = 200
-    res.write(createFile(steps))
+    res.write(createFile(steps, 'Trip to Hanover'))
     res.end()
   } else if (requestUrl.pathname.startsWith('/static/')) {
     // This pathname is protected from directory traversal based on how URL parses pathnames
