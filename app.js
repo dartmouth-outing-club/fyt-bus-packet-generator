@@ -14,11 +14,10 @@ const response = JSON.parse(await loadFile(API_RESPONSE_FILE))
 const steps = getLegsFromResponse(response).flatMap(createLeg).join('\n')
 
 const server = http.createServer(async (req, res) => {
-
   const requestUrl = new URL(req.url, `http://${req.headers.host}`)
   console.log(`Request receieved for ${requestUrl}`)
 
-  if (requestUrl.pathname === '/'){
+  if (requestUrl.pathname === '/') {
     res.setHeader('Content-Type', 'text/html; charset=UTF-8')
     res.statusCode = 200
     res.write(createFile(steps))
@@ -34,7 +33,6 @@ const server = http.createServer(async (req, res) => {
     res.statusCode = 404
     res.end()
   }
-
 })
 
 server.listen(port, host, () => {

@@ -6,18 +6,18 @@ export function createFile (bodyHtml) {
   return emptyPacket + bodyHtml
 }
 
-export function createTitle (title) {
+export function createPageTitle (title) {
   return `<h1>${title}</h1>`
 }
 
 export function createStep (step) {
+  const instructions = step.instructionsHtml || '(Missing instruction)'
   const distance = step.distanceText || '(Missing distance)'
-  return `<p>${step.instructionsHtml} - ${distance}</p>`
+  return `<p>${instructions} - ${distance}</p>`
 }
 
 export function createLeg (leg) {
-  const stepsText = leg.steps
-    .map(createStep)
-    .join('\n')
+  if (!leg.steps) throw new Error('Leg is missing steps')
+  const stepsText = leg.steps.map(createStep).join('\n')
   return `<h2>${leg.startAddress}</h2>\n` + stepsText
 }
