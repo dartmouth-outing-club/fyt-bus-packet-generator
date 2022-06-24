@@ -9,7 +9,7 @@ const port = process.env.PORT || 3000
 const host = 'localhost'
 
 // Temporary - load sample response
-const API_RESPONSE_FILE = './samples/sample-directions-api-response.json'
+const API_RESPONSE_FILE = './samples/grant-to-lodge-to-hanvoer.json'
 const response = JSON.parse(await loadFile(API_RESPONSE_FILE))
 const steps = getLegsFromResponse(response).flatMap(createLeg).join('\n')
 

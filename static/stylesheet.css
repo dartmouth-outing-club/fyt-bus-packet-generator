@@ -1,8 +1,26 @@
+body {
+    margin: 30px;
+}
+
 section {
-    padding: 5px;
+    margin-bottom: 20px;
 
     border-color: gray;
     border-radius: 3px;
     border-style: solid;
     border-width: 1px;
+}
+
+section li, section h2 {
+    padding: 10px;
+    padding: 10px;
+}
+
+ol {
+    padding: 0px;
+    list-style-type: none;
+}
+
+ol li {
+    border-top: 1px solid gray;
 }
