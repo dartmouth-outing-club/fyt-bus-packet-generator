@@ -14,22 +14,22 @@ const API_RESPONSE_FILE = './test-data/grant-to-lodge-to-hanvoer.json'
 const response = JSON.parse(await loadFile(API_RESPONSE_FILE))
 const steps = getLegsFromResponse(response).flatMap(createLeg).join('\n')
 
-function servePacket(res) {
-    res.setHeader('Content-Type', 'text/html; charset=UTF-8')
-    res.statusCode = 200
-    res.write(createFile(steps, 'Trip to Hanover'))
-    res.end()
+function servePacket (res) {
+  res.setHeader('Content-Type', 'text/html; charset=UTF-8')
+  res.statusCode = 200
+  res.write(createFile(steps, 'Trip to Hanover'))
+  res.end()
 }
 
 function serveStaticFile (res, filepath) {
-    const stream = fs.createReadStream(filepath)
-    res.statusCode = 200
-    stream.pipe(res)
+  const stream = fs.createReadStream(filepath)
+  res.statusCode = 200
+  stream.pipe(res)
 }
 
 function serveNotFound (res) {
-    res.statusCode = 404
-    res.end()
+  res.statusCode = 404
+  res.end()
 }
 
 const server = http.createServer(async (req, res) => {
@@ -43,9 +43,9 @@ const server = http.createServer(async (req, res) => {
     // Protects against directory traversal! See https://url.spec.whatwg.org/#path-state
     const filepath = path.join(path.resolve(), '/', requestUrl.pathname)
     serveStaticFile(res, filepath)
-  } else if (requestUrl.pathname.startsWith('/packet')){
+  } else if (requestUrl.pathname.startsWith('/packet')) {
     servePacket(res)
-  }else {
+  } else {
     serveNotFound(res)
   }
 })
