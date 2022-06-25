@@ -1,12 +1,15 @@
 import { loadFile } from './utils.js'
-const EMPTY_PACKET_FP = './static/empty-packet.html'
-const emptyPacket = await loadFile(EMPTY_PACKET_FP)
+
+const emptyPacket = await loadFile('./static/empty-packet.html')
+const packetStylets = await loadFile('./static/packet-stylesheet.css')
 
 export function createFile (bodyHtml, title) {
   return `${emptyPacket}
 <title>${title}</title>
-<h1>${title}</h1>
+<style>
+${packetStylets}</style>
 
+<h1>${title}</h1>
 ${bodyHtml}`
 }
 
