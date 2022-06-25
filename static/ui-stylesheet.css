@@ -1,0 +1,18 @@
+/* https://communications.dartmouth.edu/visual-identity/design-elements/color-palette */
+body {
+  background-color: #ffffff;
+  margin: 0px;
+  padding: 0px;
+}
+
+button {
+  width: 183px;
+  height: 38px;
+  color: #ffffff;
+  background-color: #00693e;
+  border-radius: 4px;
+}
+
+button:hover {
+  background-color: #12312b;
+}
