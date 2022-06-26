@@ -1,17 +1,20 @@
 {
-  "name": "fyt-bus-packet-generator",
-  "version": "1.0.0",
+  "author": "Alexander Petros",
   "description": "",
+  "devDependencies": {
+    "standard": "^17.0.0"
+  },
+  "engines": {
+    "node": ">18"
+  },
   "main": "app.js",
+  "name": "fyt-bus-packet-generator",
   "scripts": {
+  "type": "module",
+  "version": "1.0.0",
     "start": "node app.js",
     "dev": "npx nodemon app.js",
     "test": "standard && node --test",
     "format": "standard --fix"
-  },
-  "author": "Alexander Petros",
-  "type": "module",
-  "devDependencies": {
-    "standard": "^17.0.0"
   }
 }

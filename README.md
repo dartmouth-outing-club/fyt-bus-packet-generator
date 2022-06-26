@@ -6,10 +6,14 @@ A example of the kind of packet that this generates can be found in the `samples
 *Note that at this time the app is currently in development and does not have full functionality.*
 
 ## Development
-* `npm start` - Run the webapp
-* `npm run dev` - Run the webapp in dev mode, with hot-reloading
+The first time you download the repo, you will need to run `npm install` before the following commands will work properly.
+
+* `npm start` - Run the server
+* `npm run dev` - Run the server in dev mode, with hot-reloading
 * `npm test` - Run the linter and the test suite
 * `npm run format` Run the linter in `--fix` mode to format the codebase
+
+With the server running in dev mode, navigate to `http://localhost:3000` in browser to see the application.
 
 ## Bus Packet Format
 This is the process that the packet creator seeks to automate:
@@ -24,3 +28,20 @@ This is the process that the packet creator seeks to automate:
 1. Budget 15 minutes for each stop. (Arrival time at stop ‘n’ = Google maps time + 15\*[n-1] minutes).
 
 A separate packet is required for each trip "direction" i.e. picking up, dropping off, and taking from the lodge require three distinct packets.
+
+## Maintenance and Dependencies
+This app has exactly two production dependencies: a library dependency on `better-sqlite`, a set of node bindings for the SQLite database engine, and a service dependency on the Google Maps Directions API.
+Everything else runs using solely standards-compliant HTML, CSS, and JavaScript.
+
+I'm choosing to build using only these technologies because I would like this application to be made continually available essentially forever.
+The JavaScript that ran in Netscape Navigator would run in today's Google Chrome; by the [Lindy Effect](https://en.wikipedia.org/wiki/Lindy_effect), we can expect that JavaScript will continue to be supported for the next 27 years (half-kidding).
+The standards committes that maintain HTML, JS, will add or deprecate features, but never remove them, so as to preserve historical websites.
+That's a level of support that we'd like to build our apps on top of.
+
+As for SQLite, it's an extremely convienent file-writing/caching mechanism that itself maintains [absolutely ludicrous](https://sqlite.org/lts.html) backwards compatibility guarantees, and the foundation guarantees forward compatibility through the year 2050.
+For this reason it is the recommended storage format for the Library of Congress, and one of the most widely used software libraries of all time.
+I use it to save directions so that we're not wasting money by querying the API when we don't have to.
+It also creates a convient file that can be queried with SQL.
+
+The Google Maps API is obviously unavoidable, and is the portion of the application that is most likely to require maintenance, but I've isolated the API-specific portions to a single file, and will leave detailed directions about how to update that file should it ever become necessary.
+I don't trust Google to maintain SQLite-level forward compatibility, but it's safe to say they're going to be pretty careful with the Maps API.
