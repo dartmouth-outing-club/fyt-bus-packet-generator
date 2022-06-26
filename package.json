@@ -10,11 +10,11 @@
   "main": "app.js",
   "name": "fyt-bus-packet-generator",
   "scripts": {
-  "type": "module",
-  "version": "1.0.0",
     "start": "node app.js",
     "dev": "npx nodemon app.js",
     "test": "standard && node --test",
     "format": "standard --fix"
-  }
+  },
+  "type": "module",
+  "version": "1.0.0"
 }
