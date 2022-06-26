@@ -13,18 +13,28 @@ button {
 }
 
 button:hover {
-    background-color: #12312b;
+  background-color: #12312b;
 }
 
 h1 {
-    background-color: #00693e;
-    padding: 20px;
-    margin: 0px;
-    color: #ffffff;
+  background-color: #00693e;
+  padding: 20px;
+  margin: 0px;
+  color: #ffffff;
 }
 
 main {
   padding-left: 20px;
   padding-right: 20px;
+}
+
+fieldset {
+  margin-bottom: 20px;
+}
+
+legend {
+  background-color: #00693e;
+  color: #fff;
+  padding: 3px 6px;
 }
 

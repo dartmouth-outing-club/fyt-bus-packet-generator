@@ -8,10 +8,34 @@
 
 <main>
 <h2>Generate new packet</h2>
+<form action="/packet" method=post>
+
+  <fieldset name=route-start>
+    <legend>Trip start</legend>
+    <label for=origin>Start location: </label>
+    <select id=locations id=origin name=origin>
+      <option>Hanover, NH
+      <option>Moosilauke Ravine Lodge
+      <option>The Grant
+    </select>
+  </fieldset>
+
+  <fieldset name=route-end>
+    <legend>Trip end</legend>
+    <label for=origin>End location: </label>
+    <select id=locations id=origin name=origin>
+      <option>Hanover, NH
+      <option>Moosilauke Ravine Lodge
+      <option>The Grant
+    </select>
+  </fieldset>
+
+</form>
+
 
 <h2>Existing packets</h2>
 <ul>
-  <li> <a href="/packet">Sample packet</a>.
+  <li> <a href="/packet">Sample packet</a>
 </ul>
 
-<main>
+</main>
