@@ -16,7 +16,7 @@ const packet = getPacketFromResponse(response)
 function servePacket (res) {
   res.setHeader('Content-Type', 'text/html; charset=UTF-8')
   res.statusCode = 200
-  res.write(packet)
+  res.write(packet.toString())
   res.end()
 }
 
