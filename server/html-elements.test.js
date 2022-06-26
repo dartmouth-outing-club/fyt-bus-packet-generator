@@ -1,37 +1,27 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { createStep, createLeg } from './html-elements.js'
+import { Step, Leg } from './html-elements.js'
 
-test('createStep', () => {
+const STEP_ONE = new Step('Go <em>left</em>', '2 miles')
+const STEP_TWO = new Step('Turn <em>right</em>', '5 miles')
+const STEP_MISSING_DIRECTION = new Step('Go <em>left</em>', undefined)
+
+const LEG_TO_HANOVER = new Leg('Hanover, NH 03755, USA', [STEP_ONE, STEP_TWO])
+
+test('new Step', () => {
   test('it concatenates the step with the distance', () => {
-    const step = { instructionsHtml: 'Go <em>left</em>', distanceText: '2 miles' }
-    const expected = '<li>Go <em>left</em> &mdash; 2 miles</li>\n'
-    assert.equal(createStep(step), expected)
+    const expected = '<li>Go <em>left</em> &mdash; 2 miles</li>'
+    assert.equal(STEP_ONE.toString(), expected)
   })
 
   test('it makes step with a "missing distance" message when distance not provided', () => {
-    const step = { instructionsHtml: 'Go <em>left</em>' }
-    const expected = '<li>Go <em>left</em> &mdash; (Missing distance)</li>\n'
-    assert.equal(createStep(step), expected)
+    const expected = '<li>Go <em>left</em> &mdash; (Missing distance)</li>'
+    assert.equal(STEP_MISSING_DIRECTION.toString(), expected)
   })
 })
 
-test('createLeg', () => {
-  test('it creates a header with the start address', () => {
-    const leg = { startAddress: 'Hanover, NH 03755, USA', steps: [] }
-    const expected = `<section>
-<h2>From Hanover, NH 03755</h2>
-<ol>
-</ol>
-</section>
-`
-    assert.equal(createLeg(leg), expected)
-  })
-
+test('new Leg', () => {
   test('it adds the steps after the start address', () => {
-    const stepOne = { instructionsHtml: 'Go <em>left</em>', distanceText: '2 miles' }
-    const stepTwo = { instructionsHtml: 'Turn <em>right</em>', distanceText: '5 miles' }
-    const leg = { startAddress: 'Hanover, NH 03755, USA', steps: [stepOne, stepTwo] }
     const expected = `<section>
 <h2>From Hanover, NH 03755</h2>
 <ol>
@@ -40,11 +30,11 @@ test('createLeg', () => {
 </ol>
 </section>
 `
-    assert.equal(createLeg(leg), expected)
+    assert.equal(LEG_TO_HANOVER.toString(), expected)
   })
 
   test('it throws an exception when the leg is missing steps', () => {
-    const leg = { startAddress: 'Hanover, NH' }
-    assert.throws(() => createLeg(leg))
+    const startAddress = 'Hanover, NH 03755, USA'
+    assert.throws(() => new Leg(startAddress, undefined))
   })
 })

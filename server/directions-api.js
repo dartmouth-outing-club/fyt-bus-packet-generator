@@ -1,3 +1,5 @@
+import { Leg, Packet, Step } from './html-elements.js'
+
 /**
  * Format a list of coordinates into a request to the Google Maps API.
  *
@@ -26,21 +28,22 @@ export function createDirectionsRequest (coordinateList) {
   return parameters
 }
 
-/**
- * Create a list of Legs from the raw JSON of the directions response.
- */
-export function getLegsFromResponse (response) {
-  return response?.routes.at(0)?.legs.map((leg) => {
-    const distanceText = leg.distance?.text
-    const startAddress = leg.start_address
-    const steps = leg.steps.map(convertRawStep)
-
-    return { distanceText, startAddress, steps }
-  })
-}
-
 function convertRawStep (rawStep) {
   const instructionsHtml = rawStep.html_instructions
   const distanceText = rawStep.distance?.text
-  return { instructionsHtml, distanceText }
+  return new Step(instructionsHtml, distanceText)
+}
+
+/**
+ * Create a list of Legs from the raw JSON of the directions response.
+ */
+export function getPacketFromResponse (response) {
+  const legs = response?.routes.at(0)?.legs.map((leg) => {
+    // const distanceText = leg.distance?.text
+    const startAddress = leg.start_address
+    const steps = leg.steps.map(convertRawStep)
+    return new Leg(startAddress, steps)
+  })
+
+  return new Packet(legs, 'Trip to Hanover')
 }

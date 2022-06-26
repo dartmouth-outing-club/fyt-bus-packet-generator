@@ -3,33 +3,43 @@ import { loadFile } from './utils.js'
 const emptyPacket = await loadFile('./static/empty-packet.html')
 const packetStylets = await loadFile('./static/packet-stylesheet.css')
 
-export function createFile (bodyHtml, title) {
-  return `${emptyPacket}
-<title>${title}</title>
+export class Packet {
+  constructor (legs, title) {
+    this.bodyHtml = legs.map(leg => leg.toString()).join('\n')
+    this.title = title
+  }
+
+  toString = () => `${emptyPacket}
+<title>${this.title}</title>
 <style>
 ${packetStylets}</style>
 
-<h1>${title}</h1>
-${bodyHtml}`
+<h1>${this.title}</h1>
+${this.bodyHtml}`
 }
 
-export function createStep (step) {
-  const instructions = step.instructionsHtml || '(Missing instruction)'
-  const distance = step.distanceText || '(Missing distance)'
-  return `<li>${instructions} &mdash; ${distance}</li>\n`
+export class Step {
+  constructor (instructionsHtml, distanceText) {
+    this.instructions = instructionsHtml || '(Missing instruction)'
+    this.distance = distanceText || '(Missing distance)'
+  }
+
+  toString = () => `<li>${this.instructions} &mdash; ${this.distance}</li>`
 }
 
-export function createLeg (leg) {
-  if (!leg.steps) throw new Error('Leg is missing steps')
+export class Leg {
+  constructor (startAddress, steps) {
+    if (!steps) throw new Error('Leg is missing steps')
+    // Remove the unnecessary "USA" from the address string
+    this.startAddress = startAddress.slice(0, startAddress.lastIndexOf(','))
+    this.steps = steps.join('\n')
+  }
 
-  const stepsText = leg.steps.map(createStep).join('')
-  // Remove the unnecessary "USA" from the address string
-  const startAddress = leg.startAddress.slice(0, leg.startAddress.lastIndexOf(','))
-
-  return `<section>
-<h2>From ${startAddress}</h2>
+  toString = () => `<section>
+<h2>From ${this.startAddress}</h2>
 <ol>
-${stepsText}</ol>
+${this.steps}
+</ol>
 </section>
 `
 }
