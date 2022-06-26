@@ -2,7 +2,6 @@
 body {
   background-color: #ffffff;
   margin: 0px;
-  padding: 0px;
 }
 
 button {
@@ -14,5 +13,18 @@ button {
 }
 
 button:hover {
-  background-color: #12312b;
+    background-color: #12312b;
 }
+
+h1 {
+    background-color: #00693e;
+    padding: 20px;
+    margin: 0px;
+    color: #ffffff;
+}
+
+main {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
