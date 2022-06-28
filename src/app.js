@@ -3,6 +3,8 @@ import path from 'path'
 import http from 'http'
 import { loadFile } from './utils.js'
 import { getPacketFromResponse } from './directions-api.js'
+import { getStops } from './clients/sqlite.js'
+import { StopsOptionList } from './renderer/html-elements.js'
 
 const port = process.env.PORT || 3000
 const host = 'localhost'
@@ -21,9 +23,21 @@ function servePacket (res) {
 }
 
 function serveStaticFile (res, filepath) {
-  const stream = fs.createReadStream(filepath)
+  try {
+    const stream = fs.createReadStream(filepath)
+    res.statusCode = 200
+    stream.pipe(res)
+  } catch {
+    serveNotFound()
+  }
+}
+
+function serveStopsList (res) {
+  const stopsOptions = new StopsOptionList(getStops())
+
   res.statusCode = 200
-  stream.pipe(res)
+  res.write(stopsOptions.toString())
+  res.end()
 }
 
 function serveNotFound (res) {
@@ -35,14 +49,17 @@ const server = http.createServer(async (req, res) => {
   const requestUrl = new URL(req.url, `http://${req.headers.host}`)
   console.log(`Request receieved for ${requestUrl}`)
 
+  const isRoute = String.prototype.startsWith.bind(requestUrl.pathname)
   if (requestUrl.pathname === '/') {
     const filepath = path.join(path.resolve(), '/', HOMEPAGE_FP)
     serveStaticFile(res, filepath)
-  } else if (requestUrl.pathname.startsWith('/static/')) {
+  } else if (isRoute('/static')) {
     // Protects against directory traversal! See https://url.spec.whatwg.org/#path-state
     const filepath = path.join(path.resolve(), '/', requestUrl.pathname)
     serveStaticFile(res, filepath)
-  } else if (requestUrl.pathname.startsWith('/packet')) {
+  } else if (isRoute('/stops')) {
+    serveStopsList(res)
+  } else if (isRoute('/packet')) {
     servePacket(res)
   } else {
     serveNotFound(res)

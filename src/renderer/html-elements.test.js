@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { Step, Leg } from './html-elements.js'
+import { Step, Leg, StopsOptionList } from './html-elements.js'
 
 const STEP_ONE = new Step('Go <em>left</em>', '2 miles')
 const STEP_TWO = new Step('Turn <em>right</em>', '5 miles')
@@ -37,4 +37,13 @@ test('new Leg', () => {
     const startAddress = 'Hanover, NH 03755, USA'
     assert.throws(() => new Leg(startAddress, undefined))
   })
+})
+
+test('new StopsOptionList', () => {
+  const stops = ['Hanover', 'Moosilauke Ravine Lodge', 'The Grant']
+  const expected = `<option>Hanover
+<option>Moosilauke Ravine Lodge
+<option>The Grant`
+  const options = new StopsOptionList(stops)
+  assert.equal(options.toString(), expected)
 })

@@ -14,20 +14,16 @@
   <fieldset name=route-start>
     <legend>Trip start</legend>
     <label for=origin-location>Start location: </label>
-    <select id=origin-location name=origin-location>
-      <option>Hanover, NH
-      <option>Moosilauke Ravine Lodge
-      <option>The Grant
+    <select id=origin-location name=origin-location required>
+      <option value="" selected disabled hidden>---- Choose a starting location ----
     </select>
   </fieldset>
 
   <fieldset name=route-end>
     <legend>Trip end</legend>
     <label for=destination-location>End location: </label>
-    <select id=destination-location name=destination-location>
-      <option>Hanover, NH
-      <option>Moosilauke Ravine Lodge
-      <option>The Grant
+    <select id=destination-location name=destination-location required>
+      <option value="" selected disabled hidden>---- Choose a starting location ----
     </select>
   </fieldset>
 
@@ -40,3 +36,13 @@
 </ul>
 
 </main>
+
+<script>
+  // Populate "stops" options with the stops from the backend
+  const stops = fetch('/stops')
+    .then(res => res.text())
+    .then(text => {
+      document.getElementById('origin-location').innerHTML += text
+      document.getElementById('destination-location').innerHTML += text
+    })
+</script>

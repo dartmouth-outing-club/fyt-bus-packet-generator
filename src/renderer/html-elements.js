@@ -43,3 +43,11 @@ ${this.steps}
 </section>
 `
 }
+
+export class StopsOptionList {
+  constructor (stops) {
+    this.stops = stops
+  }
+
+  toString = () => this.stops.map(stop => `<option>${stop}`).join('\n')
+}
