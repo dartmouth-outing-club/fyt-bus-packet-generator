@@ -5,15 +5,16 @@
     "standard": "^17.0.0"
   },
   "engines": {
-    "node": ">18"
+    "node": ">=18.0.0"
   },
-  "main": "app.js",
+  "main": "src/app.js",
   "name": "fyt-bus-packet-generator",
   "scripts": {
+    "dev": "npx nodemon src/app.js",
+    "format": "standard --fix",
     "start": "node app.js",
-    "dev": "npx nodemon app.js",
     "test": "standard && node --test",
-    "format": "standard --fix"
+    "validate": "vnu --skip-non-html --also-check-css static"
   },
   "type": "module",
   "version": "1.0.0"

@@ -1,15 +1,15 @@
 import fs from 'fs'
 import path from 'path'
 import http from 'http'
-import { loadFile } from './server/utils.js'
-import { getPacketFromResponse } from './server/directions-api.js'
+import { loadFile } from './utils.js'
+import { getPacketFromResponse } from './directions-api.js'
 
 const port = process.env.PORT || 3000
 const host = 'localhost'
-const HOMEPAGE_FP = '/static/index.html'
+const HOMEPAGE_FP = 'static/index.html'
 
 // Temporary - load sample response
-const API_RESPONSE_FILE = './test-data/grant-to-lodge-to-hanvoer.json'
+const API_RESPONSE_FILE = 'test-data/grant-to-lodge-to-hanvoer.json'
 const response = JSON.parse(await loadFile(API_RESPONSE_FILE))
 const packet = getPacketFromResponse(response)
 

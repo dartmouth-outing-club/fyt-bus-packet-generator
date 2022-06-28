@@ -1,4 +1,4 @@
-import { Leg, Packet, Step } from './html-elements.js'
+import { Leg, Packet, Step } from './renderer/html-elements.js'
 
 /**
  * Format a list of coordinates into a request to the Google Maps API.

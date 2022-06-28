@@ -1,7 +1,7 @@
-import { loadFile } from './utils.js'
+import { loadFile } from '../utils.js'
 
-const emptyPacket = await loadFile('./static/empty-packet.html')
-const packetStylets = await loadFile('./static/packet-stylesheet.css')
+const emptyPacket = await loadFile('./src/renderer/empty-packet.html')
+const packetStylets = await loadFile('./src/renderer/packet-stylesheet.css')
 
 export class Packet {
   constructor (legs, title) {

@@ -11,6 +11,7 @@ The first time you download the repo, you will need to run `npm install` before 
 * `npm start` - Run the server
 * `npm run dev` - Run the server in dev mode, with hot-reloading
 * `npm test` - Run the linter and the test suite
+* `npm run validate` - Ensure that the assets in `/static` are valid (requires `vnu` installation)
 * `npm run format` Run the linter in `--fix` mode to format the codebase
 
 With the server running in dev mode, navigate to `http://localhost:3000` in browser to see the application.
@@ -38,10 +39,12 @@ The JavaScript that ran in Netscape Navigator would run in today's Google Chrome
 The standards committes that maintain HTML, JS, will add or deprecate features, but never remove them, so as to preserve historical websites.
 That's a level of support that we'd like to build our apps on top of.
 
-As for SQLite, it's an extremely convienent file-writing/caching mechanism that itself maintains [absolutely ludicrous](https://sqlite.org/lts.html) backwards compatibility guarantees, and the foundation guarantees forward compatibility through the year 2050.
+### SQLite
+SQLite is an extremely convienent file-writing/caching mechanism that itself maintains [absolutely ludicrous](https://sqlite.org/lts.html) backwards compatibility guarantees, and the foundation guarantees forward compatibility through the year 2050.
 For this reason it is the recommended storage format for the Library of Congress, and one of the most widely used software libraries of all time.
 I use it to save directions so that we're not wasting money by querying the API when we don't have to.
 It also creates a convient file that can be queried with SQL.
 
+### Google Maps
 The Google Maps API is obviously unavoidable, and is the portion of the application that is most likely to require maintenance, but I've isolated the API-specific portions to a single file, and will leave detailed directions about how to update that file should it ever become necessary.
 I don't trust Google to maintain SQLite-level forward compatibility, but it's safe to say they're going to be pretty careful with the Maps API.
