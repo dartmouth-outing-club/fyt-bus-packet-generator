@@ -10,39 +10,39 @@
 <main>
 <h2>Generate new packet</h2>
 <form action="/packet" method=post>
+	<fieldset name=route-start>
+		<legend>Trip start</legend>
+		<label for=origin-location>Start location: </label>
+		<select id=origin-location name=origin-location required>
+			<option value="" selected disabled hidden>---- Choose a starting location ----
+		</select>
+	</fieldset>
 
-  <fieldset name=route-start>
-    <legend>Trip start</legend>
-    <label for=origin-location>Start location: </label>
-    <select id=origin-location name=origin-location required>
-      <option value="" selected disabled hidden>---- Choose a starting location ----
-    </select>
-  </fieldset>
+	<fieldset name=route-end>
+		<legend>Trip end</legend>
+		<label for=destination-location>End location: </label>
+		<select id=destination-location name=destination-location required>
+			<option value="" selected disabled hidden>---- Choose a starting location ----
+		</select>
+	</fieldset>
 
-  <fieldset name=route-end>
-    <legend>Trip end</legend>
-    <label for=destination-location>End location: </label>
-    <select id=destination-location name=destination-location required>
-      <option value="" selected disabled hidden>---- Choose a starting location ----
-    </select>
-  </fieldset>
-
+	<button>Submit</button>
 </form>
 
 
 <h2>Existing packets</h2>
 <ul>
-  <li> <a href="/packet">Sample packet</a>
+	<li> <a href="/packet">Sample packet</a>
 </ul>
 
 </main>
 
 <script>
-  // Populate "stops" options with the stops from the backend
-  const stops = fetch('/stops')
-    .then(res => res.text())
-    .then(text => {
-      document.getElementById('origin-location').innerHTML += text
-      document.getElementById('destination-location').innerHTML += text
-    })
+	// Populate "stops" options with the stops from the backend
+	const stops = fetch('/stops')
+		.then(res => res.text())
+		.then(text => {
+				document.getElementById('origin-location').innerHTML += text
+				document.getElementById('destination-location').innerHTML += text
+			})
 </script>

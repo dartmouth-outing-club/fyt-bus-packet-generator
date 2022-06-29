@@ -15,6 +15,16 @@ const API_RESPONSE_FILE = 'test-data/grant-to-lodge-to-hanvoer.json'
 const response = JSON.parse(await loadFile(API_RESPONSE_FILE))
 const packet = getPacketFromResponse(response)
 
+// https://stackoverflow.com/questions/10623798/how-do-i-read-the-contents-of-a-node-js-stream-into-a-string-variable
+function streamToString (stream) {
+  const chunks = []
+  return new Promise((resolve, reject) => {
+    stream.on('data', (chunk) => chunks.push(Buffer.from(chunk)))
+    stream.on('error', (err) => reject(err))
+    stream.on('end', () => resolve(Buffer.concat(chunks).toString('utf8')))
+  })
+}
+
 function servePacket (res) {
   res.setHeader('Content-Type', 'text/html; charset=UTF-8')
   res.statusCode = 200
@@ -45,9 +55,17 @@ function serveNotFound (res) {
   res.end()
 }
 
+async function handlePacketPost (req, res) {
+  const body = await streamToString(req)
+  console.log(body)
+  res.statusCode = 302
+  res.setHeader('location', '/')
+  res.end()
+}
+
 const server = http.createServer(async (req, res) => {
   const requestUrl = new URL(req.url, `http://${req.headers.host}`)
-  console.log(`Request receieved for ${requestUrl}`)
+  console.log(`Request ${req.method} receieved for ${requestUrl}`)
 
   const isRoute = String.prototype.startsWith.bind(requestUrl.pathname)
   if (requestUrl.pathname === '/') {
@@ -59,6 +77,8 @@ const server = http.createServer(async (req, res) => {
     serveStaticFile(res, filepath)
   } else if (isRoute('/stops')) {
     serveStopsList(res)
+  } else if (req.method === 'POST' && isRoute('/packet')) {
+    handlePacketPost(req, res)
   } else if (isRoute('/packet')) {
     servePacket(res)
   } else {
