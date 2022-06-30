@@ -3,8 +3,10 @@ import path from 'path'
 import http from 'http'
 import { loadFile } from './utils.js'
 import { getPacketFromResponse } from './directions-api.js'
-import { getStops } from './clients/sqlite.js'
 import { StopsOptionList } from './renderer/html-elements.js'
+
+import * as sqlite from './clients/sqlite.js'
+import * as google from './clients/google-client.js'
 
 const port = process.env.PORT || 3000
 const host = 'localhost'
@@ -43,7 +45,7 @@ function serveStaticFile (res, filepath) {
 }
 
 function serveStopsList (res) {
-  const stopsOptions = new StopsOptionList(getStops())
+  const stopsOptions = new StopsOptionList(sqlite.getStops())
 
   res.statusCode = 200
   res.write(stopsOptions.toString())
@@ -57,15 +59,32 @@ function serveNotFound (res) {
 
 async function handlePacketPost (req, res) {
   const body = await streamToString(req)
-  console.log(body)
-  res.statusCode = 302
-  res.setHeader('location', '/')
+  const params = new URLSearchParams(body)
+
+  // const name = params.get('trip-name')
+  // const date = params.get('trip-date')
+
+  const origin = sqlite.getCoordinatesByStopName(params.get('origin-location'))
+  const destination = sqlite.getCoordinatesByStopName(params.get('destination-location'))
+  const coordinateList = [origin, destination]
+
+  console.log(`Checking cache for coorindateList: ${coordinateList}`)
+  const directions = sqlite.getDirections(coordinateList) || await google.getDirections(coordinateList)
+  const packet = getPacketFromResponse(directions)
+
+  res.statusCode = 200
+  res.write(packet.toString())
   res.end()
+
+  // res.statusCode = 302
+  // res.setHeader('location', '/')
+  // res.end()
+
 }
 
 const server = http.createServer(async (req, res) => {
   const requestUrl = new URL(req.url, `http://${req.headers.host}`)
-  console.log(`Request ${req.method} receieved for ${requestUrl}`)
+  console.log(`${req.method} request receieved for ${requestUrl}`)
 
   const isRoute = String.prototype.startsWith.bind(requestUrl.pathname)
   if (requestUrl.pathname === '/') {

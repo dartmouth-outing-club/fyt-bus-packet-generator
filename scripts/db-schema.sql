@@ -17,7 +17,7 @@ CREATE TABLE packets (
 	name TEXT PRIMARY KEY,
 	html_content TEXT,
 	updated_at INTEGER
-)
+);
 
 
 CREATE TRIGGER directions_updated AFTER UPDATE ON directions

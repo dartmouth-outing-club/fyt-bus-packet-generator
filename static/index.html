@@ -10,6 +10,12 @@
 <main>
 <h2>Generate new packet</h2>
 <form action="/packet" method=post>
+	<fieldset name=trip-info>
+		<legend>Trip info</legend>
+		<label>Trip name: <input type=text name=trip-name required></label>
+		<label>Trip date: <input type=date name=trip-date id=trip-date required></label>
+	</fieldset>
+
 	<fieldset name=route-start>
 		<legend>Trip start</legend>
 		<label for=origin-location>Start location: </label>
@@ -26,7 +32,7 @@
 		</select>
 	</fieldset>
 
-	<button>Submit</button>
+	<button type=submit>Submit</button>
 </form>
 
 
@@ -38,6 +44,9 @@
 </main>
 
 <script>
+	// Default trip date to today
+	document.getElementById('trip-date').valueAsDate = new Date()
+
 	// Populate "stops" options with the stops from the backend
 	const stops = fetch('/stops')
 		.then(res => res.text())

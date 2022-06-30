@@ -1,4 +1,5 @@
 import * as directions from '../directions-api.js'
+import * as sqlite from './sqlite.js'
 import { config } from '../config.js'
 
 const GOOGLE_DIRECTIONS_API =
@@ -11,6 +12,11 @@ export async function getDirections (coordinateList) {
   })
   const request = `${GOOGLE_DIRECTIONS_API}?${params}`
 
-  console.log(`Fetching ${request}...`)
-  return fetch(request).then((res) => res.json())
+  console.log('Fetching directions from Google')
+  return fetch(request)
+    .then((res) => res.text())
+    .then((text) => {
+      sqlite.saveDirections(coordinateList[0], coordinateList.at(-1), text)
+      return JSON.parse(text)
+    })
 }
