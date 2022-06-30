@@ -36,13 +36,13 @@ export function convertRawStep (rawStep) {
 
 /**
  * Create a list of Legs from the raw JSON of the directions response.
+ *
+ * Only builds a single leg right now.
  */
-export function buildPacket (directions) {
-  const legs = directions?.routes.at(0)?.legs.map((leg) => {
-    const { duration, distance, start_address: startAddress } = leg
-    const steps = leg.steps.map(convertRawStep)
-    return new Leg(duration, distance, startAddress, steps)
-  })
+export function buildPacket (directions, tripName, startName, endName, instructions) {
+  const { duration, distance, steps: rawSteps }  = directions?.routes.at(0)?.legs.at(0)
+  const steps = rawSteps.map(convertRawStep)
+  const leg = new Leg(duration, distance, startName, endName, steps, instructions)
 
-  return new Packet(legs, 'Trip to Hanover')
+  return new Packet([leg], tripName)
 }

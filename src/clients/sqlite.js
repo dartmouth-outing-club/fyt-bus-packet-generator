@@ -4,24 +4,23 @@ const db = new Database('./packet-generator.db')
 // db.pragma('journal_mode = WAL')
 db.pragma('foreign_keys = ON')
 
-export function getStops () {
+export function getAllStops () {
   return db.prepare('SELECT name FROM stops').all().map(row => row.name)
 }
 
-export function getStopByCoordinates (name) {
-  const stop = db.prepare('SELECT name, special_instructions FROM stops WHERE name = ?').get(name)
-  return {
-    name: stop.name,
-    specialInstructions: stop.specialInstructions
-  }
+export function getStop (name) {
+  const stop = db.prepare(`
+  SELECT name, special_instructions, coordinates
+  FROM stops
+  WHERE name = ?`).get(name)
 
+  if (!stop) return undefined
+
+  const specialInstructions = stop.special_instructions
+  return { specialInstructions, ...stop }
 }
 
-export function getCoordinatesByStopName (name) {
-  return db.prepare('SELECT coordinates FROM stops WHERE name = ?').get(name)?.coordinates
-}
-
-export function getDirections ([origin, destination]) {
+export function getDirections (origin, destination) {
   const directions = db.prepare(`
   SELECT google_directions, updated_at
   FROM directions

@@ -1,26 +1,30 @@
 body {
-    margin: 30px;
+	margin: 30px;
 }
 
 section {
-    margin-bottom: 30px;
+	margin-bottom: 30px;
 
-    border-color: gray;
-    border-radius: 3px;
-    border-style: solid;
-    border-width: 1px;
+	border-color: gray;
+	border-radius: 3px;
+	border-style: solid;
+	border-width: 1px;
 }
 
 section li, section h2 {
-    padding: 10px;
-    padding: 10px;
+	padding: 10px;
+	padding: 10px;
 }
 
 ol {
-    padding: 0px;
-    list-style-type: none;
+	padding: 0px;
+	list-style-type: none;
 }
 
 ol li {
-    border-top: 1px solid gray;
+	border-top: 1px solid gray;
+}
+
+li > h2 {
+	padding: 0px;
 }

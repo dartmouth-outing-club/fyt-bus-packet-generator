@@ -5,9 +5,9 @@ import { config } from '../config.js'
 const GOOGLE_DIRECTIONS_API =
   'https://maps.googleapis.com/maps/api/directions/json'
 
-export async function getDirections (coordinateList) {
+export async function getDirections (origin, destination) {
   const params = new URLSearchParams({
-    ...directions.createDirectionsRequest(coordinateList),
+    ...directions.createDirectionsRequest([origin, destination]),
     key: config.GOOGLE_API_KEY
   })
   const request = `${GOOGLE_DIRECTIONS_API}?${params}`
@@ -16,7 +16,7 @@ export async function getDirections (coordinateList) {
   return fetch(request)
     .then((res) => res.text())
     .then((text) => {
-      sqlite.saveDirections(coordinateList[0], coordinateList.at(-1), text)
+      sqlite.saveDirections(origin, destination, text)
       return JSON.parse(text)
     })
 }

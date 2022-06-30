@@ -70,22 +70,20 @@ async function handlePacketPost (req, res) {
   const body = await streamToString(req)
   const params = new URLSearchParams(body)
 
-  const name = params.get('trip-name')
+  const tripName = params.get('trip-name')
   // const date = params.get('trip-date')
+  const origin = sqlite.getStop(params.get('origin-location'))
+  const destination = sqlite.getStop(params.get('destination-location'))
 
-  const origin = sqlite.getCoordinatesByStopName(params.get('origin-location'))
-  const destination = sqlite.getCoordinatesByStopName(params.get('destination-location'))
-  const coordinateList = [origin, destination]
+  if (!origin || !destination) return serveNotFound(res)
 
-  if (!coordinateList[0] || !coordinateList[1]) {
-    serveNotFound(res)
-  }
+  console.log(`Checking cache for start: ${origin.name}, end: ${destination.name}`)
+  const directions = sqlite.getDirections(origin.coordinates, destination.coordinates) ||
+    await google.getDirections(origin.coordinates, destination.coordinates)
+  const packet = buildPacket(
+    directions, tripName, origin.name, destination.name, destination.specialInstructions)
 
-  console.log(`Checking cache for coorindateList: ${coordinateList}`)
-  const directions = sqlite.getDirections(coordinateList) || await google.getDirections(coordinateList)
-  const packet = buildPacket(directions)
-  sqlite.savePacket(name, packet.toString())
-
+  sqlite.savePacket(tripName, packet.toString())
   redirect(res, '/')
 }
 

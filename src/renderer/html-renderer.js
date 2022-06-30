@@ -25,23 +25,28 @@ export class Step {
     this.distance = distanceText || '(Missing distance)'
   }
 
-  toString = () => `<li>${this.instructions} &mdash; ${this.distance}</li>`
+  toString = () => `<li>${this.instructions} &mdash; ${this.distance}`
 }
 
 export class Leg {
-  constructor (duration, distance, startAddress, steps) {
+  constructor (duration, distance, startName, endName, steps, instructions) {
     if (!steps) throw new Error('Leg is missing steps')
     // Remove the unnecessary "USA" from the address string
-    this.startAddress = startAddress.slice(0, startAddress.lastIndexOf(','))
+    this.startName = startName
+    this.endName = endName
     this.steps = steps.join('\n')
     this.duration = duration
     this.distance = distance
+    this.instructions = instructions
   }
 
   toString = () => `<section>
-<h2>From ${this.startAddress}</h2>
+<h2>From ${this.startName}</h2>
 <ol>
 ${this.steps}
+<li>
+  <h2>Arrived at ${this.endName}</h2>
+  <p>${this.instructions}
 </ol>
 </section>
 `
