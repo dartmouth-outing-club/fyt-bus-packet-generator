@@ -8,6 +8,15 @@ export function getStops () {
   return db.prepare('SELECT name FROM stops').all().map(row => row.name)
 }
 
+export function getStopByCoordinates (name) {
+  const stop = db.prepare('SELECT name, special_instructions FROM stops WHERE name = ?').get(name)
+  return {
+    name: stop.name,
+    specialInstructions: stop.specialInstructions
+  }
+
+}
+
 export function getCoordinatesByStopName (name) {
   return db.prepare('SELECT coordinates FROM stops WHERE name = ?').get(name)?.coordinates
 }

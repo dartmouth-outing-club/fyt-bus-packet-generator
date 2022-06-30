@@ -1,7 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 
-import { getPacketFromResponse } from './directions-api.js'
+import { buildPacket } from './directions-api.js'
 import { PacketLinkList, StopsOptionList } from './renderer/html-renderer.js'
 
 import * as sqlite from './clients/sqlite.js'
@@ -83,7 +83,7 @@ async function handlePacketPost (req, res) {
 
   console.log(`Checking cache for coorindateList: ${coordinateList}`)
   const directions = sqlite.getDirections(coordinateList) || await google.getDirections(coordinateList)
-  const packet = getPacketFromResponse(directions)
+  const packet = buildPacket(directions)
   sqlite.savePacket(name, packet.toString())
 
   redirect(res, '/')

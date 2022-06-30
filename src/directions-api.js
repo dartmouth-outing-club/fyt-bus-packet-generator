@@ -28,7 +28,7 @@ export function createDirectionsRequest (coordinateList) {
   return parameters
 }
 
-function convertRawStep (rawStep) {
+export function convertRawStep (rawStep) {
   const instructionsHtml = rawStep.html_instructions
   const distanceText = rawStep.distance?.text
   return new Step(instructionsHtml, distanceText)
@@ -37,12 +37,11 @@ function convertRawStep (rawStep) {
 /**
  * Create a list of Legs from the raw JSON of the directions response.
  */
-export function getPacketFromResponse (response) {
-  const legs = response?.routes.at(0)?.legs.map((leg) => {
-    // const distanceText = leg.distance?.text
-    const startAddress = leg.start_address
+export function buildPacket (directions) {
+  const legs = directions?.routes.at(0)?.legs.map((leg) => {
+    const { duration, distance, start_address: startAddress } = leg
     const steps = leg.steps.map(convertRawStep)
-    return new Leg(startAddress, steps)
+    return new Leg(duration, distance, startAddress, steps)
   })
 
   return new Packet(legs, 'Trip to Hanover')

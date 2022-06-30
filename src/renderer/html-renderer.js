@@ -29,11 +29,13 @@ export class Step {
 }
 
 export class Leg {
-  constructor (startAddress, steps) {
+  constructor (duration, distance, startAddress, steps) {
     if (!steps) throw new Error('Leg is missing steps')
     // Remove the unnecessary "USA" from the address string
     this.startAddress = startAddress.slice(0, startAddress.lastIndexOf(','))
     this.steps = steps.join('\n')
+    this.duration = duration
+    this.distance = distance
   }
 
   toString = () => `<section>
@@ -58,5 +60,6 @@ export class PacketLinkList {
     this.names = names
   }
 
-  toString = () => this.names.map(name => `<li><a href="/packet/${encodeURI(name)}">${name}</a>`).join('\n')
+  toString = () =>
+    this.names.map(name => `<li><a href="/packet/${encodeURI(name)}">${name}</a>`).join('\n')
 }
