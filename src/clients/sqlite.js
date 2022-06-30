@@ -9,7 +9,7 @@ export function getStops () {
 }
 
 export function getCoordinatesByStopName (name) {
-  return db.prepare('SELECT coordinates FROM stops WHERE name = ?').get(name).coordinates
+  return db.prepare('SELECT coordinates FROM stops WHERE name = ?').get(name)?.coordinates
 }
 
 export function getDirections ([origin, destination]) {
@@ -36,7 +36,7 @@ export function saveDirections (start, end, directions) {
 }
 
 export function getPacket (name) {
-  return db.prepare('SELECT html_content FROM packets WHERE name = ?').get(name).html_content
+  return db.prepare('SELECT html_content FROM packets WHERE name = ?').get(name)?.html_content
 }
 
 export function getAllPacketNames () {

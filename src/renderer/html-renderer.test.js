@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { Step, Leg, StopsOptionList } from './html-elements.js'
+import { Step, Leg, StopsOptionList } from './html-renderer.js'
 
 const STEP_ONE = new Step('Go <em>left</em>', '2 miles')
 const STEP_TWO = new Step('Turn <em>right</em>', '5 miles')
