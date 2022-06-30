@@ -37,8 +37,7 @@
 
 
 <h2>Existing packets</h2>
-<ul>
-	<li> <a href="/packet">Sample packet</a>
+<ul id=packets-list>
 </ul>
 
 </main>
@@ -54,4 +53,11 @@
 				document.getElementById('origin-location').innerHTML += text
 				document.getElementById('destination-location').innerHTML += text
 			})
+
+	const packets = fetch('/packet')
+		.then(res => res.text())
+		.then(text => {
+				document.getElementById('packets-list').innerHTML += text
+			})
+
 </script>

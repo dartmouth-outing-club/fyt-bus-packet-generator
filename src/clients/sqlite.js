@@ -9,7 +9,7 @@ export function getStops () {
 }
 
 export function getCoordinatesByStopName (name) {
-  return db.prepare(`SELECT coordinates FROM stops WHERE name = ?`).get(name).coordinates
+  return db.prepare('SELECT coordinates FROM stops WHERE name = ?').get(name).coordinates
 }
 
 export function getDirections ([origin, destination]) {
@@ -28,9 +28,24 @@ export function getDirections ([origin, destination]) {
   return undefined
 }
 
-export function saveDirections(start, end, directions) {
+export function saveDirections (start, end, directions) {
   db.prepare(`
   INSERT INTO directions (start_coordinates, end_coordinates, google_directions)
   VALUES (?, ?, ?)
   `).run(start, end, directions)
+}
+
+export function getPacket (name) {
+  return db.prepare('SELECT html_content FROM packets WHERE name = ?').get(name).html_content
+}
+
+export function getAllPacketNames () {
+  return db.prepare('SELECT name FROM packets').all().map(row => row.name)
+}
+
+export function savePacket (name, html) {
+  db.prepare(`
+  INSERT INTO packets (name, html_content)
+  VALUES (?, ?)
+  `).run(name, html)
 }

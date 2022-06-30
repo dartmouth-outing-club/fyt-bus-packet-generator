@@ -51,3 +51,11 @@ export class StopsOptionList {
 
   toString = () => this.stops.map(stop => `<option>${stop}`).join('\n')
 }
+
+export class PacketLinkList {
+  constructor (names) {
+    this.names = names
+  }
+
+  toString = () => this.names.map(name => `<li><a href="/packet/${encodeURI(name)}">${name}</a>`).join('\n')
+}

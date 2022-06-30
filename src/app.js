@@ -1,9 +1,8 @@
 import fs from 'fs'
 import path from 'path'
 import http from 'http'
-import { loadFile } from './utils.js'
 import { getPacketFromResponse } from './directions-api.js'
-import { StopsOptionList } from './renderer/html-elements.js'
+import { PacketLinkList, StopsOptionList } from './renderer/html-elements.js'
 
 import * as sqlite from './clients/sqlite.js'
 import * as google from './clients/google-client.js'
@@ -11,11 +10,6 @@ import * as google from './clients/google-client.js'
 const port = process.env.PORT || 3000
 const host = 'localhost'
 const HOMEPAGE_FP = 'static/index.html'
-
-// Temporary - load sample response
-const API_RESPONSE_FILE = 'test-data/grant-to-lodge-to-hanvoer.json'
-const response = JSON.parse(await loadFile(API_RESPONSE_FILE))
-const packet = getPacketFromResponse(response)
 
 // https://stackoverflow.com/questions/10623798/how-do-i-read-the-contents-of-a-node-js-stream-into-a-string-variable
 function streamToString (stream) {
@@ -27,11 +21,24 @@ function streamToString (stream) {
   })
 }
 
-function servePacket (res) {
-  res.setHeader('Content-Type', 'text/html; charset=UTF-8')
+function servePacketList (res) {
+  const names = sqlite.getAllPacketNames()
+  const links = new PacketLinkList(names)
+
   res.statusCode = 200
-  res.write(packet.toString())
+  res.write(links.toString())
   res.end()
+}
+
+function servePacket (res, name) {
+  const packet = sqlite.getPacket(name)
+  if (packet) {
+    res.setHeader('Content-Type', 'text/html; charset=UTF-8')
+    res.statusCode = 200
+    res.write(packet.toString())
+    res.end()
+  }
+  serveNotFound(res)
 }
 
 function serveStaticFile (res, filepath) {
@@ -40,7 +47,7 @@ function serveStaticFile (res, filepath) {
     res.statusCode = 200
     stream.pipe(res)
   } catch {
-    serveNotFound()
+    serveNotFound(res)
   }
 }
 
@@ -61,7 +68,7 @@ async function handlePacketPost (req, res) {
   const body = await streamToString(req)
   const params = new URLSearchParams(body)
 
-  // const name = params.get('trip-name')
+  const name = params.get('trip-name')
   // const date = params.get('trip-date')
 
   const origin = sqlite.getCoordinatesByStopName(params.get('origin-location'))
@@ -71,15 +78,11 @@ async function handlePacketPost (req, res) {
   console.log(`Checking cache for coorindateList: ${coordinateList}`)
   const directions = sqlite.getDirections(coordinateList) || await google.getDirections(coordinateList)
   const packet = getPacketFromResponse(directions)
+  sqlite.savePacket(name, packet.toString())
 
-  res.statusCode = 200
-  res.write(packet.toString())
+  res.statusCode = 302
+  res.setHeader('location', '/')
   res.end()
-
-  // res.statusCode = 302
-  // res.setHeader('location', '/')
-  // res.end()
-
 }
 
 const server = http.createServer(async (req, res) => {
@@ -99,7 +102,12 @@ const server = http.createServer(async (req, res) => {
   } else if (req.method === 'POST' && isRoute('/packet')) {
     handlePacketPost(req, res)
   } else if (isRoute('/packet')) {
-    servePacket(res)
+    const name = decodeURI(requestUrl.pathname).split('/')[2]
+    if (name) {
+      servePacket(res, name)
+    } else {
+      servePacketList(res)
+    }
   } else {
     serveNotFound(res)
   }
