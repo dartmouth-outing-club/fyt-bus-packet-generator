@@ -40,7 +40,7 @@ export function convertRawStep (rawStep) {
  * Only builds a single leg right now.
  */
 export function buildPacket (directions, tripName, startName, endName, instructions) {
-  const { duration, distance, steps: rawSteps }  = directions?.routes.at(0)?.legs.at(0)
+  const { duration, distance, steps: rawSteps } = directions?.routes.at(0)?.legs.at(0)
   const steps = rawSteps.map(convertRawStep)
   const leg = new Leg(duration, distance, startName, endName, steps, instructions)
 

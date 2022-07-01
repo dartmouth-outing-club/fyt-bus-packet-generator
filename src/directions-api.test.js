@@ -1,8 +1,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import fs from 'node:fs/promises'
 
-import { createDirectionsRequest, getPacketFromResponse } from './directions-api.js'
+import { createDirectionsRequest } from './directions-api.js'
 
 const HANOVER_COORDINATES = '44.875039,-71.05471'
 const LODJ_COORDINATES = '43.977253,-71.8154831'
@@ -52,9 +51,9 @@ test('test createDirectionsRequest', () => {
   })
 })
 
-test('test getPacketFromResponse', async () => {
-  const API_RESPONSE_FILE = './test-data/sample-directions-api-response.json'
-  const file = await fs.readFile(API_RESPONSE_FILE, { encoding: 'utf8' })
-  const html = getPacketFromResponse(JSON.parse(file)).toString()
-  assert(html.includes('From Ravine Lodge Trailhead, Ravine Rd'))
-})
+// test('test getPacketFromResponse', async () => {
+//   const API_RESPONSE_FILE = './test-data/sample-directions-api-response.json'
+//   const file = await fs.readFile(API_RESPONSE_FILE, { encoding: 'utf8' })
+//   const html = getPacketFromResponse(JSON.parse(file)).toString()
+//   assert(html.includes('From Ravine Lodge Trailhead, Ravine Rd'))
+// })

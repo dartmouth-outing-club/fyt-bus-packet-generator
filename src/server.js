@@ -37,6 +37,12 @@ function servePacketList (res) {
   serveAsString(res, links)
 }
 
+function deletePacket (res, name) {
+  sqlite.deletePacket(name)
+  res.statusCode = 204
+  res.end()
+}
+
 function servePacket (res, name) {
   const packet = sqlite.getPacket(name)
   if (packet) {
@@ -57,8 +63,13 @@ function serveStaticFile (res, filepath) {
 }
 
 function serveStopsList (res) {
-  const stopsOptions = new StopsOptionList(sqlite.getStops())
+  const stopsOptions = new StopsOptionList(sqlite.getAllStops())
   serveAsString(res, stopsOptions)
+}
+
+export function serveNotAllowed (res) {
+  res.statusCode = 405
+  res.end()
 }
 
 export function serveNotFound (res) {
@@ -106,16 +117,20 @@ export function handleStaticRoute (req, res) {
 export function handlePacketRoute (req, res) {
   const requestUrl = new URL(req.url, `http://${req.headers.host}`)
 
-  if (req.method === 'POST') {
-    handlePacketPost(req, res)
-  } else {
-    const name = decodeURI(requestUrl.pathname).split('/')[2]
-    if (name) {
-      servePacket(res, name)
-    } else {
+  switch (req.method) {
+    case 'POST':
+      return handlePacketPost(req, res)
+    case 'GET': {
       // Technically there is an opportunity for XSS here
       // We don't have any cookies to be stolen with XSS, but it's worth removing nonetheless
-      servePacketList(res)
+      const name = decodeURI(requestUrl.pathname).split('/')[2]
+      return name ? servePacket(res, name) : servePacketList(res)
     }
+    case 'DELETE': {
+      const name = decodeURI(requestUrl.pathname).split('/')[2]
+      return deletePacket(res, name)
+    }
+    default:
+      return serveNotAllowed(res)
   }
 }

@@ -57,3 +57,9 @@ export function savePacket (name, html) {
   VALUES (?, ?)
   `).run(name, html)
 }
+
+export function deletePacket (name) {
+  const { changes } = db.prepare('DELETE FROM packets WHERE name = ?').run(name)
+  console.log(`Deleted ${changes} packet(s)`)
+  return changes
+}

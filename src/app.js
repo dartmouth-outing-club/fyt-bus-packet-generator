@@ -4,7 +4,6 @@ import * as server from './server.js'
 const port = process.env.PORT || 3000
 const host = 'localhost'
 
-
 const app = http.createServer(async (req, res) => {
   const requestUrl = new URL(req.url, `http://${req.headers.host}`)
   console.log(`${req.method} request receieved for ${requestUrl}`)
