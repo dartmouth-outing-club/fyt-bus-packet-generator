@@ -28,12 +28,25 @@ main {
   padding-right: 20px;
 }
 
-select {
-  width: 300px;
+form > * {
+  margin-bottom: 20px;
 }
 
 fieldset {
-  margin-bottom: 20px;
+	display: flex;
+	flex-direction: row;
+}
+
+fieldset > select {
+	margin-left: 10px;
+}
+
+fieldset > button {
+	margin-left: auto;
+}
+
+select {
+  width: 300px;
 }
 
 legend {
@@ -42,6 +55,16 @@ legend {
   padding: 3px 6px;
 }
 
+button#add {
+	background-image: url(/static/plus.svg);
+	background-repeat: no-repeat;
+	padding-left: 20px;
+}
+
 button.trash {
 	/* background-size: 10px 10px; */
+}
+
+.nodisplay {
+	display: none;
 }

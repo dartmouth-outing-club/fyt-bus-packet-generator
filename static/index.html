@@ -20,15 +20,20 @@
 		<legend>Trip start</legend>
 		<label for=origin-location>Start location: </label>
 		<select id=origin-location name=origin-location required>
-			<option value="" selected disabled hidden>---- Choose a starting location ----
+			<option value="" selected disabled hidden>---- Choose a location ----
 		</select>
+		<button class=nodisplay onclick="this.parentElement.remove()" type=button>Remove</button>
 	</fieldset>
+
+	<button id=add type=button onclick="addNewWaypoint()">
+		Insert another trip stop
+	</button>
 
 	<fieldset name=route-end>
 		<legend>Trip end</legend>
 		<label for=destination-location>End location: </label>
 		<select id=destination-location name=destination-location required>
-			<option value="" selected disabled hidden>---- Choose a starting location ----
+			<option value="" selected disabled hidden>---- Choose a location ----
 		</select>
 	</fieldset>
 
@@ -45,24 +50,42 @@
 <script>
 	// Default trip date to today
 	document.getElementById('trip-date').valueAsDate = new Date()
+	const INITIAL_FIELDSETS = document.querySelectorAll('fieldset').length
 
 	// Populate "stops" options with the stops from the backend
-	const stops = fetch('/stops')
-		.then(res => res.text())
-		.then(text => {
-				document.getElementById('origin-location').innerHTML += text
-				document.getElementById('destination-location').innerHTML += text
-			})
+	fetch('/stops').then(res => res.text()).then(text => {
+			document.getElementById('origin-location').innerHTML += text
+			document.getElementById('destination-location').innerHTML += text
+		})
 
-	const packets = fetch('/packet')
-		.then(res => res.text())
-		.then(text => {
-				document.getElementById('packets-list').innerHTML += text
-			})
+	// Populate existing packets from the backend
+	fetch('/packet').then(res => res.text()).then(text => {
+			document.getElementById('packets-list').innerHTML += text
+		})
 
 	function deletePacket (name) {
 			fetch(`/packet/${name}`, { method: 'DELETE' })
 				.then(res => location.reload())
 				.catch(err => console.log('Failed to delete packet'))
 		}
+
+	function addNewWaypoint () {
+			const form = document.querySelector('form')
+			const { add, ['route-start']: start } = form
+			console.log(add, start)
+			const newFieldset = start.cloneNode(true)
+			const num = document.querySelectorAll('fieldset').length - INITIAL_FIELDSETS + 1
+			const deleteButton = document.createElement
+
+			newFieldset.setAttribute('name', `waypoint${num}`)
+			newFieldset.children[0].innerHTML = `Waypoint ${num}`
+			newFieldset.children[1].setAttribute('for', `waypoint${num}-location`)
+			newFieldset.children[1].attributes.innerHTML = 'Stop location:'
+			newFieldset.children[2].setAttribute('id', `waypoint${num}-location`)
+			newFieldset.children[2].setAttribute('name', `waypoint${num}-location`)
+			newFieldset.children[3].classList.remove('nodisplay')
+
+			form.insertBefore(newFieldset, add)
+		}
+
 </script>
