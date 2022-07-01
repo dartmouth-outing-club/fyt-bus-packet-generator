@@ -53,13 +53,10 @@ function servePacket (res, name) {
 }
 
 function serveStaticFile (res, filepath) {
-  try {
-    const stream = fs.createReadStream(filepath)
-    res.statusCode = 200
-    stream.pipe(res)
-  } catch {
-    serveNotFound(res)
-  }
+  const stream = fs.createReadStream(filepath)
+  stream.on('error', () => serveNotFound(res))
+  res.statusCode = 200
+  stream.pipe(res)
 }
 
 function serveStopsList (res) {
@@ -107,13 +104,6 @@ export function handleStopsRoute (_req, res) {
   serveStopsList(res)
 }
 
-export function handleDefaultRoute (req, res) {
-  // Protects against directory traversal! See https://url.spec.whatwg.org/#path-state
-  const requestUrl = new URL(req.url, `http://${req.headers.host}`)
-  const filepath = path.join(path.resolve(), '/static', requestUrl.pathname)
-  serveStaticFile(res, filepath)
-}
-
 export function handlePacketRoute (req, res) {
   const requestUrl = new URL(req.url, `http://${req.headers.host}`)
 
@@ -133,4 +123,11 @@ export function handlePacketRoute (req, res) {
     default:
       return serveNotAllowed(res)
   }
+}
+
+export function handleDefaultRoute (req, res) {
+  // Protects against directory traversal! See https://url.spec.whatwg.org/#path-state
+  const requestUrl = new URL(req.url, `http://${req.headers.host}`)
+  const filepath = path.join(path.resolve(), '/static', requestUrl.pathname)
+  serveStaticFile(res, filepath)
 }
