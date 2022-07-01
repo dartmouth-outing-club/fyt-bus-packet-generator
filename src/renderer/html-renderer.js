@@ -4,6 +4,7 @@ import { loadFile } from '../utils.js'
 const emptyPacket = await loadFile('./src/renderer/packet-base.html')
 const packetStylets = await loadFile('./src/renderer/packet-stylesheet.css')
 
+
 export class Packet {
   constructor (legs, title) {
     this.bodyHtml = legs.map(leg => leg.toString()).join('\n')
@@ -66,5 +67,9 @@ export class PacketLinkList {
   }
 
   toString = () =>
-    this.names.map(name => `<li><a href="/packet/${encodeURI(name)}">${name}</a>`).join('\n')
+    this.names
+      .map(name => `<li>
+  <a href="/packet/${encodeURI(name)}">${name}</a>
+  <button onclick="deletePacket('${name}')">Delete</button>`)
+      .join('\n')
 }

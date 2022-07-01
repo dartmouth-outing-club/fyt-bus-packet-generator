@@ -60,4 +60,7 @@
 				document.getElementById('packets-list').innerHTML += text
 			})
 
+	function deletePacket (name) {
+			fetch(`/packet/${name}`, { method: 'DELETE' }).then(res => location.reload())
+		}
 </script>
