@@ -82,7 +82,7 @@ async function handlePacketPost (req, res) {
   const params = new URLSearchParams(body)
 
   const tripName = params.get('trip-name')
-  // const date = params.get('trip-date')
+  const date = params.get('trip-date')
   const origin = sqlite.getStop(params.get('origin-location'))
   const destination = sqlite.getStop(params.get('destination-location'))
 
@@ -92,7 +92,7 @@ async function handlePacketPost (req, res) {
   const directions = sqlite.getDirections(origin.coordinates, destination.coordinates) ||
     await google.getDirections(origin.coordinates, destination.coordinates)
   const packet = buildPacket(
-    directions, tripName, origin.name, destination.name, destination.specialInstructions)
+    directions, tripName, date, origin.name, destination.name, destination.specialInstructions)
 
   sqlite.savePacket(tripName, packet.toString())
   redirect(res, '/')

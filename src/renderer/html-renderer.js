@@ -5,15 +5,19 @@ const emptyPacket = await loadFile('./src/renderer/packet-base.html')
 const packetStylets = await loadFile('./src/renderer/packet-stylesheet.css')
 const trashCanSvg = await loadFile('./static/trash-can.svg')
 
-export function packet (legs, title) {
+export function packet (legs, title, date) {
   const bodyHtml = legs.map(leg => leg.toString()).join('\n')
+  const monthDay = date.slice(5).replace('-', '/')
 
   return `${emptyPacket}
 <title>${title}</title>
 <style>
 ${packetStylets}</style>
 
+<header>
 <h1>${title}</h1>
+<span>${monthDay}</span>
+</header>
 ${bodyHtml}`
 }
 
