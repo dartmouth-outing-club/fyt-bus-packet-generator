@@ -37,8 +37,8 @@ fieldset {
 	flex-direction: row;
 }
 
-fieldset > select {
-	margin-left: 10px;
+fieldset > label {
+	margin-right: 10px;
 }
 
 fieldset > button {
