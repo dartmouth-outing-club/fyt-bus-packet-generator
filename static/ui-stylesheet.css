@@ -56,7 +56,7 @@ legend {
 }
 
 button#add {
-	background-image: url(/static/plus.svg);
+	background-image: url(/plus.svg);
 	background-repeat: no-repeat;
 	padding-left: 20px;
 }

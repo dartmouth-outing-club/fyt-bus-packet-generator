@@ -107,10 +107,10 @@ export function handleStopsRoute (_req, res) {
   serveStopsList(res)
 }
 
-export function handleStaticRoute (req, res) {
+export function handleDefaultRoute (req, res) {
   // Protects against directory traversal! See https://url.spec.whatwg.org/#path-state
   const requestUrl = new URL(req.url, `http://${req.headers.host}`)
-  const filepath = path.join(path.resolve(), '/', requestUrl.pathname)
+  const filepath = path.join(path.resolve(), '/static', requestUrl.pathname)
   serveStaticFile(res, filepath)
 }
 
