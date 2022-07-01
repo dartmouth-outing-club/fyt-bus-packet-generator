@@ -4,7 +4,7 @@ body {
   margin: 0px;
 }
 
-button {
+button[type=submit]{
   width: 183px;
   height: 38px;
   color: #ffffff;
@@ -12,7 +12,7 @@ button {
   border-radius: 4px;
 }
 
-button:hover {
+button[type=submit]:hover {
   background-color: #12312b;
 }
 
@@ -40,4 +40,8 @@ legend {
   background-color: #00693e;
   color: #fff;
   padding: 3px 6px;
+}
+
+button.trash {
+	/* background-size: 10px 10px; */
 }

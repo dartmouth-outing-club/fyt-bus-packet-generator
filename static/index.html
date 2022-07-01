@@ -61,6 +61,8 @@
 			})
 
 	function deletePacket (name) {
-			fetch(`/packet/${name}`, { method: 'DELETE' }).then(res => location.reload())
+			fetch(`/packet/${name}`, { method: 'DELETE' })
+				.then(res => location.reload())
+				.catch(err => console.log('Failed to delete packet'))
 		}
 </script>

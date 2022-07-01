@@ -3,6 +3,7 @@ import { loadFile } from '../utils.js'
 // Note that imports are relative to current file, but non-import FPs are relative to source root
 const emptyPacket = await loadFile('./src/renderer/packet-base.html')
 const packetStylets = await loadFile('./src/renderer/packet-stylesheet.css')
+const trashCanSvg = await loadFile('./static/trash-can.svg')
 
 
 export class Packet {
@@ -70,6 +71,6 @@ export class PacketLinkList {
     this.names
       .map(name => `<li>
   <a href="/packet/${encodeURI(name)}">${name}</a>
-  <button onclick="deletePacket('${name}')">Delete</button>`)
+  <button class=trash onclick="deletePacket('${name}')">${trashCanSvg}</button>`)
       .join('\n')
 }
