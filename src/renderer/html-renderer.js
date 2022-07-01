@@ -5,72 +5,47 @@ const emptyPacket = await loadFile('./src/renderer/packet-base.html')
 const packetStylets = await loadFile('./src/renderer/packet-stylesheet.css')
 const trashCanSvg = await loadFile('./static/trash-can.svg')
 
+export function packet (legs, title) {
+  const bodyHtml = legs.map(leg => leg.toString()).join('\n')
 
-export class Packet {
-  constructor (legs, title) {
-    this.bodyHtml = legs.map(leg => leg.toString()).join('\n')
-    this.title = title
-  }
-
-  toString = () => `${emptyPacket}
-<title>${this.title}</title>
+  return `${emptyPacket}
+<title>${title}</title>
 <style>
 ${packetStylets}</style>
 
-<h1>${this.title}</h1>
-${this.bodyHtml}`
+<h1>${title}</h1>
+${bodyHtml}`
 }
 
-export class Step {
-  constructor (instructionsHtml, distanceText) {
-    this.instructions = instructionsHtml || '(Missing instruction)'
-    this.distance = distanceText || '(Missing distance)'
-  }
+export function step (instructionsHtml, distanceText) {
+  const instructions = instructionsHtml || '(Missing instruction)'
+  const distance = distanceText || '(Missing distance)'
 
-  toString = () => `<li>${this.instructions} &mdash; ${this.distance}`
+  return `<li>${instructions} &mdash; ${distance}`
 }
 
-export class Leg {
-  constructor (duration, distance, startName, endName, steps, instructions) {
-    if (!steps) throw new Error('Leg is missing steps')
-    // Remove the unnecessary "USA" from the address string
-    this.startName = startName
-    this.endName = endName
-    this.steps = steps.join('\n')
-    this.duration = duration
-    this.distance = distance
-    this.instructions = instructions
-  }
+export function leg (duration, distance, startName, endName, steps, instructions) {
+  if (!steps) throw new Error('Leg is missing steps')
 
-  toString = () => `<section>
-<h2>From ${this.startName}</h2>
+  return `<section>
+<h2>From ${startName}</h2>
 <ol>
-${this.steps}
+${steps.join('\n')}
 <li>
-  <h2>Arrived at ${this.endName}</h2>
-  <p>${this.instructions}
+  <h2>Arrived at ${endName}</h2>
+  <p>${instructions}
 </ol>
 </section>
 `
 }
 
-export class StopsOptionList {
-  constructor (stops) {
-    this.stops = stops
-  }
-
-  toString = () => this.stops.map(stop => `<option>${stop}`).join('\n')
+export function stopsOptionList (stops) {
+  return stops.map(stop => `<option>${stop}`).join('\n')
 }
 
-export class PacketLinkList {
-  constructor (names) {
-    this.names = names
-  }
-
-  toString = () =>
-    this.names
-      .map(name => `<li>
+export function packetLinkList (names) {
+  return names.map(name => `<li>
   <a href="/packet/${encodeURI(name)}">${name}</a>
   <button class=trash onclick="deletePacket('${name}')">${trashCanSvg}</button>`)
-      .join('\n')
+    .join('\n')
 }

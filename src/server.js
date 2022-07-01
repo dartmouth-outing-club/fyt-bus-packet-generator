@@ -2,8 +2,8 @@ import fs from 'node:fs'
 import path from 'node:path'
 
 import { buildPacket } from './directions-api.js'
-import { PacketLinkList, StopsOptionList } from './renderer/html-renderer.js'
 
+import * as html from './renderer/html-renderer.js'
 import * as sqlite from './clients/sqlite.js'
 import * as google from './clients/google-client.js'
 
@@ -33,7 +33,7 @@ function serveAsString (res, object) {
 
 function servePacketList (res) {
   const names = sqlite.getAllPacketNames()
-  const links = new PacketLinkList(names)
+  const links = html.packetLinkList(names)
   serveAsString(res, links)
 }
 
@@ -63,7 +63,7 @@ function serveStaticFile (res, filepath) {
 }
 
 function serveStopsList (res) {
-  const stopsOptions = new StopsOptionList(sqlite.getAllStops())
+  const stopsOptions = html.stopsOptionList(sqlite.getAllStops())
   serveAsString(res, stopsOptions)
 }
 

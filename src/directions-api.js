@@ -1,4 +1,4 @@
-import { Leg, Packet, Step } from './renderer/html-renderer.js'
+import * as html from './renderer/html-renderer.js'
 
 /**
  * Format a list of coordinates into a request to the Google Maps API.
@@ -31,7 +31,7 @@ export function createDirectionsRequest (coordinateList) {
 export function convertRawStep (rawStep) {
   const instructionsHtml = rawStep.html_instructions
   const distanceText = rawStep.distance?.text
-  return new Step(instructionsHtml, distanceText)
+  return html.step(instructionsHtml, distanceText)
 }
 
 /**
@@ -42,7 +42,7 @@ export function convertRawStep (rawStep) {
 export function buildPacket (directions, tripName, startName, endName, instructions) {
   const { duration, distance, steps: rawSteps } = directions?.routes.at(0)?.legs.at(0)
   const steps = rawSteps.map(convertRawStep)
-  const leg = new Leg(duration, distance, startName, endName, steps, instructions)
+  const leg = html.leg(duration, distance, startName, endName, steps, instructions)
 
-  return new Packet([leg], tripName)
+  return html.packet([leg], tripName)
 }
