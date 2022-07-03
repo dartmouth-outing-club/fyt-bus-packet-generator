@@ -5,46 +5,46 @@
 <link rel="icon" href="/favicon.ico">
 <link rel="stylesheet" href="/ui-stylesheet.css">
 
+<header>
 <h1>FYT Bus Packet Generator</h1>
+<ul>
+<li><a href="/">Home</a></li>
+<li><a href="/packets">Packets</a></li>
+</ul>
+</header>
 
 <main>
 <h2>Generate new packet</h2>
 <form action="/packet" method=post>
-	<fieldset name=trip-info>
-		<legend>Trip info</legend>
-		<label>Trip name: <input type=text name=trip-name required></label>
-		<label>Trip date: <input type=date name=trip-date id=trip-date required></label>
-	</fieldset>
+<fieldset name=trip-info>
+<legend>Trip info</legend>
+<label>Trip name: <input type=text name=trip-name required></label>
+<label>Trip date: <input type=date name=trip-date id=trip-date required></label>
+</fieldset>
 
-	<fieldset name=route-start>
-		<legend>Trip start</legend>
-		<label for=origin-location>Start location: </label>
-		<select id=origin-location name=origin-location required>
-			<option value="" selected disabled hidden>---- Choose a location ----
-		</select>
-		<button class=nodisplay onclick="this.parentElement.remove()" type=button>Remove</button>
-	</fieldset>
+<fieldset name=route-start>
+<legend>Trip start</legend>
+<label for=origin-location>Start location: </label>
+<select id=origin-location name=origin-location required>
+	<option value="" selected disabled hidden>---- Choose a location ----
+</select>
+<button class=nodisplay onclick="this.parentElement.remove()" type=button>Remove</button>
+</fieldset>
 
-	<button id=add type=button onclick="addNewWaypoint()">
-		Insert another trip stop
-	</button>
+<button id=add type=button onclick="addNewWaypoint()">
+Insert another trip stop
+</button>
 
-	<fieldset name=route-end>
-		<legend>Trip end</legend>
-		<label for=destination-location>End location: </label>
-		<select id=destination-location name=destination-location required>
-			<option value="" selected disabled hidden>---- Choose a location ----
-		</select>
-	</fieldset>
+<fieldset name=route-end>
+<legend>Trip end</legend>
+<label for=destination-location>End location: </label>
+<select id=destination-location name=destination-location required>
+	<option value="" selected disabled hidden>---- Choose a location ----
+</select>
+</fieldset>
 
-	<button type=submit>Submit</button>
+<button type=submit>Submit</button>
 </form>
-
-
-<h2>Existing packets</h2>
-<ul id=packets-list>
-</ul>
-
 </main>
 
 <script>
@@ -57,17 +57,6 @@
 			document.getElementById('origin-location').innerHTML += text
 			document.getElementById('destination-location').innerHTML += text
 		})
-
-	// Populate existing packets from the backend
-	fetch('/packet').then(res => res.text()).then(text => {
-			document.getElementById('packets-list').innerHTML += text
-		})
-
-	function deletePacket (name) {
-			fetch(`/packet/${name}`, { method: 'DELETE' })
-				.then(res => location.reload())
-				.catch(err => console.log('Failed to delete packet'))
-		}
 
 	function addNewWaypoint () {
 			const form = document.querySelector('form')

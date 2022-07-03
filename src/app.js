@@ -110,7 +110,11 @@ export function handlePacketRoute (req, res) {
 export function handleDefaultRoute (req, res) {
   // Protects against directory traversal! See https://url.spec.whatwg.org/#path-state
   const requestUrl = new URL(req.url, `http://${req.headers.host}`)
-  const filepath = path.join(path.resolve(), '/static', requestUrl.pathname)
+  let filepath = path.join(path.resolve(), '/static', requestUrl.pathname)
+
+  // Serve the html file if there's no file extension in the path
+  // Obviously this precludes serving files with no extensions; good thing we don't need to do that
+  if (!requestUrl.pathname.includes('.')) filepath += '.html'
   responses.serveStaticFile(res, filepath)
 }
 

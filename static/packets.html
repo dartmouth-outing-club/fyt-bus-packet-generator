@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang=en>
+<title>FYT Bus Packet Generator</title>
+<meta charset="UTF-8">
+<link rel="icon" href="/favicon.ico">
+<link rel="stylesheet" href="/ui-stylesheet.css">
+
+<header>
+<h1>FYT Bus Packet Generator</h1>
+<ul>
+<li><a href="/">Home</a></li>
+<li><a href="/packets">Packets</a></li>
+</ul>
+</header>
+
+<main>
+<h2>Existing packets</h2>
+<ul id=packets-list>
+</ul>
+</main>
+
+<script>
+	// Populate existing packets from the backend, then enable page
+	fetch('/packet').then(res => res.text()).then(text => {
+			document.getElementById('packets-list').innerHTML += text
+		})
+
+	function deletePacket (name) {
+			fetch(`/packet/${name}`, { method: 'DELETE' })
+				.then(res => location.reload())
+				.catch(err => console.log('Failed to delete packet'))
+		}
+</script>
+

@@ -12,15 +12,34 @@ button[type=submit]{
   border-radius: 4px;
 }
 
-button[type=submit]:hover {
+header li:hover, button[type=submit]:hover {
   background-color: #12312b;
 }
 
-h1 {
-  background-color: #00693e;
-  padding: 20px;
+header {
+	background-color: #005336;
   margin: 0px;
+}
+
+header > h1 {
+	margin: 0px;
+	padding: 20px 0px 0px 20px;
   color: #ffffff;
+}
+
+header > ul {
+	padding: 0px 0px 0px 20px;
+  background-color: #00693e;
+	list-style-type: none;
+	display: flex;
+	flex-direction: row;
+}
+
+header a {
+	padding: 10px;
+	display: inline-block;
+	color: white;
+	text-decoration: none;
 }
 
 main {

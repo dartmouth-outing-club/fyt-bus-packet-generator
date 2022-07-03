@@ -3,10 +3,18 @@ The “bus packet” is a human-readable document containing all the information
 This is a simple webapp to generate the the bus packets for each trip.
 A example of the kind of packet that this generates can be found in the `samples` directory.
 
-*Note that at this time the app is currently in development and does not have full functionality.*
+Current functionality:
+* Home page lets you view previously generated packets
+* You can create new packets with up to 10 stops
+* Generated packets automatically include directions to each stop, and special instructions for the driver
+
+Future functionality:
+* List the trips that will be on the bus and what stop they will be getting off at
+* View the routes that have been loaded already
+* Download all the packets
 
 ## Development
-The first time you download the repo, you will need to run `npm install` before the following commands will work properly.
+The first time you download the repo, you will need to run `npm install`.
 
 * `npm start` - Run the server
 * `npm run dev` - Run the server in dev mode, with hot-reloading
