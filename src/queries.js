@@ -7,21 +7,27 @@
  * numerical order of the stops.
  *
  */
-function convertQueryToStopsList(params) {
+function convertQueryToStopsList (params) {
   const keys = Array.from(params.keys())
 
   return keys.filter(key => key.startsWith('stop'))
     .map(key => key.slice(4, key.indexOf('-')))
-    .map(num => {console.log(num); return num})
     .map(num => parseInt(num))
     .sort()
     .map(num => `stop${num}-location`)
     .map(key => params.get(key))
 }
 
+/**
+ * Make a list of all the edges present in a flat list.
+ *
+ * For instance: a list l [1,2,3] would become [[1,2], [2,3]]
+ * Note that the resulting list contains the references to the items in the original list if they're
+ * not primitives. In other words, objects are shallow copies.
+ */
 export function makeEdgeList (list) {
   const edges = []
-  for (let i = 0; i < list.length - 1; i ++) {
+  for (let i = 0; i < list.length - 1; i++) {
     const leg = list.slice(i, i + 2)
     edges.push(leg)
   }
@@ -29,7 +35,7 @@ export function makeEdgeList (list) {
   return edges
 }
 
-export function parseQuery(body) {
+export function parseQuery (body) {
   const params = new URLSearchParams(body)
 
   const tripName = params.get('trip-name')
@@ -38,9 +44,8 @@ export function parseQuery(body) {
   const destination = params.get('destination-location')
   const stops = convertQueryToStopsList(params)
 
-  if (!origin || !destination) throw new Error(`Bad request, waypoints = ${waypoints}`)
+  if (!origin || !destination) throw new Error(`Bad request, stops = ${stops}`)
 
   const stopNames = [origin, ...stops, destination]
-  console.log(stopNames)
   return { tripName, date, stopNames }
 }

@@ -28,11 +28,9 @@ export function getDirections (origin, destination) {
   `).get(origin, destination)
 
   if (directions) {
-    console.log(`Cache hit for directions, last updated: ${directions.updated_at}`)
     return JSON.parse(directions.google_directions)
   }
 
-  console.log('Cache miss for directions')
   return undefined
 }
 

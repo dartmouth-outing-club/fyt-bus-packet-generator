@@ -37,7 +37,7 @@ export function leg (duration, distance, startName, endName, steps, instructions
 ${steps.join('\n')}
 <li>
   <h2>Arrived at ${endName}</h2>
-  <p>${instructions}
+  <p>${instructions || ''}
 </ol>
 </section>
 `

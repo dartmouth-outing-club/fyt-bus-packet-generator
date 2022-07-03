@@ -6,6 +6,7 @@ import { buildPacket } from './directions-api.js'
 import * as html from './renderer/html-renderer.js'
 import * as sqlite from './clients/sqlite.js'
 import * as google from './clients/google-client.js'
+import * as queries from './queries.js'
 
 const HOMEPAGE_FP = 'static/index.html'
 
@@ -74,23 +75,42 @@ export function serveNotFound (res) {
   res.end()
 }
 
-async function handlePacketPost (req, res) {
+export function serveBadRequest (res) {
+  res.statusCode = 400
+  res.end()
+}
+
+async function createPacket (req, res) {
   const body = await streamToString(req)
-  const params = new URLSearchParams(body)
 
-  const tripName = params.get('trip-name')
-  const date = params.get('trip-date')
-  const origin = sqlite.getStop(params.get('origin-location'))
-  const destination = sqlite.getStop(params.get('destination-location'))
+  let params
+  try {
+    params = queries.parseQuery(body)
+  } catch (err) {
+    console.error(err)
+    return serveBadRequest(res)
+  }
 
-  if (!origin || !destination) return serveNotFound(res)
+  const { tripName, date, stopNames } = params
+  console.log(`Getting stop information for: ${stopNames}`)
+  const stops = stopNames.map(sqlite.getStop)
+  const edgeListOfStops = queries.makeEdgeList(stops)
 
-  console.log(`Checking cache for start: ${origin.name}, end: ${destination.name}`)
-  const directions = sqlite.getDirections(origin.coordinates, destination.coordinates) ||
-    await google.getDirections(origin.coordinates, destination.coordinates)
-  const packet = buildPacket(
-    directions, tripName, date, origin.name, destination.name, destination.specialInstructions)
+  // Create a list of promises that will resolve the directions between each pair of stops
+  const directionsPromises = edgeListOfStops.map(([start, end]) => {
+    const directions = sqlite.getDirections(start.coordinates, end.coordinates)
 
+    if (directions) {
+      console.log(`Cache hit for directions from ${start.name} to ${end.name}`)
+      return Promise.resolve(directions)
+    }
+
+    console.log(`Cache miss for directions from ${start.name} to ${end.name}`)
+    return google.getDirections(start.coordinates, end.coordinates)
+  })
+
+  const directionsList = await Promise.all(directionsPromises)
+  const packet = buildPacket(stops, directionsList, tripName, date)
   sqlite.savePacket(tripName, packet.toString())
   redirect(res, '/')
 }
@@ -109,7 +129,7 @@ export function handlePacketRoute (req, res) {
 
   switch (req.method) {
     case 'POST':
-      return handlePacketPost(req, res)
+      return createPacket(req, res)
     case 'GET': {
       // Technically there is an opportunity for XSS here
       // We don't have any cookies to be stolen with XSS, but it's worth removing nonetheless

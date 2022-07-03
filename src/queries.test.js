@@ -3,7 +3,6 @@ import assert from 'node:assert/strict'
 import * as queries from './queries.js'
 
 test('parseQuery', () => {
-
   test('it parses a query with no additional stops', () => {
     const params = new URLSearchParams()
     params.append('trip-name', 'Trip to Moosilauke')
@@ -11,13 +10,12 @@ test('parseQuery', () => {
     params.append('origin-location', 'Hanover')
     params.append('destination-location', 'Moosilauke')
 
-		const expected = {
-			tripName: 'Trip to Moosilauke',
-			date: '2022-07-01',
-			stopNames: ['Hanover', 'Moosilauke']
-		}
+    const expected = {
+      tripName: 'Trip to Moosilauke',
+      date: '2022-07-01',
+      stopNames: ['Hanover', 'Moosilauke']
+    }
     assert.deepEqual(queries.parseQuery(params), expected)
-
   })
 
   test('it parses a query with one stop', () => {
@@ -28,11 +26,11 @@ test('parseQuery', () => {
     params.append('stop1-location', 'Dartmouth Skiway')
     params.append('destination-location', 'Moosilauke')
 
-		const expected = {
-			tripName: 'Trip to Moosilauke',
-			date: '2022-07-01',
-			stopNames: ['Hanover', 'Dartmouth Skiway', 'Moosilauke']
-		}
+    const expected = {
+      tripName: 'Trip to Moosilauke',
+      date: '2022-07-01',
+      stopNames: ['Hanover', 'Dartmouth Skiway', 'Moosilauke']
+    }
     assert.deepEqual(queries.parseQuery(params), expected)
   })
 
@@ -47,14 +45,13 @@ test('parseQuery', () => {
     params.append('stop2-location', 'Dartmouth Skiway')
     params.append('destination-location', 'Moosilauke')
 
-		const expected = {
-			tripName: 'Trip to Moosilauke',
-			date: '2022-07-01',
-			stopNames: ['Hanover', 'Lyme', 'Dartmouth Skiway', 'DOC Cabin', 'Warren', 'Moosilauke']
-		}
+    const expected = {
+      tripName: 'Trip to Moosilauke',
+      date: '2022-07-01',
+      stopNames: ['Hanover', 'Lyme', 'Dartmouth Skiway', 'DOC Cabin', 'Warren', 'Moosilauke']
+    }
     assert.deepEqual(queries.parseQuery(params), expected)
   })
-
 
   test('it throws an error if missing an origin', () => {
     const params = new URLSearchParams()
@@ -71,11 +68,9 @@ test('parseQuery', () => {
     params.append('origin-location', 'Hanover')
     assert.throws(() => queries.parseQuery(params))
   })
-
 })
 
 test('makeEdgeList', () => {
-
   test('it returns empty if list is empty', () => {
     assert.deepEqual(queries.makeEdgeList([]), [])
   })
@@ -91,5 +86,4 @@ test('makeEdgeList', () => {
   test('it returns a list of three couples when given a list of four', () => {
     assert.deepEqual(queries.makeEdgeList([1, 2, 3, 4]), [[1, 2], [2, 3], [3, 4]])
   })
-
 })
