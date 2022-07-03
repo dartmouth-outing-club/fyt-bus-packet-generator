@@ -10,10 +10,10 @@
   "main": "src/app.js",
   "name": "fyt-bus-packet-generator",
   "scripts": {
-    "dev": "npx nodemon src/app.js",
+    "dev": "NODE_ENV=development npx nodemon src/app.js",
     "format": "standard --fix",
     "init": "scripts/init-db.sh",
-    "start": "node app.js",
+    "start": "NODE_ENV=production node app.js",
     "test": "standard && node --test",
     "validate": "vnu --skip-non-html --also-check-css static"
   },
