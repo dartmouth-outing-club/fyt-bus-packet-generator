@@ -1,4 +1,23 @@
 import fs from 'node:fs'
+import path from 'node:path'
+
+const pagePath = (staticFp) => path.join(path.resolve(), '/static', staticFp)
+
+const HOMEPAGE_FP = pagePath('index.html')
+const ERROR_FP = pagePath('error.html')
+
+function setCodeAndEnd (res, code) {
+  res.statusCode = code
+  res.end()
+}
+
+function pipeFile (res, filepath, code = 200) {
+  const stream = fs.createReadStream(filepath)
+  stream.on('error', () => serveNotFound(res))
+  stream.on('end', () => res.end())
+  res.statusCode = code
+  stream.pipe(res)
+}
 
 export function serveAsString (res, object) {
   res.statusCode = 200
@@ -6,24 +25,22 @@ export function serveAsString (res, object) {
   res.end()
 }
 
-export function serveStaticFile (res, filepath) {
-  const stream = fs.createReadStream(filepath)
-  stream.on('error', () => serveNotFound(res))
-  res.statusCode = 200
-  stream.pipe(res)
+export function serveStaticFile (res, pathname) {
+  // Protects against directory traversal! See https://url.spec.whatwg.org/#path-state
+  let filepath = path.join(path.resolve(), '/static', pathname)
+  if (pathname === '/') return serveHomepage(res)
+  // Serve the html file if there's no file extension in the path
+  if (!pathname.includes('.')) filepath += '.html'
+
+  pipeFile(res, filepath)
 }
 
-function setCodeAndEnd (res, code) {
-  res.statusCode = code
-  res.end()
+export function redirect (res, url) {
+  res.setHeader('location', url); setCodeAndEnd(res, 302)
 }
 
+export const serveHomepage = (res) => pipeFile(res, HOMEPAGE_FP)
 export const serveNoContent = (res) => setCodeAndEnd(res, 204)
-
 export const serveBadRequest = (res) => setCodeAndEnd(res, 400)
-
-export const redirect = (res, url) => { res.setHeader('location', url); setCodeAndEnd(res, 302) }
-
-export const serveNotFound = (res) => setCodeAndEnd(res, 404)
-
+export const serveNotFound = (res) => pipeFile(res, ERROR_FP, 404)
 export const serveNotAllowed = (res) => setCodeAndEnd(res, 405)

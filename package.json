@@ -13,7 +13,7 @@
     "dev": "NODE_ENV=development npx nodemon src/app.js",
     "format": "standard --fix",
     "init": "scripts/init-db.sh",
-    "start": "NODE_ENV=production node app.js",
+    "start": "NODE_ENV=production node src/app.js",
     "test": "standard && node --test",
     "validate": "vnu --skip-non-html --also-check-css static"
   },

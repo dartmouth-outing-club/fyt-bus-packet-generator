@@ -21,12 +21,12 @@
 
 <script>
 	// Populate existing packets from the backend, then enable page
-	fetch('/packet').then(res => res.text()).then(text => {
+	fetch('/api/packet').then(res => res.text()).then(text => {
 			document.getElementById('packets-list').innerHTML += text
 		})
 
 	function deletePacket (name) {
-			fetch(`/packet/${name}`, { method: 'DELETE' })
+			fetch(`/api/packet/${name}`, { method: 'DELETE' })
 				.then(res => location.reload())
 				.catch(err => console.log('Failed to delete packet'))
 		}

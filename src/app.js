@@ -1,5 +1,4 @@
 import http from 'node:http'
-import path from 'node:path'
 
 import * as html from './renderer/html-renderer.js'
 import * as responses from './responses.js'
@@ -12,8 +11,9 @@ const env = process.env.NODE_ENV
 const port = process.env.PORT || 3000
 const host = 'localhost'
 
-const HOMEPAGE_FP = 'static/index.html'
-const STATIC_FILE_WARNING = 'Warining: you are running node in a non-dev environment and serving static files - you should replace that with a static file server.'
+const STATIC_FILE_WARNING = `Error - your server is not configured correctly.
+All requests to this server should be prefixed with /api/, but this one was not.
+Check your nginx configuration and ensure that only /api/ requests get sent here.`
 
 // https://stackoverflow.com/questions/10623798/how-do-i-read-the-contents-of-a-node-js-stream-into-a-string-variable
 function streamToString (stream) {
@@ -40,9 +40,7 @@ function servePacket (res, name) {
   responses.serveNotFound(res)
 }
 
-async function createPacket (req, res) {
-  const body = await streamToString(req)
-
+async function createPacket (res, body) {
   let params
   try {
     params = queries.parseQuery(body)
@@ -75,30 +73,27 @@ async function createPacket (req, res) {
   responses.redirect(res, '/')
 }
 
-export function handleRoot (_req, res) {
-  const filepath = path.join(path.resolve(), '/', HOMEPAGE_FP)
-  responses.serveStaticFile(res, filepath)
-}
-
 export function handleStopsRoute (_req, res) {
   const stopsOptions = html.stopsOptionList(sqlite.getAllStops())
   responses.serveAsString(res, stopsOptions)
 }
 
-export function handlePacketRoute (req, res) {
+export async function handlePacketRoute (req, res) {
   const requestUrl = new URL(req.url, `http://${req.headers.host}`)
 
   switch (req.method) {
-    case 'POST':
-      return createPacket(req, res)
+    case 'POST': {
+      const body = await streamToString(req)
+      return createPacket(res, body)
+    }
     case 'GET': {
       // Technically there is an opportunity for XSS here
-      // We don't have any cookies to be stolen with XSS, but it's worth removing nonetheless
-      const name = decodeURI(requestUrl.pathname).split('/')[2]
+      // We don't have any cookies to be stolen with XSS, but it's worth fixing nonetheless
+      const name = decodeURI(requestUrl.pathname).split('/')[3]
       return name ? servePacket(res, name) : servePacketList(res)
     }
     case 'DELETE': {
-      const name = decodeURI(requestUrl.pathname).split('/')[2]
+      const name = decodeURI(requestUrl.pathname).split('/')[3]
       sqlite.deletePacket(name)
       return responses.serveNoContent(res)
     }
@@ -107,26 +102,26 @@ export function handlePacketRoute (req, res) {
   }
 }
 
-export function handleDefaultRoute (req, res) {
-  // Protects against directory traversal! See https://url.spec.whatwg.org/#path-state
-  const requestUrl = new URL(req.url, `http://${req.headers.host}`)
-  let filepath = path.join(path.resolve(), '/static', requestUrl.pathname)
+export function handleNonApiRoute (req, res) {
+  if (env !== 'development') {
+    console.error(STATIC_FILE_WARNING)
+    return responses.serveNotFound(res)
+  }
 
-  // Serve the html file if there's no file extension in the path
-  // Obviously this precludes serving files with no extensions; good thing we don't need to do that
-  if (!requestUrl.pathname.includes('.')) filepath += '.html'
-  responses.serveStaticFile(res, filepath)
+  const requestUrl = new URL(req.url, `http://${req.headers.host}`)
+  return responses.serveStaticFile(res, requestUrl.pathname)
 }
 
 const app = http.createServer(async (req, res) => {
   const requestUrl = new URL(req.url, `http://${req.headers.host}`)
   console.log(`${req.method} request receieved for ${requestUrl}`)
-  const topRoute = requestUrl.pathname.split('/')[1]
+  const subRoutes = requestUrl.pathname.split('/')
 
-  switch (topRoute) {
-    case '':
-      handleRoot(req, res)
-      break
+  // If the route doesn't start with /api, it's a static route
+  if (subRoutes[1] !== 'api') return handleNonApiRoute(req, res)
+
+  // If it start with /api, send it to the appropriate API handler
+  switch (subRoutes[2]) {
     case 'stops':
       handleStopsRoute(req, res)
       break
@@ -134,11 +129,12 @@ const app = http.createServer(async (req, res) => {
       handlePacketRoute(req, res)
       break
     default:
-      if (env !== 'development') console.warn(STATIC_FILE_WARNING)
-      handleDefaultRoute(req, res)
+      responses.serveNotFound(res)
   }
 })
 
 app.listen(port, host, () => {
   console.log(`It's giving... http://${host}:${port}`)
 })
+
+// TODO Add "on crash" listener

@@ -15,7 +15,7 @@
 
 <main>
 <h2>Generate new packet</h2>
-<form action="/packet" method=post>
+<form action="/api/packet" method=post>
 <fieldset name=trip-info>
 <legend>Trip info</legend>
 <label>Trip name: <input type=text name=trip-name required></label>
@@ -53,7 +53,7 @@ Insert another trip stop
 	const INITIAL_FIELDSETS = document.querySelectorAll('fieldset').length
 
 	// Populate "stops" options with the stops from the backend
-	fetch('/stops').then(res => res.text()).then(text => {
+	fetch('/api/stops').then(res => res.text()).then(text => {
 			document.getElementById('origin-location').innerHTML += text
 			document.getElementById('destination-location').innerHTML += text
 		})
