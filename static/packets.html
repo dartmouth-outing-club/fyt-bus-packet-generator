@@ -2,6 +2,7 @@
 <html lang=en>
 <title>FYT Bus Packet Generator</title>
 <meta charset="UTF-8">
+<script async src="main.js"></script>
 <link rel="icon" href="/favicon.ico">
 <link rel="stylesheet" href="/ui-stylesheet.css">
 
@@ -20,17 +21,9 @@
 </main>
 
 <script>
-
 	// Populate existing packets from the backend, then enable page
 	fetch('/api/packet').then(res => res.text()).then(text => {
 			document.getElementById('packets-list').innerHTML += text
 		})
-
-	function deletePacket (name) {
-			fetch(`/api/packet/${name}`, { method: 'DELETE' })
-				.then(res => location.reload())
-				.catch(err => console.log('Failed to delete packet'))
-		}
-
 </script>
 

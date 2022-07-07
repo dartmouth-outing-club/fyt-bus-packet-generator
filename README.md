@@ -24,6 +24,13 @@ The first time you download the repo, you will need to run `npm install`.
 
 With the server running in dev mode, navigate to `http://localhost:3000` in browser to see the application.
 
+## Deployment instructions
+On your desired host:
+1. `git clone` this repository
+1. `scp` your `.env` file into the repository root, and the font `.woff` files into `/static/fonts`
+1. Run `npm run init` to set up SQLite
+1. Run `npm start` in your process manager of choice
+
 ## Bus Packet Format
 This is the process that the packet creator seeks to automate:
 1. Get the directions for each bus route from Google maps

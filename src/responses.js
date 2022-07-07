@@ -6,6 +6,16 @@ const pagePath = (staticFp) => path.join(path.resolve(), '/static', staticFp)
 const HOMEPAGE_FP = pagePath('index.html')
 const ERROR_FP = pagePath('error.html')
 
+function setMimeType (res, pathname) {
+  if (pathname.endsWith('.html')) {
+    res.setHeader('Content-Type', 'text/html')
+  } else if (pathname.endsWith('.js')) {
+    res.setHeader('Content-Type', 'text/javascript')
+  } else if (pathname.endsWith('.css')) {
+    res.setHeader('Content-Type', 'text/css')
+  }
+}
+
 function setCodeAndEnd (res, code) {
   res.statusCode = code
   res.end()
@@ -31,6 +41,7 @@ export function serveStaticFile (res, pathname) {
   if (pathname === '/') return serveHomepage(res)
   // Serve the html file if there's no file extension in the path
   if (!pathname.includes('.')) filepath += '.html'
+  setMimeType(res, pathname)
 
   pipeFile(res, filepath)
 }
