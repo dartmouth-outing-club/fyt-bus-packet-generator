@@ -20,6 +20,7 @@
 </main>
 
 <script>
+
 	// Populate existing packets from the backend, then enable page
 	fetch('/api/packet').then(res => res.text()).then(text => {
 			document.getElementById('packets-list').innerHTML += text
@@ -30,5 +31,6 @@
 				.then(res => location.reload())
 				.catch(err => console.log('Failed to delete packet'))
 		}
+
 </script>
 

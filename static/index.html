@@ -45,6 +45,11 @@ Insert another trip stop
 
 <button type=submit>Submit</button>
 </form>
+
+<h2>Existing packets</h2>
+<ul id=packets-list>
+</ul>
+
 </main>
 
 <script>
@@ -57,6 +62,17 @@ Insert another trip stop
 			document.getElementById('origin-location').innerHTML += text
 			document.getElementById('destination-location').innerHTML += text
 		})
+
+	// Populate existing packets from the backend, then enable page
+	fetch('/api/packet').then(res => res.text()).then(text => {
+			document.getElementById('packets-list').innerHTML += text
+		})
+
+	function deletePacket (name) {
+			fetch(`/api/packet/${name}`, { method: 'DELETE' })
+				.then(res => location.reload())
+				.catch(err => console.log('Failed to delete packet'))
+		}
 
 	function addNewWaypoint () {
 			const form = document.querySelector('form')
