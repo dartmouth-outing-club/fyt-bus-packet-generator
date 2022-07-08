@@ -1,6 +1,6 @@
 import { loadFile } from '../utils.js'
 
-// Note that imports are relative to current file, but non-import FPs are relative to source root
+// Note: imports are relative to current file, but non-import FPs are relative to source root
 const emptyPacket = await loadFile('./src/renderer/packet-base.html')
 const packetStylets = await loadFile('./src/renderer/packet-stylesheet.css')
 const trashCanSvg = await loadFile('./static/trash-can.svg')
@@ -32,7 +32,12 @@ export function leg (duration, distance, startName, endName, steps, instructions
   if (!steps) throw new Error('Leg is missing steps')
 
   return `<section>
+<header>
 <h2>From ${startName}</h2>
+<p>Distance to next desination: <b>${distance.text}</b>
+<p>Estimated time to next desination: <b>${duration.text}</b>
+</header>
+
 <ol>
 ${steps.join('\n')}
 <li>
