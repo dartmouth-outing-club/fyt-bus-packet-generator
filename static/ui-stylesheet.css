@@ -26,9 +26,14 @@ body {
 }
 
 button {
-	border-radius: 4px;
-	border-width: 2px;
-	border-color:  #f7f7f7;
+	margin: 3px;
+	background-color: #f7f7f7;
+	border: 1px solid gray;
+	border-radius: 2px;
+}
+
+button:hover {
+	 background-color: #e2e2e2;
 }
 
 button[type=submit]{
@@ -42,17 +47,14 @@ header li:hover, button[type=submit]:hover {
 	background-color: #12312b;
 }
 
-button:hover {
-	background-image: linear-gradient(rgba(0, 0, 0, 0.2) 0 0);
-}
-
 button.edit {
+	width: 50px;
 	color: #00693e;
 }
 
 button.delete {
-	color: white;
-	background-color: rgb(205, 62, 43);
+	width: 50px;
+	color: rgb(205, 62, 43);
 }
 
 h1, h2 {
@@ -120,12 +122,6 @@ legend {
 	background-color: #00693e;
 	color: #fff;
 	padding: 3px 6px;
-}
-
-button#add {
-	background-image: url(/plus.svg);
-	background-repeat: no-repeat;
-	padding-left: 20px;
 }
 
 ul#packets-list a {

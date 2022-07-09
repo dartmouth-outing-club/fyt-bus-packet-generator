@@ -56,8 +56,8 @@ export function stopsOptionList (stops) {
 
 export function packetLinkList (names) {
   return names.map(name => `<li>
-  <a href="/api/packet/${encodeURI(name)}">${name}</a>
   <button class=edit onclick="editPacket('${name}')">Edit</button>
-  <button class=delete onclick="deletePacket('${name}')">Delete</button>`)
-    .join('\n')
+  <button class=delete onclick="deletePacket('${name}')">Delete</button>
+  <a href="/api/packet/${encodeURI(name)}">${name}</a>
+  `).join('')
 }
