@@ -1,12 +1,13 @@
 /*
- * This stylesheet makes use of proprietary Dartmouth typefaces. These typefaces are not stored in
- * the repository, but they can be found at the Dartmouth communications websites:
- * https://communications.dartmouth.edu/visual-identity/design-elements/typography
- *
- * Though not propriety (in the sense that you cannot copyright a color), this sheet adheres to the
- * web version of the Dartmouth visual identify color palette:
- * https://communications.dartmouth.edu/visual-identity/design-elements/color-palette
- */
+This stylesheet makes use of proprietary Dartmouth typefaces. These typefaces are not stored in
+the repository, but they can be found at the Dartmouth communications websites:
+https://communications.dartmouth.edu/visual-identity/design-elements/typography
+
+Though not propriety (in the sense that you cannot copyright a color), this sheet adheres to the
+web version of the Dartmouth visual identify color palette:
+https://communications.dartmouth.edu/visual-identity/design-elements/color-palette
+*/
+
 @font-face{
 	font-family:"National2Web";
 	src:url(fonts/National2Web-Regular.woff);
@@ -26,6 +27,7 @@ body {
 }
 
 button {
+	min-width: 50px;
 	margin: 3px;
 	background-color: #f7f7f7;
 	border: 1px solid gray;
@@ -33,7 +35,7 @@ button {
 }
 
 button:hover {
-	 background-color: #e2e2e2;
+	background-color: #e2e2e2;
 }
 
 button[type=submit]{
@@ -48,12 +50,10 @@ header li:hover, button[type=submit]:hover {
 }
 
 button.edit {
-	width: 50px;
 	color: #00693e;
 }
 
 button.delete {
-	width: 50px;
 	color: rgb(205, 62, 43);
 }
 
@@ -98,14 +98,13 @@ form > * {
 }
 
 fieldset {
-	display: flex;
-	flex-direction: row;
 	border-color: gray;
 	border-width: 1px;
 	border-radius: 3px;
 }
 
 fieldset > label {
+	margin-bottom: 5px;
 	margin-right: 10px;
 	border-radius: 2px;
 }

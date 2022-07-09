@@ -26,11 +26,12 @@
 
 <fieldset name=route-start>
 <legend>Trip start</legend>
-<label for=origin-location>Start location: </label>
-<select id=origin-location name=origin-location required>
+<label>Start location:
+<select name=origin-location required>
 	<option value="" selected disabled hidden>---- Choose a location ----
 </select>
-<button class=nodisplay onclick="this.parentElement.remove()" type=button>Remove</button>
+</label>
+<button class="delete nodisplay"onclick="this.parentElement.remove()" type=button>Remove</button>
 </fieldset>
 
 <button id=add type=button onclick="addNewWaypoint()">
@@ -39,10 +40,11 @@
 
 <fieldset name=route-end>
 <legend>Trip end</legend>
-<label for=destination-location>End location: </label>
-<select id=destination-location name=destination-location required>
+<label>End location:
+<select name=destination-location required>
 	<option value="" selected disabled hidden>---- Choose a location ----
 </select>
+</label>
 </fieldset>
 
 <button type=submit>Submit</button>
@@ -60,8 +62,8 @@ const WINDOW_URL = new URL(window.location.href)
 
 // Populate "stops" options with the stops from the backend
 fetch('/api/stops').then(res => res.text()).then(text => {
-		document.getElementById('origin-location').innerHTML += text
-		document.getElementById('destination-location').innerHTML += text
+		document.getElementsByName('origin-location')[0].innerHTML += text
+		document.getElementsByName('destination-location')[0].innerHTML += text
 
 		// Pre-populate form if there's a query in the window
 		const params = Array.from(WINDOW_URL.searchParams.entries())
@@ -96,12 +98,12 @@ function addNewWaypoint () {
 		const num = document.querySelectorAll('fieldset').length - INITIAL_FIELDSETS + 1
 
 		newFieldset.setAttribute('name', `stop${num}`)
-		newFieldset.children[0].innerHTML = `Stop ${num}`
-		newFieldset.children[1].setAttribute('for', `stop${num}-location`)
-		newFieldset.children[1].attributes.innerHTML = 'Stop location:'
-		newFieldset.children[2].setAttribute('id', `stop${num}-location`)
-		newFieldset.children[2].setAttribute('name', `stop${num}-location`)
-		newFieldset.children[3].classList.remove('nodisplay')
+		const [ legend, label, deleteButton ] = newFieldset.children
+
+		legend.innerHTML = `Stop ${num}`
+		label.attributes.innerHTML = 'Stop location:'
+		label.children[0].setAttribute('name', `stop${num}-location`)
+		deleteButton.classList.remove('nodisplay')
 
 		form.insertBefore(newFieldset, add)
 	}
