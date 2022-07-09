@@ -65,6 +65,7 @@ fetch('/api/stops').then(res => res.text()).then(text => {
 
 		// Pre-populate form if there's a query in the window
 		const params = Array.from(WINDOW_URL.searchParams.entries())
+		params.filter(item => item[0].includes('stop')).forEach(addNewWaypoint)
 		params.forEach(([key, value]) => document.getElementsByName(key)[0].value = value)
 	})
 
@@ -81,9 +82,11 @@ async function editPacket (name) {
 
 // Though not in HTML source, packets populated via AJAX use this function to delete themselves
 async function deletePacket (name) {
-		await fetch(`/api/packet/${name}`, { method: 'DELETE' })
-		location.reload()
-		console.log('Failed to delete packet')
+		if (!window.confirm('Are you sure you want to delete?')) return
+
+		fetch(`/api/packet/${name}`, { method: 'DELETE' })
+			.then(() => location.reload())
+			.catch(() => alert('Something went wrong trying to delete the packet.'))
 	}
 
 function addNewWaypoint () {

@@ -34,17 +34,30 @@ button {
 button[type=submit]{
 	width: 183px;
 	height: 38px;
-	color: #ffffff;
+	color: white;
 	background-color: #00693e;
+}
+
+header li:hover, button[type=submit]:hover {
+	background-color: #12312b;
+}
+
+button:hover {
+	background-image: linear-gradient(rgba(0, 0, 0, 0.2) 0 0);
+}
+
+button.edit {
+	color: #00693e;
+}
+
+button.delete {
+	color: white;
+	background-color: rgb(205, 62, 43);
 }
 
 h1, h2 {
 	font-family:"National2Web-Bold","Helvetica Neue","Helvetica","Helvetica","Arial","sans-serif";
 	font-weight: normal;
-}
-
-header li:hover, button[type=submit]:hover {
-	background-color: #12312b;
 }
 
 header {
@@ -115,8 +128,8 @@ button#add {
 	padding-left: 20px;
 }
 
-button.trash {
-	/* background-size: 10px 10px; */
+ul#packets-list a {
+	margin-right: 10px;
 }
 
 .nodisplay {
