@@ -49,11 +49,11 @@ export function getAllPacketNames () {
   return db.prepare('SELECT name FROM packets').all().map(row => row.name)
 }
 
-export function savePacket (name, html) {
+export function savePacket (name, query, html) {
   db.prepare(`
-  INSERT INTO packets (name, html_content)
-  VALUES (?, ?)
-  `).run(name, html)
+  INSERT INTO packets (name, query, html_content)
+  VALUES (?, ?, ?)
+  `).run(name, query, html)
 }
 
 export function deletePacket (name) {

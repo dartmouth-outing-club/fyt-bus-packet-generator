@@ -69,7 +69,7 @@ async function createPacket (res, body) {
 
   const directionsList = await Promise.all(directionsPromises)
   const packet = buildPacket(stops, directionsList, tripName, date)
-  sqlite.savePacket(tripName, packet.toString())
+  sqlite.savePacket(tripName, body, packet.toString())
   responses.redirect(res, '/')
 }
 
@@ -80,6 +80,7 @@ export function handleStopsRoute (_req, res) {
 
 export async function handlePacketRoute (req, res) {
   const requestUrl = new URL(req.url, `http://${req.headers.host}`)
+  const name = decodeURI(requestUrl.pathname).split('/').at(3)
 
   switch (req.method) {
     case 'POST': {
@@ -89,11 +90,9 @@ export async function handlePacketRoute (req, res) {
     case 'GET': {
       // Technically there is an opportunity for XSS here
       // We don't have any cookies to be stolen with XSS, but it's worth fixing nonetheless
-      const name = decodeURI(requestUrl.pathname).split('/')[3]
       return name ? servePacket(res, name) : servePacketList(res)
     }
     case 'DELETE': {
-      const name = decodeURI(requestUrl.pathname).split('/')[3]
       sqlite.deletePacket(name)
       return responses.serveNoContent(res)
     }

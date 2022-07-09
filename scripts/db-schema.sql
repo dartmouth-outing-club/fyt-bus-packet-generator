@@ -15,6 +15,7 @@ CREATE TABLE directions (
 
 CREATE TABLE packets (
 	name TEXT PRIMARY KEY,
+	query TEXT,
 	html_content TEXT,
 	updated_at INTEGER
 );
