@@ -32,10 +32,10 @@ function servePacketList (res) {
 }
 
 function servePacket (res, name) {
-  const packet_html = sqlite.getPacket(name)?.html_content
-  if (packet_html) {
+  const packetHtml = sqlite.getPacket(name)?.html_content
+  if (packetHtml) {
     res.setHeader('Content-Type', 'text/html; charset=UTF-8')
-    responses.serveAsString(res, packet_html)
+    responses.serveAsString(res, packetHtml)
   }
   responses.serveNotFound(res)
 }
@@ -66,10 +66,11 @@ async function createPacket (res, body) {
     console.log(`Cache miss for directions from ${start.name} to ${end.name}`)
     return google.getDirections(start.coordinates, end.coordinates)
   })
-
   const directionsList = await Promise.all(directionsPromises)
-  const packet = buildPacket(stops, directionsList, tripName, date)
-  sqlite.savePacket(tripName, body, packet.toString())
+
+  const title = tripName || `From ${stopNames.at(0)} to ${stopNames.at(-1)} (${stopNames.length - 2} stops)`
+  const packet = buildPacket(stops, directionsList, title, date)
+  sqlite.savePacket(title, body, packet.toString())
   responses.redirect(res, '/')
 }
 
@@ -89,8 +90,7 @@ export async function handlePacketRoute (req, res) {
     case 'GET': {
       if (!name) {
         return servePacketList(res)
-      }
-      else if (requestUrl.searchParams.has('queryOnly')) {
+      } else if (requestUrl.searchParams.has('queryOnly')) {
         const { query } = sqlite.getPacket(name)
         return responses.serveAsString(res, query)
       } else {

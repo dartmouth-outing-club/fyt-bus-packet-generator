@@ -45,6 +45,10 @@ button[type=submit]{
 	background-color: #00693e;
 }
 
+input[type=text] {
+	width: 250px;
+}
+
 header li:hover, button[type=submit]:hover {
 	background-color: #12312b;
 }

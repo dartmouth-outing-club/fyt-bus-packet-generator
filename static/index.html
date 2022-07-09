@@ -8,8 +8,8 @@
 <header>
 <h1>FYT Bus Packet Generator</h1>
 <ul>
-<li><a href="/">Home</a></li>
-<li><a href="/packets">Packets</a></li>
+<li><a href="/">Home</a>
+<li><a href="/packets">Packets</a>
 </ul>
 </header>
 
@@ -19,7 +19,7 @@
 
 <fieldset name=trip-info>
 <legend>Trip info</legend>
-<label>Trip name: <input type=text name=trip-name required></label>
+<label>Trip name: <input type=text name=trip-name placeholder="Leave blank for default name"></label>
 <label>Trip date: <input type=date name=trip-date id=trip-date required></label>
 <script>document.getElementById('trip-date').valueAsDate = new Date()</script>
 </fieldset>

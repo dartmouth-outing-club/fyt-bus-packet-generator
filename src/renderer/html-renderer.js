@@ -3,7 +3,6 @@ import { loadFile } from '../utils.js'
 // Note: imports are relative to current file, but non-import FPs are relative to source root
 const emptyPacket = await loadFile('./src/renderer/packet-base.html')
 const packetStylets = await loadFile('./src/renderer/packet-stylesheet.css')
-const trashCanSvg = await loadFile('./static/trash-can.svg')
 
 // Technically there is an opportunity for XSS here
 // We don't have any cookies to be stolen with XSS, but it's worth fixing nonetheless
