@@ -16,6 +16,7 @@
 <main>
 <h2>Generate new packet</h2>
 <form action="/api/packet" method=post>
+
 <fieldset name=trip-info>
 <legend>Trip info</legend>
 <label>Trip name: <input type=text name=trip-name required></label>
@@ -67,6 +68,7 @@ fetch('/api/packet').then(res => res.text()).then(text => {
 		document.getElementById('packets-list').innerHTML += text
 	})
 
+// Packets populated via AJAX use this function
 async function deletePacket (name) {
 		await fetch(`/api/packet/${name}`, { method: 'DELETE' })
 		location.reload()

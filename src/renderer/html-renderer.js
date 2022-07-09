@@ -6,7 +6,7 @@ const packetStylets = await loadFile('./src/renderer/packet-stylesheet.css')
 const trashCanSvg = await loadFile('./static/trash-can.svg')
 
 export function packet (legs, title, date) {
-  const bodyHtml = legs.map(leg => leg.toString()).join('\n')
+  const mainHtml = legs.map(leg => leg.toString()).join('\n')
   const monthDay = date.slice(5).replace('-', '/')
 
   return `${emptyPacket}
@@ -18,7 +18,8 @@ ${packetStylets}</style>
 <h1>${title}</h1>
 <span>${monthDay}</span>
 </header>
-${bodyHtml}`
+
+${mainHtml}`
 }
 
 export function step (instructionsHtml, distanceText) {
@@ -34,8 +35,7 @@ export function leg (duration, distance, startName, endName, steps, instructions
   return `<section>
 <header>
 <h2>From ${startName}</h2>
-<p>Distance to next desination: <b>${distance.text}</b>
-<p>Estimated time to next desination: <b>${duration.text}</b>
+<p><b>${distance.text}</b> to next destination (<b>${duration.text}</b>)
 </header>
 
 <ol>

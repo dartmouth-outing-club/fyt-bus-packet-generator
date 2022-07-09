@@ -6,7 +6,13 @@ const STEP_ONE = html.step('Go <em>left</em>', '2 miles')
 const STEP_TWO = html.step('Turn <em>right</em>', '5 miles')
 const STEP_MISSING_DIRECTION = html.step('Go <em>left</em>', undefined)
 
-const LEG_TO_HANOVER = html.leg(null, null, 'Hanover', 'Moosilauke', [STEP_ONE, STEP_TWO], null)
+const LEG_TO_HANOVER = html.leg(
+  { text: '20 min' },
+  { text: '5 mi' },
+  'Hanover',
+  'Moosilauke',
+  [STEP_ONE, STEP_TWO],
+  null)
 
 test('html.step', () => {
   test('it concatenates the step with the distance', () => {
@@ -23,7 +29,11 @@ test('html.step', () => {
 test('html.leg', () => {
   test('it adds the steps after the start address', () => {
     const expected = `<section>
+<header>
 <h2>From Hanover</h2>
+<p><b>5 mi</b> to next destination (<b>20 min</b>)
+</header>
+
 <ol>
 <li>Go <em>left</em> &mdash; 2 miles
 <li>Turn <em>right</em> &mdash; 5 miles
