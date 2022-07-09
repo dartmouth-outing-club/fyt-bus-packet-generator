@@ -42,7 +42,7 @@ export function saveDirections (start, end, directions) {
 }
 
 export function getPacket (name) {
-  return db.prepare('SELECT html_content FROM packets WHERE name = ?').get(name)?.html_content
+  return db.prepare('SELECT query, html_content FROM packets WHERE name = ?').get(name)
 }
 
 export function getAllPacketNames () {

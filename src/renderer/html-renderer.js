@@ -5,6 +5,8 @@ const emptyPacket = await loadFile('./src/renderer/packet-base.html')
 const packetStylets = await loadFile('./src/renderer/packet-stylesheet.css')
 const trashCanSvg = await loadFile('./static/trash-can.svg')
 
+// Technically there is an opportunity for XSS here
+// We don't have any cookies to be stolen with XSS, but it's worth fixing nonetheless
 export function packet (legs, title, date) {
   const mainHtml = legs.map(leg => leg.toString()).join('\n')
   const monthDay = date.slice(5).replace('-', '/')

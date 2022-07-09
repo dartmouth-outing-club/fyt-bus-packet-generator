@@ -56,11 +56,16 @@ Insert another trip stop
 
 <script>
 const INITIAL_FIELDSETS = document.querySelectorAll('fieldset').length
+const WINDOW_URL = new URL(window.location.href)
 
 // Populate "stops" options with the stops from the backend
 fetch('/api/stops').then(res => res.text()).then(text => {
 		document.getElementById('origin-location').innerHTML += text
 		document.getElementById('destination-location').innerHTML += text
+
+		// Pre-populate form if there's a query in the window
+		const params = Array.from(WINDOW_URL.searchParams.entries())
+		params.forEach(([key, value]) => document.getElementsByName(key)[0].value = value)
 	})
 
 // Populate existing packets from the backend, then enable page
@@ -68,7 +73,13 @@ fetch('/api/packet').then(res => res.text()).then(text => {
 		document.getElementById('packets-list').innerHTML += text
 	})
 
-// Packets populated via AJAX use this function
+async function editPacket (name) {
+		const res = await fetch(`/api/packet/${name}?queryOnly`, { method: 'GET' })
+		const queryString = await res.text()
+		location.assign(`${WINDOW_URL.origin}?${queryString}`)
+	}
+
+// Though not in HTML source, packets populated via AJAX use this function to delete themselves
 async function deletePacket (name) {
 		await fetch(`/api/packet/${name}`, { method: 'DELETE' })
 		location.reload()

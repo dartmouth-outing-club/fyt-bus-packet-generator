@@ -32,10 +32,10 @@ function servePacketList (res) {
 }
 
 function servePacket (res, name) {
-  const packet = sqlite.getPacket(name)
-  if (packet) {
+  const packet_html = sqlite.getPacket(name)?.html_content
+  if (packet_html) {
     res.setHeader('Content-Type', 'text/html; charset=UTF-8')
-    responses.serveAsString(res, packet)
+    responses.serveAsString(res, packet_html)
   }
   responses.serveNotFound(res)
 }
@@ -81,20 +81,28 @@ export function handleStopsRoute (_req, res) {
 export async function handlePacketRoute (req, res) {
   const requestUrl = new URL(req.url, `http://${req.headers.host}`)
   const name = decodeURI(requestUrl.pathname).split('/').at(3)
-
   switch (req.method) {
     case 'POST': {
       const body = await streamToString(req)
       return createPacket(res, body)
     }
     case 'GET': {
-      // Technically there is an opportunity for XSS here
-      // We don't have any cookies to be stolen with XSS, but it's worth fixing nonetheless
-      return name ? servePacket(res, name) : servePacketList(res)
+      if (!name) {
+        return servePacketList(res)
+      }
+      else if (requestUrl.searchParams.has('queryOnly')) {
+        const { query } = sqlite.getPacket(name)
+        return responses.serveAsString(res, query)
+      } else {
+        return servePacket(res, name)
+      }
     }
     case 'DELETE': {
-      sqlite.deletePacket(name)
-      return responses.serveNoContent(res)
+      if (sqlite.deletePacket(name)) {
+        return responses.serveNoContent(res)
+      } else {
+        return responses.serveBadRequest(res)
+      }
     }
     default:
       return responses.serveNotAllowed(res)
