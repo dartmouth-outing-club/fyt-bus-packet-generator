@@ -1,4 +1,4 @@
-import * as packet from './routes/packet.js'
+import * as packets from './routes/packets.js'
 import * as responses from './responses.js'
 import * as stops from './routes/stops.js'
 
@@ -18,5 +18,5 @@ function handle (module, req, res) {
   }
 }
 
-export const handlePacketRoute = (req, res) => handle(packet, req, res)
+export const handlePacketsRoute = (req, res) => handle(packets, req, res)
 export const handleStopsRoute = (req, res) => handle(stops, req, res)

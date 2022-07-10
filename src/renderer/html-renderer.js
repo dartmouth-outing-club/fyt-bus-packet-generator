@@ -57,6 +57,6 @@ export function packetLinkList (names) {
   return names.map(name => `<li>
   <button class=edit onclick="editPacket('${name}')">Edit</button>
   <button class=delete onclick="deletePacket('${name}')">Delete</button>
-  <a href="/api/packet/${encodeURI(name)}">${name}</a>
+  <a href="/api/packets/${encodeURI(name)}">${name}</a>
   `).join('')
 }

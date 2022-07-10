@@ -23,18 +23,18 @@
 	const WINDOW_URL = new URL(window.location.href)
 
 	// Populate existing packets from the backend, then enable page
-	fetch('/api/packet').then(res => res.text()).then(text => {
+	fetch('/api/packets').then(res => res.text()).then(text => {
 			document.getElementById('packets-list').innerHTML += text
 		})
 
 	async function deletePacket (name) {
-			await fetch(`/api/packet/${name}`, { method: 'DELETE' })
+			await fetch(`/api/packets/${name}`, { method: 'DELETE' })
 			location.reload()
 			console.log('Failed to delete packet')
 		}
 
 	async function editPacket (name) {
-			const res = await fetch(`/api/packet/${name}?queryOnly`, { method: 'GET' })
+			const res = await fetch(`/api/packets/${name}?queryOnly`, { method: 'GET' })
 			const queryString = await res.text()
 			location.assign(`${WINDOW_URL.origin}?${queryString}`)
 		}

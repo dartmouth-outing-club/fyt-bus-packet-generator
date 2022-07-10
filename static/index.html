@@ -15,7 +15,7 @@
 
 <main>
 <h2>Generate new packet</h2>
-<form action="/api/packet" method=post>
+<form action="/api/packets" method=post>
 
 <fieldset name=trip-info>
 <legend>Trip info</legend>
@@ -72,12 +72,12 @@ fetch('/api/stops').then(res => res.text()).then(text => {
 	})
 
 // Populate existing packets from the backend, then enable page
-fetch('/api/packet').then(res => res.text()).then(text => {
+fetch('/api/packets').then(res => res.text()).then(text => {
 		document.getElementById('packets-list').innerHTML += text
 	})
 
 async function editPacket (name) {
-		const res = await fetch(`/api/packet/${name}?queryOnly`, { method: 'GET' })
+		const res = await fetch(`/api/packets/${name}?queryOnly`, { method: 'GET' })
 		const queryString = await res.text()
 		location.assign(`${WINDOW_URL.origin}?${queryString}`)
 	}
@@ -86,7 +86,7 @@ async function editPacket (name) {
 async function deletePacket (name) {
 		if (!window.confirm('Are you sure you want to delete?')) return
 
-		fetch(`/api/packet/${name}`, { method: 'DELETE' })
+		fetch(`/api/packets/${name}`, { method: 'DELETE' })
 			.then(() => location.reload())
 			.catch(() => alert('Something went wrong trying to delete the packet.'))
 	}

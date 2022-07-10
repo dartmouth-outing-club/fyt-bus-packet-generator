@@ -17,7 +17,7 @@ const app = http.createServer(async (req, res) => {
   const subRoutes = requestUrl.pathname.split('/')
 
   // If the route doesn't start with /api, it's a static route
-  if (subRoutes[1] !== 'api') {
+  if (subRoutes.at(1) !== 'api') {
     if (env !== 'development') {
       console.error(STATIC_FILE_WARNING)
       return responses.serveNotFound(res)
@@ -27,13 +27,13 @@ const app = http.createServer(async (req, res) => {
     return responses.serveStaticFile(res, requestUrl.pathname)
   }
 
-  // If it start with /api, send it to the appropriate API handler
-  switch (subRoutes[2]) {
+  // If it starts with /api, send it to the appropriate API handler
+  switch (subRoutes.at(2)) {
     case 'stops':
       routes.handleStopsRoute(req, res)
       break
-    case 'packet':
-      routes.handlePacketRoute(req, res)
+    case 'packets':
+      routes.handlePacketsRoute(req, res)
       break
     default:
       responses.serveNotFound(res)
@@ -43,5 +43,3 @@ const app = http.createServer(async (req, res) => {
 app.listen(port, host, () => {
   console.log(`It's giving... http://${host}:${port}`)
 })
-
-// TODO Add "on crash" listener
