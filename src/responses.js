@@ -50,6 +50,14 @@ export function redirect (res, url) {
   res.setHeader('location', url); setCodeAndEnd(res, 302)
 }
 
+export function serveHtml (res, html) {
+  if (html) {
+    res.setHeader('Content-Type', 'text/html; charset=UTF-8')
+    serveAsString(res, html)
+  }
+  serveNotFound(res)
+}
+
 export const serveHomepage = (res) => pipeFile(res, HOMEPAGE_FP)
 export const serveNoContent = (res) => setCodeAndEnd(res, 204)
 export const serveBadRequest = (res) => setCodeAndEnd(res, 400)
