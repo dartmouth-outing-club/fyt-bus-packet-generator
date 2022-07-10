@@ -11,7 +11,7 @@ const STATIC_FILE_WARNING = `Error - your server is not configured correctly.
 All requests to this server should be prefixed with /api/, but this one was not.
 Check your nginx configuration and ensure that only /api/ requests get sent here.`
 
-const app = http.createServer(async (req, res) => {
+async function serveRequest (req, res) {
   const requestUrl = new URL(req.url, `http://${req.headers.host}`)
   console.log(`${req.method} request receieved for ${requestUrl}`)
   const subRoutes = requestUrl.pathname.split('/')
@@ -30,15 +30,21 @@ const app = http.createServer(async (req, res) => {
   // If it starts with /api, send it to the appropriate API handler
   switch (subRoutes.at(2)) {
     case 'stops':
-      routes.handleStopsRoute(req, res)
-      break
+      return routes.handleStopsRoute(req, res)
     case 'packets':
-      routes.handlePacketsRoute(req, res)
-      break
+      return routes.handlePacketsRoute(req, res)
     case 'trips':
-      routes.handleTripsRoutes(req, res)
+      return routes.handleTripsRoutes(req, res)
     default:
-      responses.serveNotFound(res)
+      return responses.serveNotFound(res)
+  }
+}
+const app = http.createServer(async (req, res) => {
+  try {
+    await serveRequest(req, res)
+  } catch (error) {
+    console.error('ERROR - uncaught exception while handling request\n', error)
+    responses.serveServerError(res)
   }
 })
 

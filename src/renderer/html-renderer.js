@@ -61,17 +61,19 @@ export function packetLinkList (names) {
 `).join('')
 }
 
-export function tripsTable (_trips) {
+export function tripsTable (trips) {
+  console.log(trips)
+
+  const tripsHtml = trips.map((trip) => `<tr>
+<td>${trip.name}
+<td>${trip.num_students}
+`).join('')
+
   return `<table>
 <tr>
 <th>Trip Name
 <th>Num Students
-<th>Leader Names
-
-<tr>
-<td>J174
-<td>10
-<td>Alex Petros
+${tripsHtml}
 </table>
 `
 }

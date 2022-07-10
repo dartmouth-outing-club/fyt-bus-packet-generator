@@ -61,3 +61,7 @@ export function deletePacket (name) {
   console.log(`Deleted ${changes} packet(s)`)
   return changes
 }
+
+export function getAllTrips () {
+  return db.prepare('SELECT name, num_students FROM trips').all()
+}

@@ -1,10 +1,3 @@
-CREATE TABLE stops (
-	coordinates TEXT PRIMARY KEY,
-	name TEXT NOT NULL,
-	address TEXT,
-	special_instructions TEXT
-);
-
 CREATE TABLE directions (
 	id INTEGER PRIMARY KEY,
 	start_coordinates TEXT REFERENCES stops ON UPDATE SET NULL,
@@ -20,6 +13,17 @@ CREATE TABLE packets (
 	updated_at INTEGER
 );
 
+CREATE TABLE stops (
+	coordinates TEXT PRIMARY KEY,
+	name TEXT NOT NULL,
+	address TEXT,
+	special_instructions TEXT
+);
+
+CREATE TABLE trips (
+	name TEXT PRIMARY KEY,
+	num_students INTEGER
+);
 
 CREATE TRIGGER directions_updated AFTER UPDATE ON directions
 BEGIN

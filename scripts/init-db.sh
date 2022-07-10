@@ -2,7 +2,8 @@
 #Run this from the root directory, via `npm run init`
 set -e
 DB_FILENAME="packet-generator.db"
-CSV_FILENAME="stops.csv"
+STOPS_CSV="stops.csv"
+TRIPS_CSV="trips.csv"
 
 if [[ -f $DB_FILENAME ]]
 then
@@ -20,10 +21,11 @@ then
 fi
 
 
-echo "Creating $DB_FILENAME from $CSV_FILENAME"
+echo "Creating $DB_FILENAME"
 sqlite3 $DB_FILENAME << EOF
 .read ./scripts/db-schema.sql
-.import --csv --skip 1 ./scripts/$CSV_FILENAME stops
+.import --csv --skip 1 ./scripts/$STOPS_CSV stops
+.import --csv --skip 1 ./scripts/$TRIPS_CSV trips
 EOF
 
 # set -e ensures we only see this if sqlite3 exited successfully
