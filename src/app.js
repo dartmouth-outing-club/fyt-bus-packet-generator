@@ -35,6 +35,8 @@ const app = http.createServer(async (req, res) => {
     case 'packets':
       routes.handlePacketsRoute(req, res)
       break
+    case 'trips':
+      routes.handleTripsRoutes(req, res)
     default:
       responses.serveNotFound(res)
   }

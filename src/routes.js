@@ -1,6 +1,7 @@
 import * as packets from './routes/packets.js'
 import * as responses from './responses.js'
 import * as stops from './routes/stops.js'
+import * as trips from './routes/trips.js'
 
 function handle (module, req, res) {
   switch (req.method) {
@@ -14,9 +15,10 @@ function handle (module, req, res) {
       if (typeof module.del !== 'function') return responses.serveNotAllowed(res)
       return module.del(req, res)
     default:
-      return responses.serveBadRequest(res)
+      return responses.methodNotAllowed(res)
   }
 }
 
 export const handlePacketsRoute = (req, res) => handle(packets, req, res)
 export const handleStopsRoute = (req, res) => handle(stops, req, res)
+export const handleTripsRoutes = (req, res) => handle(trips, req, res)

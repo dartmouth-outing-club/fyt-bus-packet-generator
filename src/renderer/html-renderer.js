@@ -5,7 +5,7 @@ const emptyPacket = await loadFile('./src/renderer/packet-base.html')
 const packetStylets = await loadFile('./src/renderer/packet-stylesheet.css')
 
 // Technically there is an opportunity for XSS here
-// We don't have any cookies to be stolen with XSS, but it's worth fixing nonetheless
+// We don't have any cookies to be stolen with XSS, but it's worth fixing
 export function packet (legs, title, date) {
   const mainHtml = legs.map(leg => leg.toString()).join('\n')
   const monthDay = date.slice(5).replace('-', '/')
@@ -55,8 +55,23 @@ export function stopsOptionList (stops) {
 
 export function packetLinkList (names) {
   return names.map(name => `<li>
-  <button class=edit onclick="editPacket('${name}')">Edit</button>
-  <button class=delete onclick="deletePacket('${name}')">Delete</button>
-  <a href="/api/packets/${encodeURI(name)}">${name}</a>
-  `).join('')
+<button class=edit onclick="editPacket('${name}')">Edit</button>
+<button class=delete onclick="deletePacket('${name}')">Delete</button>
+<a href="/api/packets/${encodeURI(name)}">${name}</a>
+`).join('')
+}
+
+export function tripsTable (_trips) {
+  return `<table>
+<tr>
+<th>Trip Name
+<th>Num Students
+<th>Leader Names
+
+<tr>
+<td>J174
+<td>10
+<td>Alex Petros
+</table>
+`
 }

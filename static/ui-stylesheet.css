@@ -61,6 +61,15 @@ button.delete {
 	color: rgb(205, 62, 43);
 }
 
+th {
+	background-color: #e2e2e2;
+}
+
+th, td {
+	margin: 0px;
+	padding: 10px;
+}
+
 h1, h2 {
 	font-family:"National2Web-Bold","Helvetica Neue","Helvetica","Helvetica","Arial","sans-serif";
 	font-weight: normal;

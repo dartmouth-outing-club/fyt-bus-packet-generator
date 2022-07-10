@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang=en>
+<title>FYT Bus Packet Generator</title>
+<meta charset="UTF-8">
+<link rel="icon" href="/favicon.ico">
+<link rel="stylesheet" href="/ui-stylesheet.css">
+
+<header>
+<h1>FYT Bus Packet Generator</h1>
+<ul>
+<li><a href="/">Home</a></li>
+<li><a href="/packets">Packets</a></li>
+<li><a href="/trips">Trips</a></li>
+</ul>
+</header>
+
+<script>
+fetch('/api/trips').then(res => res.text()).then(text => {
+		document.body.innerHTML += text
+	})
+</script>
