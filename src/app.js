@@ -28,6 +28,7 @@ async function serveRequest (req, res) {
   }
 
   // If it starts with /api, send it to the appropriate API handler
+  // The return is important here - it connects promise rejections to the outer try block
   switch (subRoutes.at(2)) {
     case 'stops':
       return routes.handleStopsRoute(req, res)
