@@ -14,8 +14,11 @@
 </ul>
 </header>
 
+<main>
+</main>
+
 <script>
 fetch('/api/trips').then(res => res.text()).then(text => {
-		document.body.innerHTML += text
+		document.getElementsByTagName('main')[0].innerHTML += text
 	})
 </script>

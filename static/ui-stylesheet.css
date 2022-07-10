@@ -61,13 +61,16 @@ button.delete {
 	color: rgb(205, 62, 43);
 }
 
+table {
+	border-collapse: collapse;
+}
 th {
 	background-color: #e2e2e2;
 }
 
 th, td {
-	margin: 0px;
-	padding: 10px;
+	padding: 0px 10px 0px 5px;
+	border: solid 1px;
 }
 
 h1, h2 {

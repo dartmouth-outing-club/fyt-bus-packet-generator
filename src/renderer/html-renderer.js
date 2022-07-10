@@ -62,8 +62,6 @@ export function packetLinkList (names) {
 }
 
 export function tripsTable (trips) {
-  console.log(trips)
-
   const tripsHtml = trips.map((trip) => `<tr>
 <td>${trip.name}
 <td>${trip.num_students}
