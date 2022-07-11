@@ -13,10 +13,10 @@ fi
 
 SQLITE_VERSION=$(sqlite3 --version | cut -d ' ' -f 1)
 SQLITE3_MINOR_VERSION=$(echo $SQLITE_VERSION | cut -d '.' -f 2)
-if [[ $SQLITE3_MINOR_VERSION -lt 38 ]]
+if [[ $SQLITE3_MINOR_VERSION -lt 35 ]]
 then
 	echo "Error - script requires a newer version of the sqlite3 CLI"
-	echo "Required: >3.38.x, Current: $SQLITE_VERSION"
+	echo "Required: >3.35.x, Current: $SQLITE_VERSION"
 	exit 1
 fi
 
