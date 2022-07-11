@@ -4,7 +4,7 @@ import path from 'node:path'
 const pagePath = (staticFp) => path.join(path.resolve(), '/static', staticFp)
 
 const HOMEPAGE_FP = pagePath('index.html')
-const ERROR_FP = pagePath('error.html')
+const ERROR_FP = pagePath('404.html')
 
 function setMimeType (res, pathname) {
   if (pathname.endsWith('.html')) {
