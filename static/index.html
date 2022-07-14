@@ -18,17 +18,17 @@
 <h2>Generate new packet</h2>
 <form action="/api/packets" method=post>
 
-<fieldset name=trip-info>
-<legend>Trip info</legend>
-<label>Trip name: <input type=text name=trip-name placeholder="Leave blank for default name"></label>
-<label>Trip date: <input type=date name=trip-date id=trip-date required></label>
+<fieldset name=bus-info>
+<legend>Bus info</legend>
+<label>Bus trip name: <input type=text name=trip-name placeholder="Leave blank for default name"></label>
+<label>Bus trip date: <input type=date name=trip-date id=trip-date required></label>
 <script>document.getElementById('trip-date').valueAsDate = new Date()</script>
 </fieldset>
 
 <fieldset name=route-start>
-<legend>Trip start</legend>
+<legend>Route start</legend>
 <label>Start location:
-<select name=origin-location required>
+<select class="location" name=origin-location required>
 	<option value="" selected disabled hidden>---- Choose a location ----
 </select>
 </label>
@@ -40,12 +40,28 @@
 </button>
 
 <fieldset name=route-end>
-<legend>Trip end</legend>
+<legend>Route end</legend>
 <label>End location:
-<select name=destination-location required>
+<select class="location" name=destination-location required>
 	<option value="" selected disabled hidden>---- Choose a location ----
 </select>
 </label>
+</fieldset>
+
+<button type=button onclick="setTripBoardingOptions()">Update stops</button>
+<fieldset name=trip-boardings>
+<legend>Trip boardings</legend>
+
+<span>J62</span>
+<select class="trip-stop start" name=trip-j62-start></select>
+<select class="trip-stop end" name=trip-j62-end></select>
+
+<hr>
+
+<span>J174</span>
+<select class="trip-stop start" name=trip-j174-start></select>
+<select class="trip-stop end" name=trip-j174-end></select>
+
 </fieldset>
 
 <button type=submit>Submit</button>
@@ -60,6 +76,47 @@
 <script>
 const INITIAL_FIELDSETS = document.querySelectorAll('fieldset').length
 const WINDOW_URL = new URL(window.location.href)
+
+function addNewWaypoint () {
+		const form = document.querySelector('form')
+		const { add, ['route-start']: start } = form
+		const newFieldset = start.cloneNode(true)
+		const num = document.querySelectorAll('fieldset').length - INITIAL_FIELDSETS + 1
+
+		newFieldset.setAttribute('name', `stop${num}`)
+		const [ legend, label, deleteButton ] = newFieldset.children
+
+		legend.innerHTML = `Stop ${num}`
+		label.attributes.innerHTML = 'Stop location:'
+		label.children[0].setAttribute('name', `stop${num}-location`)
+		deleteButton.classList.remove('nodisplay')
+
+		form.insertBefore(newFieldset, add)
+	}
+
+function setTripBoardingOptions () {
+		// Available boarding options are the currently selected bust stops
+		const currentStops = Array
+			.from(document.querySelectorAll('.location'))
+			.map(item => item.value)
+
+		const options = currentStops
+			.map((item) => (`<option>${item}`))
+			.join('\n')
+
+		const tripStops = document
+			.querySelectorAll('.trip-stop')
+			.forEach((item) => {
+					const currentSelection = item.value
+					const defaultIndex = item.classList.contains('start') ? 0 : currentStops.length -1
+					item.innerHTML = options
+					item.options.selectedIndex = currentStops.includes(currentSelection)
+						? currentStops.indexOf(currentSelection)
+						: defaultIndex
+				})
+	}
+
+
 
 // Populate "stops" options with the stops from the backend
 fetch('/api/stops').then(res => res.text()).then(text => {
@@ -90,22 +147,5 @@ async function deletePacket (name) {
 		fetch(`/api/packets/${name}`, { method: 'DELETE' })
 			.then(() => location.reload())
 			.catch(() => alert('Something went wrong trying to delete the packet.'))
-	}
-
-function addNewWaypoint () {
-		const form = document.querySelector('form')
-		const { add, ['route-start']: start } = form
-		const newFieldset = start.cloneNode(true)
-		const num = document.querySelectorAll('fieldset').length - INITIAL_FIELDSETS + 1
-
-		newFieldset.setAttribute('name', `stop${num}`)
-		const [ legend, label, deleteButton ] = newFieldset.children
-
-		legend.innerHTML = `Stop ${num}`
-		label.attributes.innerHTML = 'Stop location:'
-		label.children[0].setAttribute('name', `stop${num}-location`)
-		deleteButton.classList.remove('nodisplay')
-
-		form.insertBefore(newFieldset, add)
 	}
 </script>

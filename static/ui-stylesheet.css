@@ -30,7 +30,7 @@ button {
 	min-width: 50px;
 	margin: 3px;
 	background-color: #f7f7f7;
-	border: 1px solid gray;
+	border: 1px solid #424141;
 	border-radius: 2px;
 }
 
@@ -114,7 +114,7 @@ form > * {
 }
 
 fieldset {
-	border-color: gray;
+	border-color: #424141;
 	border-width: 1px;
 	border-radius: 3px;
 }
@@ -127,6 +127,17 @@ fieldset > label {
 
 fieldset > button {
 	margin-left: auto;
+}
+
+fieldset > span {
+	display: inline-block;
+	min-width: 40px;
+}
+
+fieldset > hr {
+	height: 1px;
+	border: none;
+	background-color: #424141;
 }
 
 select {
