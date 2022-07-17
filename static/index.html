@@ -20,12 +20,13 @@
 
 <fieldset name=info>
 <legend>Bus info</legend>
+
 <p>
-<label>Bus trip name: </label>
+<label for=trip-name>Bus trip name: </label>
 <input type=text name=trip-name placeholder="Leave blank for default name">
 
 <p>
-<label>Bus trip date: </label>
+<label for=trip-date>Bus trip date: </label>
 <input type=date name=trip-date id=trip-date required>
 <script>document.getElementById('trip-date').valueAsDate = new Date()</script>
 </fieldset>
@@ -34,8 +35,8 @@
 <legend>Route</legend>
 
 <p>
-<label>Start location: </label>
-<select class="location" name=origin-location required>
+<label for=origin-location>Start location: </label>
+<select class="location" id=origin-location name=origin-location required>
 	<option value="" selected disabled hidden>---- Choose a location ----
 </select>
 <button class="delete nodisplay" onclick="this.parentElement.remove()" type=button>Remove</button>
@@ -44,8 +45,8 @@
 <button id=add type=button onclick="addNewWaypoint()">&#10133; Insert another trip stop</button>
 
 <p>
-<label>End location: </label>
-<select class="location" name=destination-location required>
+<label for=destination-location>End location: </label>
+<select class="location" id=destination-location name=destination-location required>
 	<option value="" selected disabled hidden>---- Choose a location ----
 </select>
 </fieldset>
@@ -87,7 +88,9 @@ function addNewWaypoint () {
 		const [ label, select, deleteButton ] = newPara.children
 
 		label.innerHTML = `Stop ${num}: `
+		label.htmlFor = `stop${num}-location`
 		select.setAttribute('name', `stop${num}-location`)
+		select.setAttribute('id', `stop${num}-location`)
 		deleteButton.classList.remove('nodisplay')
 
 		routeFieldset.insertBefore(newPara, ADD_P)
