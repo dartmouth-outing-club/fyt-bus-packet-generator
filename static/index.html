@@ -36,7 +36,12 @@
 
 <p>
 <label for=origin-location>Start location: </label>
-<select class="location" id=origin-location name=origin-location required>
+<select
+		class="location"
+		id=origin-location
+		name=origin-location
+		onchange="setTripBoardingOptions()"
+		required>
 	<option value="" selected disabled hidden>---- Choose a location ----
 </select>
 <button class="delete nodisplay" onclick="this.parentElement.remove()" type=button>Remove</button>
@@ -46,7 +51,12 @@
 
 <p>
 <label for=destination-location>End location: </label>
-<select class="location" id=destination-location name=destination-location required>
+<select
+		class="location"
+		id=destination-location
+		name=destination-location
+		onchange="setTripBoardingOptions()"
+		required>
 	<option value="" selected disabled hidden>---- Choose a location ----
 </select>
 </fieldset>
