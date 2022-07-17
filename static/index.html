@@ -64,16 +64,17 @@
 
 <fieldset name=boardings>
 <legend>Trip boardings</legend>
+<label for=add-trip>Add trip:</label>
+<input list=trips-list id=add-trip type=text>
+<datalist id=trips-list></datalist>
 
-<span>J62</span>
-<select class="trip-stop start" name=trip-j62-start></select>
-<select class="trip-stop end" name=trip-j62-end></select>
-
-<hr>
-
-<span>J174</span>
-<select class="trip-stop start" name=trip-j174-start></select>
-<select class="trip-stop end" name=trip-j174-end></select>
+<!-- <span>J62</span> -->
+<!-- <select class="trip-stop start" name=trip-j62-start></select> -->
+<!-- <select class="trip-stop end" name=trip-j62-end></select> -->
+<!-- <hr> -->
+<!-- <span>J174</span> -->
+<!-- <select class="trip-stop start" name=trip-j174-start></select> -->
+<!-- <select class="trip-stop end" name=trip-j174-end></select> -->
 
 </fieldset>
 
@@ -128,24 +129,6 @@ function setTripBoardingOptions () {
 				})
 	}
 
-
-
-// Populate "stops" options with the stops from the backend
-fetch('/api/stops').then(res => res.text()).then(text => {
-		document.getElementsByName('origin-location')[0].innerHTML += text
-		document.getElementsByName('destination-location')[0].innerHTML += text
-
-		// Pre-populate form if there's a query in the window
-		const params = Array.from(WINDOW_URL.searchParams.entries())
-		params.filter(item => item[0].includes('stop')).forEach(addNewWaypoint)
-		params.forEach(([key, value]) => document.getElementsByName(key)[0].value = value)
-	})
-
-// Populate existing packets from the backend, then enable page
-fetch('/api/packets').then(res => res.text()).then(text => {
-		document.getElementById('packets-list').innerHTML += text
-	})
-
 async function editPacket (name) {
 		const res = await fetch(`/api/packets/${name}?queryOnly`, { method: 'GET' })
 		const queryString = await res.text()
@@ -160,4 +143,26 @@ async function deletePacket (name) {
 			.then(() => location.reload())
 			.catch(() => alert('Something went wrong trying to delete the packet.'))
 	}
+
+// Populate "stops" options with the stops from the backend
+fetch('/api/stops').then(res => res.text()).then(text => {
+		document.getElementsByName('origin-location')[0].innerHTML += text
+		document.getElementsByName('destination-location')[0].innerHTML += text
+
+		// Pre-populate form if there's a query in the window
+		const params = Array.from(WINDOW_URL.searchParams.entries())
+		params.filter(item => item[0].includes('stop')).forEach(addNewWaypoint)
+		params.forEach(([key, value]) => document.getElementsByName(key)[0].value = value)
+	})
+
+// Populate existing packets from the backend
+fetch('/api/packets').then(res => res.text()).then(text => {
+		document.getElementById('packets-list').innerHTML += text
+	})
+
+// Populate datalist for trip boardings
+fetch('/api/trips?format=options').then(res => res.text()).then(text => {
+		document.getElementById('trips-list').innerHTML = text
+	})
+
 </script>

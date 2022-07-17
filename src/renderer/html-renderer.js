@@ -75,3 +75,7 @@ ${tripsHtml}
 </table>
 `
 }
+
+export function tripsOptions (trips) {
+  return trips.map((trip) => `<option value="${trip.name}">`).join('\n')
+}
