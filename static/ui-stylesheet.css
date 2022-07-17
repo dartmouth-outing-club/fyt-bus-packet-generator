@@ -105,6 +105,8 @@ header a {
 }
 
 main {
+	max-width: 800px;
+	margin: auto;
 	padding-left: 20px;
 	padding-right: 20px;
 }
@@ -128,6 +130,11 @@ fieldset > hr {
 	height: 1px;
 	border: none;
 	background-color: #424141;
+}
+
+p > label {
+	display: inline-block;
+	min-width: 110px;
 }
 
 select {
