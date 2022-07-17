@@ -32,7 +32,7 @@
 </fieldset>
 
 <fieldset name=route>
-<legend>Route</legend>
+<legend>Bus route</legend>
 
 <p>
 <label for=origin-location>Start location: </label>
@@ -62,20 +62,14 @@
 </fieldset>
 
 
-<fieldset name=boardings>
-<legend>Trip boardings</legend>
+<fieldset name=trips>
+<legend>Trips onboard</legend>
+
+<p>
 <label for=add-trip>Add trip:</label>
-<input list=trips-list id=add-trip type=text>
-<datalist id=trips-list></datalist>
-
-<!-- <span>J62</span> -->
-<!-- <select class="trip-stop start" name=trip-j62-start></select> -->
-<!-- <select class="trip-stop end" name=trip-j62-end></select> -->
-<!-- <hr> -->
-<!-- <span>J174</span> -->
-<!-- <select class="trip-stop start" name=trip-j174-start></select> -->
-<!-- <select class="trip-stop end" name=trip-j174-end></select> -->
-
+<input list=trip-list id=add-trip type=text>
+<datalist id=trip-list></datalist>
+<button type=button class=edit onclick="addTrip()">Add</button>
 </fieldset>
 
 <button type=submit>Submit</button>
@@ -135,6 +129,20 @@ async function editPacket (name) {
 		location.assign(`${WINDOW_URL.origin}?${queryString}`)
 	}
 
+function addTrip () {
+		const tripInput = document.querySelector('input#add-trip')
+		const tripsFieldset = document.querySelector('fieldset[name=trips]')
+
+		const name = tripInput.value
+		tripInput.value = ""
+		const newItem = `<p>
+<span>${name.toUpperCase()}</span>
+<select class="trip-stop start" name=trip-${name.toLowerCase()}-start></select>
+<select class="trip-stop end" name=trip-${name.toLowerCase()}-end></select>
+<button class=delete onclick="this.parentElement.remove()">Delete</button>`
+		tripsFieldset.insertAdjacentHTML('beforeend', newItem)
+	}
+
 // Though not in HTML source, packets populated via AJAX use this function to delete themselves
 async function deletePacket (name) {
 		if (!window.confirm('Are you sure you want to delete?')) return
@@ -162,7 +170,7 @@ fetch('/api/packets').then(res => res.text()).then(text => {
 
 // Populate datalist for trip boardings
 fetch('/api/trips?format=options').then(res => res.text()).then(text => {
-		document.getElementById('trips-list').innerHTML = text
+		document.getElementById('trip-list').innerHTML = text
 	})
 
 </script>

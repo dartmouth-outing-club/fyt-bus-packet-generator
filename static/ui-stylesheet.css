@@ -121,7 +121,7 @@ fieldset {
 	border-radius: 3px;
 }
 
-fieldset > span {
+fieldset span {
 	display: inline-block;
 	min-width: 40px;
 }
@@ -130,6 +130,11 @@ fieldset > hr {
 	height: 1px;
 	border: none;
 	background-color: #424141;
+}
+
+input#add-trip {
+	margin-left: 10px;
+	width: 70px;
 }
 
 p > label {
