@@ -18,38 +18,40 @@
 <h2>Generate new packet</h2>
 <form action="/api/packets" method=post>
 
-<fieldset name=bus-info>
+<fieldset name=info>
 <legend>Bus info</legend>
-<label>Bus trip name: <input type=text name=trip-name placeholder="Leave blank for default name"></label>
-<label>Bus trip date: <input type=date name=trip-date id=trip-date required></label>
+<p>
+<label>Bus trip name: </label>
+<input type=text name=trip-name placeholder="Leave blank for default name">
+
+<p>
+<label>Bus trip date: </label>
+<input type=date name=trip-date id=trip-date required>
 <script>document.getElementById('trip-date').valueAsDate = new Date()</script>
 </fieldset>
 
-<fieldset name=route-start>
-<legend>Route start</legend>
-<label>Start location:
+<fieldset name=route>
+<legend>Route</legend>
+
+<p>
+<label>Start location: </label>
 <select class="location" name=origin-location required>
 	<option value="" selected disabled hidden>---- Choose a location ----
 </select>
-</label>
 <button class="delete nodisplay" onclick="this.parentElement.remove()" type=button>Remove</button>
-</fieldset>
 
-<button id=add type=button onclick="addNewWaypoint()">
-&#10133; Insert another trip stop
-</button>
+<p>
+<button id=add type=button onclick="addNewWaypoint()">&#10133; Insert another trip stop</button>
 
-<fieldset name=route-end>
-<legend>Route end</legend>
-<label>End location:
+<p>
+<label>End location: </label>
 <select class="location" name=destination-location required>
 	<option value="" selected disabled hidden>---- Choose a location ----
 </select>
-</label>
 </fieldset>
 
-<button type=button onclick="setTripBoardingOptions()">Update stops</button>
-<fieldset name=trip-boardings>
+
+<fieldset name=boardings>
 <legend>Trip boardings</legend>
 
 <span>J62</span>
@@ -74,24 +76,21 @@
 </main>
 
 <script>
-const INITIAL_FIELDSETS = document.querySelectorAll('fieldset').length
 const WINDOW_URL = new URL(window.location.href)
+const ADD_P = document.querySelector('fieldset[name=route]').children[2]
 
 function addNewWaypoint () {
-		const form = document.querySelector('form')
-		const { add, ['route-start']: start } = form
-		const newFieldset = start.cloneNode(true)
-		const num = document.querySelectorAll('fieldset').length - INITIAL_FIELDSETS + 1
+		const routeFieldset = document.querySelector('fieldset[name=route]')
+		const newPara = routeFieldset.children[1].cloneNode(true)
 
-		newFieldset.setAttribute('name', `stop${num}`)
-		const [ legend, label, deleteButton ] = newFieldset.children
+		const num = document.querySelectorAll('select.location').length - 1
+		const [ label, select, deleteButton ] = newPara.children
 
-		legend.innerHTML = `Stop ${num}`
-		label.attributes.innerHTML = 'Stop location:'
-		label.children[0].setAttribute('name', `stop${num}-location`)
+		label.innerHTML = `Stop ${num}: `
+		select.setAttribute('name', `stop${num}-location`)
 		deleteButton.classList.remove('nodisplay')
 
-		form.insertBefore(newFieldset, add)
+		routeFieldset.insertBefore(newPara, ADD_P)
 	}
 
 function setTripBoardingOptions () {
