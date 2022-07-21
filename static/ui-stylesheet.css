@@ -132,16 +132,6 @@ fieldset > hr {
 	background-color: #424141;
 }
 
-input#add-trip {
-	margin-left: 10px;
-	width: 70px;
-}
-
-p > label {
-	display: inline-block;
-	min-width: 110px;
-}
-
 select {
 	width: 300px;
 }
@@ -150,6 +140,20 @@ legend {
 	background-color: #00693e;
 	color: #fff;
 	padding: 3px 6px;
+}
+
+p > label {
+	display: inline-block;
+	min-width: 110px;
+}
+
+p > label[for=add-trip] {
+	min-width: 0px;
+}
+
+input#add-trip {
+	margin-left: 5px;
+	width: 70px;
 }
 
 ul#packets-list a {

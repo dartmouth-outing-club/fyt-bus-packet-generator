@@ -18,9 +18,9 @@
 <h2>Generate new packet</h2>
 <form action="/api/packets" method=post>
 
+
 <fieldset name=info>
 <legend>Bus info</legend>
-
 <p>
 <label for=trip-name>Bus trip name: </label>
 <input type=text name=trip-name placeholder="Leave blank for default name">
@@ -31,9 +31,9 @@
 <script>document.getElementById('trip-date').valueAsDate = new Date()</script>
 </fieldset>
 
+
 <fieldset name=route>
 <legend>Bus route</legend>
-
 <p>
 <label for=origin-location>Start location: </label>
 <select
@@ -69,7 +69,7 @@
 <label for=add-trip>Add trip:</label>
 <input list=trip-list id=add-trip type=text>
 <datalist id=trip-list></datalist>
-<button type=button class=edit onclick="addTrip()">Add</button>
+<button type=button class=edit onclick="onAddTripClick()">Add</button>
 </fieldset>
 
 <button type=submit>Submit</button>
@@ -102,7 +102,7 @@ function addNewWaypoint () {
 	}
 
 function setTripBoardingOptions () {
-		// Available boarding options are the currently selected bust stops
+		// Available boarding options are the currently selected bus stops
 		const currentStops = Array
 			.from(document.querySelectorAll('.location'))
 			.map(item => item.value)
@@ -111,16 +111,15 @@ function setTripBoardingOptions () {
 			.map((item) => (`<option>${item}`))
 			.join('\n')
 
-		const tripStops = document
-			.querySelectorAll('.trip-stop')
-			.forEach((item) => {
-					const currentSelection = item.value
-					const defaultIndex = item.classList.contains('start') ? 0 : currentStops.length -1
-					item.innerHTML = options
-					item.options.selectedIndex = currentStops.includes(currentSelection)
-						? currentStops.indexOf(currentSelection)
-						: defaultIndex
-				})
+		const tripStops = document.querySelectorAll('.trip-stop')
+		tripStops.forEach((item) => {
+				const currentSelection = item.value
+				const defaultIndex = item.classList.contains('start') ? 0 : currentStops.length -1
+				item.innerHTML = options
+				item.options.selectedIndex = currentStops.includes(currentSelection)
+					? currentStops.indexOf(currentSelection)
+					: defaultIndex
+			})
 	}
 
 async function editPacket (name) {
@@ -129,12 +128,8 @@ async function editPacket (name) {
 		location.assign(`${WINDOW_URL.origin}?${queryString}`)
 	}
 
-function addTrip () {
-		const tripInput = document.querySelector('input#add-trip')
+function addTrip (name) {
 		const tripsFieldset = document.querySelector('fieldset[name=trips]')
-
-		const name = tripInput.value
-		tripInput.value = ""
 		const newItem = `<p>
 <span>${name.toUpperCase()}</span>
 <select class="trip-stop start" name=trip-${name.toLowerCase()}-start></select>
@@ -143,34 +138,65 @@ function addTrip () {
 		tripsFieldset.insertAdjacentHTML('beforeend', newItem)
 	}
 
+function onAddTripClick() {
+	const tripInput = document.querySelector('input#add-trip')
+	addTrip(tripInput.value)
+	tripInput.value = ""
+	setTripBoardingOptions()
+}
+
 // Though not in HTML source, packets populated via AJAX use this function to delete themselves
 async function deletePacket (name) {
-		if (!window.confirm('Are you sure you want to delete?')) return
+	if (!window.confirm('Are you sure you want to delete?')) return
 
-		fetch(`/api/packets/${name}`, { method: 'DELETE' })
-			.then(() => location.reload())
-			.catch(() => alert('Something went wrong trying to delete the packet.'))
-	}
+	fetch(`/api/packets/${name}`, { method: 'DELETE' })
+		.then(() => location.reload())
+		.catch(() => alert('Something went wrong trying to delete the packet.'))
+}
 
-// Populate "stops" options with the stops from the backend
-fetch('/api/stops').then(res => res.text()).then(text => {
-		document.getElementsByName('origin-location')[0].innerHTML += text
-		document.getElementsByName('destination-location')[0].innerHTML += text
+function setFormValues(params) {
+	params.forEach(([key, value]) => {
+			document.getElementsByName(key)[0].value = value
+		})
+}
 
-		// Pre-populate form if there's a query in the window
-		const params = Array.from(WINDOW_URL.searchParams.entries())
-		params.filter(item => item[0].includes('stop')).forEach(addNewWaypoint)
-		params.forEach(([key, value]) => document.getElementsByName(key)[0].value = value)
-	})
-
-// Populate existing packets from the backend
-fetch('/api/packets').then(res => res.text()).then(text => {
+async function loadDocument () {
+	// Populate existing packets from the backend
+	const packets = fetch('/api/packets').then(res => res.text()).then(text => {
 		document.getElementById('packets-list').innerHTML += text
 	})
 
-// Populate datalist for trip boardings
-fetch('/api/trips?format=options').then(res => res.text()).then(text => {
+	// Populate datalist for trip boardings
+	const boardings = fetch('/api/trips?format=options').then(res => res.text()).then(text => {
 		document.getElementById('trip-list').innerHTML = text
 	})
+
+// Populate "stops" options with the stops from the backend
+	const stops = fetch('/api/stops').then(res => res.text()).then(text => {
+		document.getElementsByName('origin-location')[0].innerHTML += text
+		document.getElementsByName('destination-location')[0].innerHTML += text
+	})
+
+	await Promise.all([packets, boardings, stops])
+
+	// Pre-populate form if there's a query in the window
+	const params = Array.from(WINDOW_URL.searchParams.entries())
+	params.filter(param => param[0].includes('stop')).forEach(addNewWaypoint)
+
+	params
+		.filter(param => param[0].match(/trip-.*-start/))
+		.map(param => param[0].split('-')[1])
+		.forEach((trip) => { addTrip(trip) })
+
+	// you can only choose currently-selected stops as trip boarding spots
+	// the first setFormValues sets the bus stops, setTripBoardingOptions sets possible boarding spots
+	// then the second setFormValues sets the selected boarding spots
+	// this might be a mild kludge - fine for now but refactor if it gets more complicated
+	setFormValues(params)
+	setTripBoardingOptions()
+	setFormValues(params)
+}
+
+loadDocument()
 
 </script>
