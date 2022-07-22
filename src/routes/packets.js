@@ -35,9 +35,12 @@ export async function post (req, res) {
     return responses.serveBadRequest(res)
   }
 
-  const { tripName, date, stopNames } = params
+  const { tripName, date, stopNames, tripsOnboard } = params
   console.log(`Getting stop information for: ${stopNames}`)
   const stops = stopNames.map(sqlite.getStop)
+  const trips = tripsOnboard.map(trip => (
+    { ...trip, num_students: sqlite.getTrip(trip.name)?.num_students }
+  ))
   const edgeListOfStops = queries.makeEdgeList(stops)
 
   // Create a list of promises that will resolve the directions between each pair of stops
@@ -55,7 +58,7 @@ export async function post (req, res) {
   const directionsList = await Promise.all(directionsPromises)
 
   const title = tripName || `From ${stopNames.at(0)} to ${stopNames.at(-1)} (${stopNames.length - 2} stops)`
-  const packet = buildPacket(stops, directionsList, title, date)
+  const packet = buildPacket(stops, directionsList, title, date, trips)
   sqlite.savePacket(title, body, packet.toString())
   responses.redirect(res, '/')
 }

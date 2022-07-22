@@ -30,20 +30,31 @@ export function step (instructionsHtml, distanceText) {
   return `<li>${instructions} &mdash; ${distance}`
 }
 
-export function leg (duration, distance, startName, endName, steps, instructions) {
+function tripsList (trips) {
+  const items = trips.map(trip => `<li><b>${trip.name}</b> (${trip.num_students} people)`)
+  return trips.length > 0 ?  `<ul>\n${items.join('\n')}\n</ul>` : ''
+}
+
+export function leg (duration, distance, startName, endName, steps, instructions, tripsOn, tripsOff) {
   if (!steps) throw new Error('Leg is missing steps')
 
+  const tripsOnList = tripsList(tripsOn)
+  const tripsOffList = tripsList(tripsOff)
+
   return `<section>
-<header>
+<ol>
+<li>
 <h2>From ${startName}</h2>
 <p><b>${distance.text}</b> to next destination (<b>${duration.text}</b>)
-</header>
+<h3>Trips on</h3>
+${tripsOnList}
 
-<ol>
 ${steps.join('\n')}
 <li>
-  <h2>Arrived at ${endName}</h2>
-  <p>${instructions || ''}
+<h2>Arrived at ${endName}</h2>
+<p>${instructions || ''}
+<h3>Trips off</h3>
+${tripsOffList}
 </ol>
 </section>
 `

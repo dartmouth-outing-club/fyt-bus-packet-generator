@@ -1,19 +1,22 @@
 import * as packets from './routes/packets.js'
-import * as responses from './responses.js'
 import * as stops from './routes/stops.js'
 import * as trips from './routes/trips.js'
+import * as responses from './responses.js'
+
+const isFunction = (x) => (typeof x === 'function')
+const serveNotAllowed = (res, method) => {
+  console.warn(`Invalid request received for ${method} method`)
+  return responses.serveNotAllowed(res)
+}
 
 function handle (module, req, res) {
   switch (req.method) {
     case 'POST':
-      if (typeof module.post !== 'function') return responses.serveNotAllowed(res)
-      return module.post(req, res)
+      return isFunction(module.post) ? module.post(req, res) : serveNotAllowed(res, req.method)
     case 'GET':
-      if (typeof module.get !== 'function') return responses.serveNotAllowed(res)
-      return module.get(req, res)
+      return isFunction(module.get) ? module.get(req, res) : serveNotAllowed(res, req.method)
     case 'DELETE':
-      if (typeof module.del !== 'function') return responses.serveNotAllowed(res)
-      return module.del(req, res)
+      return isFunction(module.del) ? module.del(req, res) : serveNotAllowed(res, req.method)
     default:
       return responses.methodNotAllowed(res)
   }

@@ -13,7 +13,8 @@ test('parseQuery', () => {
     const expected = {
       tripName: 'Trip to Moosilauke',
       date: '2022-07-01',
-      stopNames: ['Hanover', 'Moosilauke']
+      stopNames: ['Hanover', 'Moosilauke'],
+      tripsOnboard: []
     }
     assert.deepEqual(queries.parseQuery(params), expected)
   })
@@ -29,7 +30,8 @@ test('parseQuery', () => {
     const expected = {
       tripName: 'Trip to Moosilauke',
       date: '2022-07-01',
-      stopNames: ['Hanover', 'Dartmouth Skiway', 'Moosilauke']
+      stopNames: ['Hanover', 'Dartmouth Skiway', 'Moosilauke'],
+      tripsOnboard: []
     }
     assert.deepEqual(queries.parseQuery(params), expected)
   })
@@ -48,7 +50,8 @@ test('parseQuery', () => {
     const expected = {
       tripName: 'Trip to Moosilauke',
       date: '2022-07-01',
-      stopNames: ['Hanover', 'Lyme', 'Dartmouth Skiway', 'DOC Cabin', 'Warren', 'Moosilauke']
+      stopNames: ['Hanover', 'Lyme', 'Dartmouth Skiway', 'DOC Cabin', 'Warren', 'Moosilauke'],
+      tripsOnboard: []
     }
     assert.deepEqual(queries.parseQuery(params), expected)
   })

@@ -14,7 +14,7 @@
     "format": "standard --fix",
     "init": "scripts/init-db.sh",
     "start": "NODE_ENV=production node src/app.js",
-    "test": "standard && node --test",
+    "test": "node --test",
     "validate": "vnu --skip-non-html --also-check-css static"
   },
   "type": "module",

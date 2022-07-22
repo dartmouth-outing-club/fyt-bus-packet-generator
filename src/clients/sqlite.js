@@ -51,7 +51,7 @@ export function getAllPacketNames () {
 
 export function savePacket (name, query, html) {
   db.prepare(`
-  INSERT INTO packets (name, query, html_content)
+  INSERT OR REPLACE INTO packets (name, query, html_content)
   VALUES (?, ?, ?)
   `).run(name, query, html)
 }
@@ -60,6 +60,10 @@ export function deletePacket (name) {
   const { changes } = db.prepare('DELETE FROM packets WHERE name = ?').run(name)
   console.log(`Deleted ${changes} packet(s)`)
   return changes
+}
+
+export function getTrip (name) {
+  return db.prepare('SELECT name, num_students FROM trips where name = ?').get(name)
 }
 
 export function getAllTrips () {

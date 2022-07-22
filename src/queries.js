@@ -7,7 +7,7 @@
  * numerical order of the stops.
  *
  */
-function convertQueryToStopsList (params) {
+function parseStopList (params) {
   const keys = Array.from(params.keys())
 
   return keys.filter(key => key.startsWith('stop'))
@@ -16,6 +16,20 @@ function convertQueryToStopsList (params) {
     .sort()
     .map(num => `stop${num}-location`)
     .map(key => params.get(key))
+}
+
+function parseTripBoardings (params) {
+  const keys = Array.from(params.keys())
+  const tripNames = keys
+    .filter(key => key.match(/trip-([^-]*)-st/))
+    .map(key => key.match(/trip-([^-]*)-st/)[1])
+
+  // Create an object of trips, where each trip is an object with a start and end property
+  return tripNames.map(trip => {
+    const start = params.get(`trip-${trip}-start`)
+    const end = params.get(`trip-${trip}-end`)
+    return { name: trip.toUpperCase(), start, end }
+  })
 }
 
 /**
@@ -42,10 +56,11 @@ export function parseQuery (body) {
   const date = params.get('trip-date')
   const origin = params.get('origin-location')
   const destination = params.get('destination-location')
-  const stops = convertQueryToStopsList(params)
+  const stops = parseStopList(params)
+  const tripsOnboard = parseTripBoardings(params)
 
   if (!origin || !destination) throw new Error(`Bad request, stops = ${stops}`)
 
   const stopNames = [origin, ...stops, destination]
-  return { tripName, date, stopNames }
+  return { tripName, date, stopNames, tripsOnboard }
 }

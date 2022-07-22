@@ -37,12 +37,27 @@ export function convertRawStep (rawStep) {
 /**
  * Create a list of Legs from the raw JSON of the directions response.
  */
-export function buildPacket (stops, directionsList, title, date) {
+export function buildPacket (stops, directionsList, title, date, tripsOnboard) {
+  const tripBoardingsByStop = stops.reduce((boardings, stop) => {
+    boardings[stop.name] = { on: [], off: [] }
+    return boardings
+  }, {})
+  tripsOnboard.forEach((trip) => {
+    const { name, num_students, start, end } = trip
+    tripBoardingsByStop[start].on.push({ name, num_students })
+    tripBoardingsByStop[end].off.push({ name, num_students })
+  })
+
   const legs = directionsList.map((directions, index) => {
     const { duration, distance, steps: rawSteps } = directions?.routes.at(0)?.legs.at(0)
     const [start, end] = stops.slice(index, index + 2)
     const steps = rawSteps.map(convertRawStep)
-    return html.leg(duration, distance, start.name, end.name, steps, end.specialInstructions)
+    const tripsOn = tripBoardingsByStop[start.name].on
+    const tripsOff = tripBoardingsByStop[end.name].off
+
+    // TODO Refactor absurd parameter list
+    return html.leg(duration, distance, start.name, end.name, steps, end.specialInstructions,
+      tripsOn, tripsOff)
   })
 
   return html.packet(legs, title, date)
