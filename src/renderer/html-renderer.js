@@ -6,8 +6,7 @@ const packetStylets = await loadFile('./src/renderer/packet-stylesheet.css')
 
 // Technically there is an opportunity for XSS here
 // We don't have any cookies to be stolen with XSS, but it's worth fixing
-export function packet (legs, title, date) {
-  const mainHtml = legs.map(leg => leg.toString()).join('\n')
+export function packet (listItems, title, date) {
   const monthDay = date.slice(5).replace('-', '/')
 
   return `${emptyPacket}
@@ -20,7 +19,10 @@ ${packetStylets}</style>
 <span>${monthDay}</span>
 </header>
 
-${mainHtml}`
+<ol>
+${listItems.join('\n')}
+</ol>
+`
 }
 
 export function step (instructionsHtml, distanceText) {
@@ -32,31 +34,25 @@ export function step (instructionsHtml, distanceText) {
 
 function tripsList (trips) {
   const items = trips.map(trip => `<li><b>${trip.name}</b> (${trip.num_students} people)`)
-  return trips.length > 0 ?  `<ul>\n${items.join('\n')}\n</ul>` : ''
+  return trips.length > 0 ? `<ul>\n${items.join('\n')}\n</ul>` : ''
 }
 
-export function leg (duration, distance, startName, endName, steps, instructions, tripsOn, tripsOff) {
-  if (!steps) throw new Error('Leg is missing steps')
+export function destination (name, tripsOn, tripsOff, instructions, duration, distance) {
+  const specialInstructions = instructions ? `<p>${instructions}` : null
+  const nextDesinationText = duration && distance
+    ? `<p><b>${distance.text}</b> to next destination (<b>${duration.text}</b>)`
+    : null
+  const tripsOnList = tripsOn.length > 0 ? `<h3>Picking up</h3>\n${tripsList(tripsOn)}` : null
+  const tripsOffList = tripsOff.length > 0 ? `<h3>Dropping off</h3>\n${tripsList(tripsOff)}` : null
 
-  const tripsOnList = tripsList(tripsOn)
-  const tripsOffList = tripsList(tripsOff)
+  const info = [specialInstructions, nextDesinationText, tripsOnList, tripsOffList]
+    .filter(item => item) // Filter out all the falsy values
+    .join('\n')
 
-  return `<section>
-<ol>
+  return `
 <li>
-<h2>From ${startName}</h2>
-<p><b>${distance.text}</b> to next destination (<b>${duration.text}</b>)
-<h3>Trips on</h3>
-${tripsOnList}
-
-${steps.join('\n')}
-<li>
-<h2>Arrived at ${endName}</h2>
-<p>${instructions || ''}
-<h3>Trips off</h3>
-${tripsOffList}
-</ol>
-</section>
+<h2>${name}</h2>
+${info}
 `
 }
 

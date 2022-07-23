@@ -50,15 +50,18 @@ export function buildPacket (stops, directionsList, title, date, tripsOnboard) {
 
   const legs = directionsList.map((directions, index) => {
     const { duration, distance, steps: rawSteps } = directions?.routes.at(0)?.legs.at(0)
-    const [start, end] = stops.slice(index, index + 2)
-    const steps = rawSteps.map(convertRawStep)
+    const start = stops[index]
     const tripsOn = tripBoardingsByStop[start.name].on
-    const tripsOff = tripBoardingsByStop[end.name].off
+    const tripsOff = tripBoardingsByStop[start.name].off
 
-    // TODO Refactor absurd parameter list
-    return html.leg(duration, distance, start.name, end.name, steps, end.specialInstructions,
-      tripsOn, tripsOff)
+    const nextStop = html.destination(start.name, tripsOn, tripsOff, start.specialInstructions, duration, distance)
+    const steps = rawSteps.map(convertRawStep).join('\n')
+    return nextStop + steps
   })
 
-  return html.packet(legs, title, date)
+  const destination = stops.at(-1).name
+  const finalStop = html.destination(destination, [], tripBoardingsByStop[destination].off,
+    destination.specialInstructions)
+
+  return html.packet([...legs, finalStop], title, date)
 }
