@@ -59,8 +59,8 @@ export function buildPacket (stops, directionsList, title, date, tripsOnboard) {
     return nextStop + steps
   })
 
-  const destination = stops.at(-1).name
-  const finalStop = html.destination(destination, [], tripBoardingsByStop[destination].off,
+  const destination = stops.at(-1)
+  const finalStop = html.destination(destination.name, [], tripBoardingsByStop[destination.name].off,
     destination.specialInstructions)
 
   return html.packet([...legs, finalStop], title, date)
