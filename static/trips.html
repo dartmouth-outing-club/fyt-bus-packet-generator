@@ -15,6 +15,22 @@
 </header>
 
 <main>
+
+<h2>Add Trips</h2>
+<p>Upload a CSV of the current trips. How it works:
+<ul>
+<li>Uploading a trip of the same name as an existing one will replace the existing trip
+<li>The upload will never delete an existing trip, only replace them
+</ul>
+
+<p>Make sure to upload the CSV <em>without headers, in the following order:</em> name, # students
+
+<p>
+<form action=/api/trips method=POST enctype=multipart/form-data>
+<input name=trips-csv type=file>
+<p><button type=submit>Submit</button>
+</form>
+<h2>Current Trips</h2>
 </main>
 
 <script>
