@@ -10,7 +10,6 @@ const serveNotAllowed = (res, method) => {
 }
 
 function handle (module, req, res) {
-  console.log(req.method)
   switch (req.method) {
     case 'POST':
       return isFunction(module.post) ? module.post(req, res) : serveNotAllowed(res, req.method)
