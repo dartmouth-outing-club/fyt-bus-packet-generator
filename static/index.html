@@ -92,7 +92,7 @@ function addNewWaypoint () {
 	const num = document.querySelectorAll('select.location').length - 1
 	const [ label, select, deleteButton ] = newPara.children
 
-	label.innerHTML = `Stop ${num}: `
+	label.textContent = `Stop ${num}: `
 	label.htmlFor = `stop${num}-location`
 	select.setAttribute('name', `stop${num}-location`)
 	select.setAttribute('id', `stop${num}-location`)
