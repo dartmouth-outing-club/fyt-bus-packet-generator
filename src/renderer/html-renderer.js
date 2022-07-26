@@ -69,6 +69,7 @@ export function packetLinkList (names) {
 }
 
 export function tripsTable (trips) {
+  trips.sort((a, b) => a.name.localeCompare(b.name))
   const tripsHtml = trips.map((trip) => `<tr>
 <td>${trip.name}
 <td>${trip.num_students}
@@ -84,6 +85,7 @@ ${tripsHtml}
 }
 
 export function tripsOptions (trips) {
+  trips.sort((a, b) => a.name.localeCompare(b.name))
   return trips.map((trip) => `<option value="${trip.name}">`).join('\n')
 }
 
