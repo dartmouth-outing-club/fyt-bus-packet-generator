@@ -86,57 +86,57 @@ const WINDOW_URL = new URL(window.location.href)
 const ADD_P = document.querySelector('fieldset[name=route]').children[2]
 
 function addNewWaypoint () {
-		const routeFieldset = document.querySelector('fieldset[name=route]')
-		const newPara = routeFieldset.children[1].cloneNode(true)
+	const routeFieldset = document.querySelector('fieldset[name=route]')
+	const newPara = routeFieldset.children[1].cloneNode(true)
 
-		const num = document.querySelectorAll('select.location').length - 1
-		const [ label, select, deleteButton ] = newPara.children
+	const num = document.querySelectorAll('select.location').length - 1
+	const [ label, select, deleteButton ] = newPara.children
 
-		label.innerHTML = `Stop ${num}: `
-		label.htmlFor = `stop${num}-location`
-		select.setAttribute('name', `stop${num}-location`)
-		select.setAttribute('id', `stop${num}-location`)
-		deleteButton.classList.remove('nodisplay')
+	label.innerHTML = `Stop ${num}: `
+	label.htmlFor = `stop${num}-location`
+	select.setAttribute('name', `stop${num}-location`)
+	select.setAttribute('id', `stop${num}-location`)
+	deleteButton.classList.remove('nodisplay')
 
-		routeFieldset.insertBefore(newPara, ADD_P)
-	}
+	routeFieldset.insertBefore(newPara, ADD_P)
+}
 
 function setTripBoardingOptions () {
-		// Available boarding options are the currently selected bus stops
-		const currentStops = Array
-			.from(document.querySelectorAll('.location'))
-			.map(item => item.value)
+	// Available boarding options are the currently selected bus stops
+	const currentStops = Array
+		.from(document.querySelectorAll('.location'))
+		.map(item => item.value)
 
-		const options = currentStops
-			.map((item) => (`<option>${item}`))
-			.join('\n')
+	const options = currentStops
+		.map((item) => (`<option>${item}`))
+		.join('\n')
 
-		const tripStops = document.querySelectorAll('.trip-stop')
-		tripStops.forEach((item) => {
-				const currentSelection = item.value
-				const defaultIndex = item.classList.contains('start') ? 0 : currentStops.length -1
-				item.innerHTML = options
-				item.options.selectedIndex = currentStops.includes(currentSelection)
-					? currentStops.indexOf(currentSelection)
-					: defaultIndex
-			})
-	}
+	const tripStops = document.querySelectorAll('.trip-stop')
+	tripStops.forEach((item) => {
+		const currentSelection = item.value
+		const defaultIndex = item.classList.contains('start') ? 0 : currentStops.length -1
+		item.innerHTML = options
+		item.options.selectedIndex = currentStops.includes(currentSelection)
+			? currentStops.indexOf(currentSelection)
+			: defaultIndex
+	})
+}
 
 async function editPacket (name) {
-		const res = await fetch(`/api/packets/${name}?queryOnly`, { method: 'GET' })
-		const queryString = await res.text()
-		location.assign(`${WINDOW_URL.origin}?${queryString}`)
-	}
+	const res = await fetch(`/api/packets/${name}?queryOnly`, { method: 'GET' })
+	const queryString = await res.text()
+	location.assign(`${WINDOW_URL.origin}?${queryString}`)
+}
 
 function addTrip (name) {
-		const tripsFieldset = document.querySelector('fieldset[name=trips]')
-		const newItem = `<p>
+	const tripsFieldset = document.querySelector('fieldset[name=trips]')
+	const newItem = `<p>
 <span>${name.toUpperCase()}</span>
 <select class="trip-stop start" name=trip-${name.toLowerCase()}-start></select>
 <select class="trip-stop end" name=trip-${name.toLowerCase()}-end></select>
 <button class=delete onclick="this.parentElement.remove()">Delete</button>`
-		tripsFieldset.insertAdjacentHTML('beforeend', newItem)
-	}
+	tripsFieldset.insertAdjacentHTML('beforeend', newItem)
+}
 
 function onAddTripClick() {
 	const tripInput = document.querySelector('input#add-trip')
@@ -156,8 +156,8 @@ async function deletePacket (name) {
 
 function setFormValues(params) {
 	params.forEach(([key, value]) => {
-			document.getElementsByName(key)[0].value = value
-		})
+		document.getElementsByName(key)[0].value = value
+	})
 }
 
 async function loadDocument () {
@@ -171,7 +171,7 @@ async function loadDocument () {
 		document.getElementById('trip-list').innerHTML = text
 	})
 
-// Populate "stops" options with the stops from the backend
+	// Populate "stops" options with the stops from the backend
 	const stops = fetch('/api/stops').then(res => res.text()).then(text => {
 		document.getElementsByName('origin-location')[0].innerHTML += text
 		document.getElementsByName('destination-location')[0].innerHTML += text

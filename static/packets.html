@@ -21,24 +21,24 @@
 </main>
 
 <script>
-	const WINDOW_URL = new URL(window.location.href)
+const WINDOW_URL = new URL(window.location.href)
 
-	// Populate existing packets from the backend, then enable page
-	fetch('/api/packets').then(res => res.text()).then(text => {
-			document.getElementById('packets-list').innerHTML += text
-		})
+// Populate existing packets from the backend, then enable page
+fetch('/api/packets').then(res => res.text()).then(text => {
+	document.getElementById('packets-list').innerHTML += text
+})
 
-	async function deletePacket (name) {
-			await fetch(`/api/packets/${name}`, { method: 'DELETE' })
-			location.reload()
-			console.log('Failed to delete packet')
-		}
+async function deletePacket (name) {
+	await fetch(`/api/packets/${name}`, { method: 'DELETE' })
+	location.reload()
+	console.log('Failed to delete packet')
+}
 
-	async function editPacket (name) {
-			const res = await fetch(`/api/packets/${name}?queryOnly`, { method: 'GET' })
-			const queryString = await res.text()
-			location.assign(`${WINDOW_URL.origin}?${queryString}`)
-		}
+async function editPacket (name) {
+	const res = await fetch(`/api/packets/${name}?queryOnly`, { method: 'GET' })
+	const queryString = await res.text()
+	location.assign(`${WINDOW_URL.origin}?${queryString}`)
+}
 
 </script>
 
