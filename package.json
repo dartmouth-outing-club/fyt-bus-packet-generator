@@ -20,6 +20,7 @@
   "type": "module",
   "version": "1.0.0",
   "dependencies": {
-    "better-sqlite3": "^7.5.3"
+    "better-sqlite3": "^7.5.3",
+    "csv-parser": "^3.0.0"
   }
 }

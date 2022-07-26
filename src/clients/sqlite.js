@@ -69,3 +69,9 @@ export function getTrip (name) {
 export function getAllTrips () {
   return db.prepare('SELECT name, num_students FROM trips').all()
 }
+
+export function saveTrip ({ name, num_students }) {
+  return db
+    .prepare('INSERT OR REPLACE INTO trips (name, num_students) VALUES (?, ?)')
+    .run(name, num_students)
+}

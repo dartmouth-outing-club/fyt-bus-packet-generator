@@ -31,6 +31,8 @@ On your desired host:
 1. Run `npm run init` to set up SQLite
 1. Run `npm start` in your process manager of choice
 
+Whatever you put in front of this (probably nginx) should have a sane request size limit.
+
 ## Bus Packet Format
 This is the process that the packet creator seeks to automate:
 1. Get the directions for each bus route from Google maps
@@ -46,8 +48,9 @@ This is the process that the packet creator seeks to automate:
 A separate packet is required for each trip "direction" i.e. picking up, dropping off, and taking from the lodge require three distinct packets.
 
 ## Maintenance and Dependencies
-This app has exactly two production dependencies: a library dependency on `better-sqlite`, a set of node bindings for the SQLite database engine, and a service dependency on the Google Maps Directions API.
-Everything else runs using solely standards-compliant HTML, CSS, and JavaScript.
+This app has two main production dependencies: a library dependency on `better-sqlite`, a set of node bindings for the SQLite database engine, and a service dependency on the Google Maps Directions API.
+Everything else runs using standards-compliant HTML, CSS, and JavaScript. There's a very
+small CSV parser as well (parsing CSVs is so annoying).
 
 I'm choosing to build using only these technologies because I would like this application to be made continually available essentially forever.
 The JavaScript that ran in Netscape Navigator would run in today's Google Chrome; by the [Lindy Effect](https://en.wikipedia.org/wiki/Lindy_effect), we can expect that JavaScript will continue to be supported for the next 27 years (half-kidding).
