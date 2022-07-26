@@ -18,6 +18,7 @@
 
 <h2>Add Trips</h2>
 <p>Upload a CSV of the current trips. How it works:
+
 <ul>
 <li>Uploading a trip of the same name as an existing one will replace the existing trip
 <li>The upload will never delete an existing trip, only replace them
@@ -25,16 +26,43 @@
 
 <p>Make sure to upload the CSV <em>without headers, in the following order:</em> name, # students
 
-<p>
 <form action=/api/trips method=POST enctype=multipart/form-data>
-<input name=trips-csv type=file accept=.csv>
+<p><input name=trips-csv type=file accept=.csv>
 <p><button type=submit>Upload</button>
 </form>
+
+<h2>Delete Trip</h2>
+<input list=trip-list id=delete-trip type=text>
+<datalist id=trip-list></datalist>
+<button type=button class=delete onclick="deleteTrip()">Delete</button>
+
 <h2>Current Trips</h2>
 </main>
 
 <script>
 fetch('/api/trips?format=table').then(res => res.text()).then(text => {
-		document.getElementsByTagName('main')[0].innerHTML += text
-	})
+	document.getElementsByTagName('main')[0].innerHTML += text
+})
+
+fetch('/api/trips?format=options').then(res => res.text()).then(text => {
+	document.getElementById('trip-list').innerHTML += text
+})
+
+// TODO Replace this with banner
+const showError = (message) => alert(`Error: ${message}`)
+
+function deleteTrip() {
+	const trip = document.getElementById('delete-trip').value
+	if (!window.confirm(`Delete trip ${trip}?`)) return
+	fetch(`/api/trips/${trip}`, { method: 'DELETE' })
+		.then((res) => {
+			if (res.status >= 400) {
+				showError('failed to delete trip')
+			} else {
+				location.reload()
+			}
+		})
+		.catch((err) => showError('failed to delete trip'))
+}
+
 </script>

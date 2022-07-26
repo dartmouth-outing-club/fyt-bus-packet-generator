@@ -51,3 +51,13 @@ export async function post (req, res) {
       responses.redirect(res, '/trips')
     })
 }
+
+export async function del (req, res) {
+  const trip = req.url.split('/').at(3)
+
+  if (sqlite.deleteTrip(trip)) {
+    return responses.serveNoContent(res)
+  } else {
+    return responses.serveBadRequest(res)
+  }
+}

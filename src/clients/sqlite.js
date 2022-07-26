@@ -75,3 +75,9 @@ export function saveTrip ({ name, num_students }) {
     .prepare('INSERT OR REPLACE INTO trips (name, num_students) VALUES (?, ?)')
     .run(name, num_students)
 }
+
+export function deleteTrip (name) {
+  const { changes } = db.prepare('DELETE FROM trips WHERE name = ?').run(name)
+  console.log(`Deleted ${changes} trip(s)`)
+  return changes
+}
