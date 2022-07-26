@@ -48,21 +48,17 @@ fetch('/api/trips?format=options').then(res => res.text()).then(text => {
 	document.getElementById('trip-list').innerHTML += text
 })
 
-// TODO Replace this with banner
-const showError = (message) => alert(`Error: ${message}`)
-
-function deleteTrip() {
+async function deleteTrip() {
 	const trip = document.getElementById('delete-trip').value
 	if (!window.confirm(`Delete trip ${trip}?`)) return
-	fetch(`/api/trips/${trip}`, { method: 'DELETE' })
-		.then((res) => {
-			if (res.status >= 400) {
-				showError('failed to delete trip')
-			} else {
-				location.reload()
-			}
-		})
-		.catch((err) => showError('failed to delete trip'))
+
+	const res = await fetch(`/api/trips/${trip}`, { method: 'DELETE' })
+	if (res.status >= 400) {
+		const text = await res.text()
+		document.getElementsByTagName('main')[0].insertAdjacentHTML("afterbegin", text)
+	} else {
+		location.reload()
+	}
 }
 
 </script>

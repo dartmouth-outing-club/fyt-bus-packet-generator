@@ -165,6 +165,15 @@ ul#packets-list a {
 	margin-right: 10px;
 }
 
+.error {
+	color: white;
+	background-color: #9d162e;
+	padding: 0px 10px 0px 10px;
+
+	display: flex;
+	flex-direction: column;
+}
+
 .nodisplay {
 	display: none;
 }

@@ -86,3 +86,10 @@ ${tripsHtml}
 export function tripsOptions (trips) {
   return trips.map((trip) => `<option value="${trip.name}">`).join('\n')
 }
+
+export function errorMessage (message) {
+return `<div class=error onclick=this.remove()>
+<h3>${message}</h3>
+<p>(click to dismiss)
+</div>`
+}

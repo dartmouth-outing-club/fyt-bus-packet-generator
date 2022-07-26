@@ -81,3 +81,11 @@ export function deleteTrip (name) {
   console.log(`Deleted ${changes} trip(s)`)
   return changes
 }
+
+export function savePacketTrips(packetTitle, trips) {
+  trips.forEach(trip => {
+    db
+      .prepare('INSERT OR REPLACE INTO packet_trips (packet, trip) VALUES (?, ?)')
+      .run(packetTitle, trip.name)
+  })
+}

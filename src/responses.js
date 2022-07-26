@@ -1,6 +1,8 @@
 import fs from 'node:fs'
 import path from 'node:path'
 
+import * as html from './renderer/html-renderer.js'
+
 const pagePath = (staticFp) => path.join(path.resolve(), '/static', staticFp)
 
 const HOMEPAGE_FP = pagePath('index.html')
@@ -46,16 +48,23 @@ export function serveStaticFile (res, pathname) {
   pipeFile(res, filepath)
 }
 
-export function redirect (res, url) {
-  res.setHeader('location', url); setCodeAndEnd(res, 302)
+export function serveMessage (res, code, message) {
+  res.setHeader('Content-Type', 'text/html; charset=UTF-8')
+  res.statusCode = code
+  res.write(html.errorMessage(message))
+  res.end()
 }
 
-export function serveHtml (res, html) {
-  if (html) {
+export function serveHtml (res, text) {
+  if (text) {
     res.setHeader('Content-Type', 'text/html; charset=UTF-8')
-    serveAsString(res, html)
+    serveAsString(res, text)
   }
   serveNotFound(res)
+}
+
+export function redirect (res, url) {
+  res.setHeader('location', url); setCodeAndEnd(res, 302)
 }
 
 export const serveHomepage = (res) => pipeFile(res, HOMEPAGE_FP)

@@ -60,6 +60,7 @@ export async function post (req, res) {
   const title = tripName || `From ${stopNames.at(0)} to ${stopNames.at(-1)} (${stopNames.length - 2} stops)`
   const packet = buildPacket(stops, directionsList, title, date, trips)
   sqlite.savePacket(title, body, packet.toString())
+  sqlite.savePacketTrips(title, trips)
   responses.redirect(res, '/')
 }
 

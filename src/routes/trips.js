@@ -55,9 +55,12 @@ export async function post (req, res) {
 export async function del (req, res) {
   const trip = req.url.split('/').at(3)
 
-  if (sqlite.deleteTrip(trip)) {
+  try {
+    sqlite.deleteTrip(trip)
     return responses.serveNoContent(res)
-  } else {
-    return responses.serveBadRequest(res)
+  } catch (error) {
+    if (error.code === 'SQLITE_CONSTRAINT_TRIGGER') {
+    return responses.serveMessage(res, 400, "Error: cannot delete a trip that is part of a packet")
+    }
   }
 }
