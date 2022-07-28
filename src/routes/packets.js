@@ -35,7 +35,7 @@ export async function post (req, res) {
     return responses.serveBadRequest(res)
   }
 
-  const { tripName, date, stopNames, tripsOnboard } = params
+  const { name, date, stopNames, tripsOnboard } = params
   console.log(`Getting stop information for: ${stopNames}`)
   const stops = stopNames.map(sqlite.getStop)
   const trips = tripsOnboard.map(trip => (
@@ -57,7 +57,7 @@ export async function post (req, res) {
   })
   const directionsList = await Promise.all(directionsPromises)
 
-  const title = tripName || `From ${stopNames.at(0)} to ${stopNames.at(-1)} (${stopNames.length - 2} stops)`
+  const title = name || `From ${stopNames.at(0)} to ${stopNames.at(-1)} (${stopNames.length - 2} stops)`
   const packet = buildPacket(stops, directionsList, title, date, trips)
   sqlite.savePacket(title, body, packet.toString())
   sqlite.savePacketTrips(title, trips)

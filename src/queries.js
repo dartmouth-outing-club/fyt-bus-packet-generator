@@ -9,7 +9,6 @@
  */
 function parseStopList (params) {
   const keys = Array.from(params.keys())
-
   return keys.filter(key => key.startsWith('stop'))
     .map(key => key.slice(4, key.indexOf('-')))
     .map(num => parseInt(num))
@@ -52,8 +51,8 @@ export function makeEdgeList (list) {
 export function parseQuery (body) {
   const params = new URLSearchParams(body)
 
-  const tripName = params.get('trip-name')
-  const date = params.get('trip-date')
+  const name = params.get('route-name')
+  const date = params.get('route-date')
   const origin = params.get('origin-location')
   const destination = params.get('destination-location')
   const stops = parseStopList(params)
@@ -62,5 +61,5 @@ export function parseQuery (body) {
   if (!origin || !destination) throw new Error(`Bad request, stops = ${stops}`)
 
   const stopNames = [origin, ...stops, destination]
-  return { tripName, date, stopNames, tripsOnboard }
+  return { name, date, stopNames, tripsOnboard }
 }

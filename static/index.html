@@ -19,21 +19,21 @@
 <form action="/api/packets" method=post>
 
 
-<fieldset name=info>
-<legend>Bus info</legend>
+<fieldset name=route-info>
+<legend>Route info</legend>
 <p>
-<label for=trip-name>Bus trip name: </label>
-<input type=text name=trip-name placeholder="Leave blank for default name">
+<label for=route-name>Bus route name: </label>
+<input type=text name=route-name placeholder="Leave blank for default name">
 
 <p>
-<label for=trip-date>Bus trip date: </label>
-<input type=date name=trip-date id=trip-date required>
-<script>document.getElementById('trip-date').valueAsDate = new Date()</script>
+<label for=route-date>Bus route date: </label>
+<input type=date name=route-date id=route-date required>
+<script>document.getElementById('route-date').valueAsDate = new Date()</script>
 </fieldset>
 
 
-<fieldset name=route>
-<legend>Bus route</legend>
+<fieldset name=route-stops>
+<legend>Route stops</legend>
 <p>
 <label for=origin-location>Start location: </label>
 <select
