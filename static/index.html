@@ -83,10 +83,10 @@
 
 <script>
 const WINDOW_URL = new URL(window.location.href)
-const ADD_P = document.querySelector('fieldset[name=route]').children[2]
+const ADD_P = document.querySelector('fieldset[name=route-stops]').children[2]
 
 function addNewWaypoint () {
-	const routeFieldset = document.querySelector('fieldset[name=route]')
+	const routeFieldset = document.querySelector('fieldset[name=route-stops]')
 	const newPara = routeFieldset.children[1].cloneNode(true)
 
 	const num = document.querySelectorAll('select.location').length - 1
@@ -156,7 +156,8 @@ async function deletePacket (name) {
 
 function setFormValues(params) {
 	params.forEach(([key, value]) => {
-		document.getElementsByName(key)[0].value = value
+		const elements = document.getElementsByName(key)
+		if (elements.length > 0) elements[0].value = value
 	})
 }
 
