@@ -1,8 +1,8 @@
-import { loadFile } from '../utils.js'
+import * as utils from '../utils.js'
 
 // Note: imports are relative to current file, but non-import FPs are relative to source root
-const emptyPacket = await loadFile('./src/renderer/packet-base.html')
-const packetStylets = await loadFile('./src/renderer/packet-stylesheet.css')
+const emptyPacket = await utils.loadFile('./src/renderer/packet-base.html')
+const packetStylets = await utils.loadFile('./src/renderer/packet-stylesheet.css')
 
 // Technically there is an opportunity for XSS here
 // We don't have any cookies to be stolen with XSS, but it's worth fixing
@@ -69,7 +69,7 @@ export function packetLinkList (names) {
 }
 
 export function tripsTable (trips) {
-  trips.sort((a, b) => a.name.localeCompare(b.name))
+  trips.sort((a, b) => utils.tripSort(a.name, b.name))
   const tripsHtml = trips.map((trip) => `<tr>
 <td>${trip.name}
 <td>${trip.num_students}
@@ -85,7 +85,7 @@ ${tripsHtml}
 }
 
 export function tripsOptions (trips) {
-  trips.sort((a, b) => a.name.localeCompare(b.name))
+  trips.sort((a, b) => utils.tripSort(a.name, b.name))
   return trips.map((trip) => `<option value="${trip.name}">`).join('\n')
 }
 
