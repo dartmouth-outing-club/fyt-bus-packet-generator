@@ -152,7 +152,7 @@ p > label[for=add-trip] {
 	min-width: 0px;
 }
 
-input#add-trip {
+select#add-trip {
 	margin-left: 5px;
 	width: 70px;
 }

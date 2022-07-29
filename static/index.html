@@ -67,8 +67,7 @@
 
 <p>
 <label for=add-trip>Add trip:</label>
-<input list=trip-list id=add-trip type=text>
-<datalist id=trip-list></datalist>
+<select id=add-trip></select>
 <button type=button class=edit onclick="onAddTripClick()">Add</button>
 </fieldset>
 
@@ -139,9 +138,8 @@ function addTrip (name) {
 }
 
 function onAddTripClick() {
-	const tripInput = document.querySelector('input#add-trip')
+	const tripInput = document.querySelector('select#add-trip')
 	addTrip(tripInput.value)
-	tripInput.value = ""
 	setTripBoardingOptions()
 }
 
@@ -167,9 +165,9 @@ async function loadDocument () {
 		document.getElementById('packets-list').innerHTML += text
 	})
 
-	// Populate datalist for trip boardings
+	// Populate select list for trip boardings
 	const boardings = fetch('/api/trips?format=options').then(res => res.text()).then(text => {
-		document.getElementById('trip-list').innerHTML = text
+		document.getElementById('add-trip').innerHTML = text
 	})
 
 	// Populate "stops" options with the stops from the backend

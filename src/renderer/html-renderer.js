@@ -86,7 +86,7 @@ ${tripsHtml}
 
 export function tripsOptions (trips) {
   trips.sort((a, b) => utils.tripSort(a.name, b.name))
-  return trips.map((trip) => `<option value="${trip.name}">`).join('\n')
+  return trips.map((trip) => `<option>${trip.name}</option>`).join('\n')
 }
 
 export function errorMessage (message) {
