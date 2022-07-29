@@ -104,6 +104,21 @@ header a {
 	text-decoration: none;
 }
 
+footer {
+	margin-top: 50px;
+	padding: 10px 20px 10px 20px;
+	color: white;
+	background-color: #005336;
+
+	display: flex;
+	justify-content: space-between;
+}
+
+footer a {
+	color:  #c4dd88;
+	text-decoration: none;
+}
+
 main {
 	max-width: 800px;
 	margin: auto;
