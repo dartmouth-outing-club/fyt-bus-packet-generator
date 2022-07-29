@@ -4,12 +4,12 @@ This is a simple webapp to generate the the bus packets for each trip.
 A example of the kind of packet that this generates can be found in the `samples` directory.
 
 Current functionality:
-* Home page lets you view previously generated packets
+* Home page lets you view generated packets and create new ones
 * You can create new packets with up to 10 stops
-* Generated packets automatically include directions to each stop, and special instructions for the driver
+* Packets automatically include directions to each stop, and special instructions for the driver
+* Packets also inform the driver what stop each trip will be getting on and off at, as well as the number of tripees on each trip
 
 Future functionality:
-* List the trips that will be on the bus and what stop they will be getting off at
 * View the routes that have been loaded already
 * Download all the packets
 
