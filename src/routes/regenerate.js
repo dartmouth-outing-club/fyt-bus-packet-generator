@@ -38,6 +38,7 @@ export async function post (_req, res) {
   } else {
     // TODO Add names of failed packets
     const message = html.errorMessage(`${failedPromises.length}/${packets.length} failed to regenerate.`)
+    failedPromises.map((result, index) => console.error(`(#${index}) failed:`, result))
     responses.serveAsString(res, message)
   }
 
