@@ -96,6 +96,17 @@ return `<div class=error onclick="this.remove()">
 `
 }
 
+export function generationError (list) {
+  return `<div class=error onclick="this.remove()">
+<p>Something went wrong; the following packages failed to regenerate:
+<ul>
+${list.map(item => `<li>${item}`)}
+</ul>
+<p>Please edit the packets with errors ensure that the trips selected are still valid.
+</div>
+`
+}
+
 export function successMessage (message) {
 return `<div class=success onclick="this.remove()">
 <p>${message}

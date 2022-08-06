@@ -3,9 +3,6 @@ import * as html from '../renderer/html-renderer.js'
 import * as sqlite from '../clients/sqlite.js'
 import { generatePacket } from './packets.js'
 
-const ERROR_MESSAGE = `Something went wrong regenerating the packets.
-Contact server administrator for more details.`
-
 /** Regenerate existing packets using stored info.
  *
  * In the database we save both the packet and the original query used to
@@ -33,13 +30,12 @@ export async function post (_req, res) {
   const failedPromises = results.filter(result => result.status === 'rejected')
 
   if (failedPromises.length === 0) {
-    const message = html.successMessage(`Successfully regenerated all packets.`)
-    responses.serveAsString(res, message)
+    responses.serveAsString(res, html.successMessage('Successfully regenerated all packets.'))
   } else {
-    // TODO Add names of failed packets
-    const message = html.errorMessage(`${failedPromises.length}/${packets.length} failed to regenerate.`)
-    failedPromises.map((result, index) => console.error(`(#${index}) failed:`, result))
-    responses.serveAsString(res, message)
+    const failedPacketNames = failedPromises.map((result, index) => {
+      console.error(`(#${index}) failed:`, result)
+      return packets[index].name
+    })
+    responses.serveAsString(res, html.generationError(failedPacketNames))
   }
-
 }

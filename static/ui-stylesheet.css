@@ -189,6 +189,10 @@ ul#packets-list a {
 	flex-direction: column;
 }
 
+.error ul {
+	margin: 0px;
+}
+
 .success {
 	color: white;
 	background-color: #00693e;
