@@ -15,9 +15,18 @@
 </header>
 
 <main>
+<h2>Regenerate packets</h2>
+<p>
+When you create a packet, that packet is saved as-is. Even you change the number of students on a trip, packets previous created with that trip on it before reflect the old value.
+
+<p>
+Clicking this button will regenerate the existing packets. The primary reason to do this is if the trips have changed since the packets were created, but it will also update any new special instructions.
+
+<p>
+<button id=regenerate onclick="regeneratePackets()">Regenerate</button>
+
 <h2>Existing packets</h2>
-<ul id=packets-list>
-</ul>
+<ul id=packets-list></ul>
 </main>
 
 <script>
@@ -38,6 +47,12 @@ async function editPacket (name) {
 	const res = await fetch(`/api/packets/${name}?queryOnly`, { method: 'GET' })
 	const queryString = await res.text()
 	location.assign(`${WINDOW_URL.origin}?${queryString}`)
+}
+
+async function regeneratePackets () {
+	const res = await fetch(`/api/regenerate`, { method: 'POST' })
+	const text = await res.text()
+	document.getElementById('regenerate').insertAdjacentHTML("afterend", text)
 }
 
 </script>

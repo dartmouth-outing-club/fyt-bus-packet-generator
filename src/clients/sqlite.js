@@ -45,6 +45,10 @@ export function getPacket (name) {
   return db.prepare('SELECT query, html_content FROM packets WHERE name = ?').get(name)
 }
 
+export function getAllPackets () {
+  return db.prepare('SELECT name, query FROM packets').all()
+}
+
 export function getAllPacketNames () {
   return db.prepare('SELECT name FROM packets').all().map(row => row.name)
 }

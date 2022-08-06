@@ -35,7 +35,9 @@ async function serveRequest (req, res) {
     case 'packets':
       return routes.handlePacketsRoute(req, res)
     case 'trips':
-      return routes.handleTripsRoutes(req, res)
+      return routes.handleTripsRoute(req, res)
+    case 'regenerate':
+      return routes.handleRegenerateRoute(req, res)
     default:
       return responses.serveNotFound(res)
   }

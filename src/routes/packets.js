@@ -27,14 +27,31 @@ export async function get (req, res) {
 export async function post (req, res) {
   const body = await utils.streamToString(req)
 
-  let params
   try {
-    params = queries.parseQuery(body)
+    generatePacket(body)
+    responses.redirect(res, '/')
   } catch (err) {
+    // TODO: Add more granular errors
+    // i.e. A query parse failure is a bad request, google maps is bad gateway, etc
     console.error(err)
+    responses.serveServerError(res)
+  }
+}
+
+export async function del (req, res) {
+  const requestUrl = new URL(req.url, `http://${req.headers.host}`)
+  const name = decodeURI(requestUrl.pathname).split('/').at(3)
+
+  if (sqlite.deletePacket(name)) {
+    return responses.serveNoContent(res)
+  } else {
     return responses.serveBadRequest(res)
   }
+}
 
+export async function generatePacket (body) {
+  console.log(body)
+  const params = queries.parseQuery(body)
   const { name, date, stopNames, tripsOnboard } = params
   console.log(`Getting stop information for: ${stopNames}`)
   const stops = stopNames.map(sqlite.getStop)
@@ -61,16 +78,4 @@ export async function post (req, res) {
   const packet = buildPacket(stops, directionsList, title, date, trips)
   sqlite.savePacket(title, body, packet.toString())
   sqlite.savePacketTrips(title, trips)
-  responses.redirect(res, '/')
-}
-
-export async function del (req, res) {
-  const requestUrl = new URL(req.url, `http://${req.headers.host}`)
-  const name = decodeURI(requestUrl.pathname).split('/').at(3)
-
-  if (sqlite.deletePacket(name)) {
-    return responses.serveNoContent(res)
-  } else {
-    return responses.serveBadRequest(res)
-  }
 }

@@ -1,7 +1,7 @@
 import stream from 'node:stream'
 
 import * as sqlite from '../clients/sqlite.js'
-import * as renderer from '../renderer/html-renderer.js'
+import * as html from '../renderer/html-renderer.js'
 import * as responses from '../responses.js'
 import * as utils from '../utils.js'
 
@@ -13,12 +13,12 @@ export async function get (req, res) {
   const trips = sqlite.getAllTrips()
 
   if (format === 'table') {
-    const tripsTable = renderer.tripsTable(trips)
+    const tripsTable = html.tripsTable(trips)
     responses.serveAsString(res, tripsTable)
   }
 
   if (format === 'options') {
-    const tripsOptions = renderer.tripsOptions(trips)
+    const tripsOptions = html.tripsOptions(trips)
     responses.serveAsString(res, tripsOptions)
   }
 }

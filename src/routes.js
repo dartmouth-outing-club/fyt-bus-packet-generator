@@ -1,6 +1,7 @@
 import * as packets from './routes/packets.js'
 import * as stops from './routes/stops.js'
 import * as trips from './routes/trips.js'
+import * as regenerate from './routes/regenerate.js'
 import * as responses from './responses.js'
 
 const isFunction = (x) => (typeof x === 'function')
@@ -24,4 +25,5 @@ function handle (module, req, res) {
 
 export const handlePacketsRoute = (req, res) => handle(packets, req, res)
 export const handleStopsRoute = (req, res) => handle(stops, req, res)
-export const handleTripsRoutes = (req, res) => handle(trips, req, res)
+export const handleTripsRoute = (req, res) => handle(trips, req, res)
+export const handleRegenerateRoute = (req, res) => handle(regenerate, req, res)

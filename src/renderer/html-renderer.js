@@ -90,8 +90,15 @@ export function tripsOptions (trips) {
 }
 
 export function errorMessage (message) {
-return `<div class=error onclick=this.remove()>
-<h3>${message}</h3>
-<p>(click to dismiss)
-</div>`
+return `<div class=error onclick="this.remove()">
+<p>${message}
+</div>
+`
+}
+
+export function successMessage (message) {
+return `<div class=success onclick="this.remove()">
+<p>${message}
+</div>
+`
 }

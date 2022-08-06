@@ -183,8 +183,17 @@ ul#packets-list a {
 .error {
 	color: white;
 	background-color: #9d162e;
-	padding: 0px 10px 0px 10px;
+	margin: 10px 0px;
+	padding: 0px 10px;
+	display: flex;
+	flex-direction: column;
+}
 
+.success {
+	color: white;
+	background-color: #00693e;
+	margin: 10px 0px;
+	padding: 0px 10px;
 	display: flex;
 	flex-direction: column;
 }
