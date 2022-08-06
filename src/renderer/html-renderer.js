@@ -33,7 +33,7 @@ export function step (instructionsHtml, distanceText) {
 }
 
 function tripsList (trips) {
-  const items = trips.map(trip => `<li><b>${trip.name}</b> (${trip.num_students} people)`)
+  const items = trips.map(trip => `<li><b>${trip.name}</b> (${trip.num_students || 'Unknown # of'} people)`)
   return trips.length > 0 ? `<ul>\n${items.join('\n')}\n</ul>` : ''
 }
 
