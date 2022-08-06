@@ -28,12 +28,17 @@ export async function post (_req, res) {
   const packets = sqlite.getAllPackets()
   console.log(`Regenerating ${packets.length} packets`)
 
-  try {
-    const promises = packets.map(packet => generatePacket(packet.query))
-    await Promise.all(promises)
-    responses.serveAsString(res, html.successMessage(`Successfully regenerated ${packets.length} packet(s)`))
-  } catch (error) {
-    console.error('Something went wrong regenerating the packets.\n', error)
-    responses.serveAsString(res, html.errorMessage(ERROR_MESSAGE))
+  const promises = packets.map(packet => generatePacket(packet.query))
+  const results = await Promise.allSettled(promises)
+  const failedPromises = results.filter(result => result.status === 'rejected')
+
+  if (failedPromises.length === 0) {
+    const message = html.successMessage(`Successfully regenerated all packets.`)
+    responses.serveAsString(res, message)
+  } else {
+    // TODO Add names of failed packets
+    const message = html.errorMessage(`${failedPromises.length}/${packets.length} failed to regenerate.`)
+    responses.serveAsString(res, message)
   }
+
 }
