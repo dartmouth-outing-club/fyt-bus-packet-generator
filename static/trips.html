@@ -27,7 +27,7 @@
 <p>Make sure to upload the CSV <em>without headers, in the following order:</em> name, # students
 
 <form action=/api/trips method=POST enctype=multipart/form-data>
-<p><input name=trips-csv type=file accept=.csv>
+<p><input required name=trips-csv type=file accept=.csv>
 <p><button type=submit>Upload</button>
 </form>
 
