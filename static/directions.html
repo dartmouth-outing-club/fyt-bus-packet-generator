@@ -28,6 +28,11 @@ View the directions for every trip leg that is included in the packets. The dire
 <ul class=accordion id=directions-list></ul>
 </main>
 
+<footer><span>
+Questions? Email <a href="mailto:Alexander.W.Petros@dartmouth.edu">Alexander.W.Petros@dartmouth.edu</a>
+</span><span>
+Source on <a href="https://github.com/dartmouth-outing-club/fyt-bus-packet-generator">Github</a></span></footer>
+
 <script>
 // Populate existing directions from the backend, then enable page
 fetch('/api/directions').then(res => res.text()).then(text => {

@@ -40,6 +40,11 @@
 <h2>Current Trips</h2>
 </main>
 
+<footer><span>
+Questions? Email <a href="mailto:Alexander.W.Petros@dartmouth.edu">Alexander.W.Petros@dartmouth.edu</a>
+</span><span>
+Source on <a href="https://github.com/dartmouth-outing-club/fyt-bus-packet-generator">Github</a></span></footer>
+
 <script>
 fetch('/api/trips?format=table').then(res => res.text()).then(text => {
 	document.getElementsByTagName('main')[0].innerHTML += text

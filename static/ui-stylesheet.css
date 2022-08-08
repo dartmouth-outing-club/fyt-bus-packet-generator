@@ -24,6 +24,7 @@ body {
 	font-style:normal;
 	background-color: #ffffff;
 	margin: 0px;
+	min-height: 100vh;
 }
 
 button {
@@ -107,7 +108,7 @@ header a {
 }
 
 footer {
-	margin-top: 50px;
+	margin-top: auto;
 	padding: 10px 20px 10px 20px;
 	color: white;
 	background-color: #005336;
@@ -123,10 +124,10 @@ footer a {
 
 main {
 	max-width: 800px;
-	margin: auto;
+	min-height: 70vh;
+	margin: 0 auto;
 	margin-bottom: 20px;
-	padding-left: 20px;
-	padding-right: 20px;
+	padding: 0 20px 50px 20px;
 }
 
 form > * {
