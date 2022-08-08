@@ -42,18 +42,16 @@ export function destination (name, tripsOn, tripsOff, instructions, duration, di
   const nextDesinationText = duration && distance
     ? `<p><b>${distance.text}</b> to next destination (<b>${duration.text}</b>)`
     : null
-  const tripsOnList = tripsOn.length > 0 ? `<h3>Picking up</h3>\n${tripsList(tripsOn)}` : null
-  const tripsOffList = tripsOff.length > 0 ? `<h3>Dropping off</h3>\n${tripsList(tripsOff)}` : null
+  const tripsOnList = tripsOn.length > 0 ? `<h3>Picking up</h3>\n${tripsList(tripsOn)}\n` : null
+  const tripsOffList = tripsOff.length > 0 ? `<h3>Dropping off</h3>\n${tripsList(tripsOff)}\n` : null
 
   const info = [specialInstructions, nextDesinationText, tripsOnList, tripsOffList]
     .filter(item => item) // Filter out all the falsy values
     .join('\n')
 
-  return `
-<li>
+  return `<li>
 <h2>${name}</h2>
-${info}
-`
+${info}`
 }
 
 export function stopsOptionList (stops) {
@@ -111,5 +109,16 @@ export function successMessage (message) {
 return `<div class=success onclick="this.remove()">
 <p>${message}
 </div>
+`
+}
+
+export function leg (startName, endName, steps, duration, distance) {
+    const start = destination(startName, [], [], null, duration, distance)
+    const end = destination(endName, [], [])
+  return `
+<ul>
+${start}
+${steps}
+${end}</ul>
 `
 }

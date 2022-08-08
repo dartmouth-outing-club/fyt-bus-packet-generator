@@ -56,12 +56,11 @@ export function buildPacket (stops, directionsList, title, date, tripsOnboard) {
 
     const nextStop = html.destination(start.name, tripsOn, tripsOff, start.specialInstructions, duration, distance)
     const steps = rawSteps.map(convertRawStep).join('\n')
-    return nextStop + steps
+    return nextStop + steps + '\n'
   })
 
   const destination = stops.at(-1)
-  const finalStop = html.destination(destination.name, [], tripBoardingsByStop[destination.name].off,
-    destination.specialInstructions)
+  const finalStop = html.destination(destination.name, [], tripBoardingsByStop[destination.name].off, destination.specialInstructions)
 
   return html.packet([...legs, finalStop], title, date)
 }

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang=en>
+<title>FYT Bus Packet Generator</title>
+<meta charset="UTF-8">
+<link rel="icon" href="/favicon.ico">
+<link rel="stylesheet" href="/ui-stylesheet.css">
+
+<header>
+<h1>FYT Bus Packet Generator</h1>
+<ul>
+<li><a href="/">Home</a></li>
+<li><a href="/packets">Packets</a></li>
+<li><a href="/trips">Trips</a></li>
+<li><a href="/directions">Directions</a></li>
+</ul>
+</header>
+
+<main>
+<h2>Directions</h2>
+
+<p>
+View the directions for every trip leg that is included in the packets. The directions for each leg are identical across packets. For instance, the directions from Hanover to the Lodge that you see here are identical across packets.
+
+<p>
+<em>It is very important that you double-check these routes.</em> Google maps is used to generate these routes, and the service.
+
+<h2>Existing directions</h2>
+<ul id=directions-list></ul>
+</main>
+
+<script>
+// Populate existing directions from the backend, then enable page
+// TODO Uncomment and style
+<!-- fetch('/api/directions').then(res => res.text()).then(text => { -->
+<!-- 	document.getElementById('directions-list').innerHTML += text -->
+<!-- }) -->
+
+</script>
+

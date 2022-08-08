@@ -38,6 +38,8 @@ async function serveRequest (req, res) {
       return routes.handleTripsRoute(req, res)
     case 'regenerate':
       return routes.handleRegenerateRoute(req, res)
+    case 'directions':
+      return routes.handleDirectionsRoute(req, res)
     default:
       return responses.serveNotFound(res)
   }

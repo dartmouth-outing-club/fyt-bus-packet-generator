@@ -93,3 +93,17 @@ export function savePacketTrips(packetTitle, trips) {
       .run(packetTitle, trip.name)
   })
 }
+
+export function getAllLegs () {
+  const statement = `
+SELECT start_names.name AS start_name, end_names.name AS end_name, google_directions
+FROM directions
+LEFT JOIN stops AS start_names ON start_coordinates=start_names.coordinates
+LEFT JOIN stops AS end_names ON end_coordinates=end_names.coordinates`
+
+  const legs = db.prepare(statement).all()
+  return legs.map((leg) => ({
+    ...leg,
+    directions: JSON.parse(leg.google_directions)
+  }))
+}
