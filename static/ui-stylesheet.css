@@ -27,11 +27,12 @@ body {
 }
 
 button {
-	min-width: 50px;
-	margin: 3px;
 	background-color: #f7f7f7;
-	border: 1px solid #424141;
 	border-radius: 2px;
+	border: 1px solid #424141;
+	cursor: pointer;
+	margin: 3px;
+	min-width: 50px;
 }
 
 button:hover {
@@ -64,6 +65,7 @@ button.delete {
 table {
 	border-collapse: collapse;
 }
+
 th {
 	background-color: #e2e2e2;
 }
@@ -200,6 +202,53 @@ ul#packets-list a {
 	padding: 0px 10px;
 	display: flex;
 	flex-direction: column;
+}
+
+ul.accordion {
+	margin: 0px;
+	padding: 0px;
+	width: 80%;
+}
+
+ul.accordion button {
+	background-color: #e2e2e2;
+	margin: 0px 0px 5px 0px;
+	padding: 10px 10px;
+	width: 100%;
+	text-align: left;
+}
+
+ul.accordion button:after {
+	text-align: right;
+	float: right;
+	content: '+'
+}
+
+ul.accordion li.expanded button:after {
+	content: '-'
+}
+
+ul.accordion button:hover {
+	background-color: #707070;
+}
+
+
+ul.accordion > li {
+	margin: 10px 0px;
+	list-style-type: none;
+	background-color: #f7f7f7;
+}
+
+ul.accordion ol {
+	display: none;
+}
+
+ul.accordion li.expanded ol {
+	display: block;
+}
+
+ul.accordion ol > li {
+	padding: 3px 0px;
 }
 
 .nodisplay {

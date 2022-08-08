@@ -112,13 +112,12 @@ return `<div class=success onclick="this.remove()">
 `
 }
 
-export function leg (startName, endName, steps, duration, distance) {
-    const start = destination(startName, [], [], null, duration, distance)
-    const end = destination(endName, [], [])
+export function directionsList (startName, endName, steps, duration, distance) {
   return `
-<ul>
-${start}
+<li onclick="this.classList.toggle('expanded')">
+<button>${startName} to ${endName}</button>
+<ol>
 ${steps}
-${end}</ul>
+</ol>
 `
 }
