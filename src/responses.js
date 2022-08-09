@@ -1,8 +1,6 @@
 import fs from 'node:fs'
 import path from 'node:path'
 
-import * as html from './renderer/html-renderer.js'
-
 const pagePath = (staticFp) => path.join(path.resolve(), '/static', staticFp)
 
 const HOMEPAGE_FP = pagePath('index.html')
@@ -18,7 +16,8 @@ function setMimeType (res, pathname) {
   }
 }
 
-function setCodeAndEnd (res, code) {
+function setCodeAndEnd (res, code, body) {
+  if (body) res.write(body)
   res.statusCode = code
   res.end()
 }
@@ -29,6 +28,11 @@ function pipeFile (res, filepath, code = 200) {
   stream.on('end', () => res.end())
   res.statusCode = code
   stream.pipe(res)
+}
+
+function pipeHtmlFile (res, filepath, code = 200) {
+  res.setHeader('Content-Type', 'text/html; charset=UTF-8')
+  pipeFile(res, filepath, code)
 }
 
 export function serveAsString (res, object) {
@@ -48,10 +52,19 @@ export function serveStaticFile (res, pathname) {
   pipeFile(res, filepath)
 }
 
-export function serveMessage (res, code, message) {
+export function serveSuccessMessage (res, message) {
+  const body = `<div class=success onclick="this.remove()"><p>${message}</div>`
+  res.setHeader('Content-Type', 'text/html; charset=UTF-8')
+  res.statusCode = 200
+  res.write(body)
+  res.end()
+}
+
+export function serveErrorMessage (res, message, code) {
+  const body = `<div class=error onclick="this.remove()"><p>${message}</div>`
   res.setHeader('Content-Type', 'text/html; charset=UTF-8')
   res.statusCode = code
-  res.write(html.errorMessage(message))
+  res.write(body)
   res.end()
 }
 
@@ -67,9 +80,9 @@ export function redirect (res, url) {
   res.setHeader('location', url); setCodeAndEnd(res, 302)
 }
 
-export const serveHomepage = (res) => pipeFile(res, HOMEPAGE_FP)
+export const serveHomepage = (res) => pipeHtmlFile(res, HOMEPAGE_FP)
 export const serveNoContent = (res) => setCodeAndEnd(res, 204)
 export const serveBadRequest = (res) => setCodeAndEnd(res, 400)
-export const serveNotFound = (res) => pipeFile(res, ERROR_FP, 404)
+export const serveNotFound = (res) => pipeHtmlFile(res, ERROR_FP, 404)
 export const serveNotAllowed = (res) => setCodeAndEnd(res, 405)
 export const serveServerError = (res) => setCodeAndEnd(res, 500)

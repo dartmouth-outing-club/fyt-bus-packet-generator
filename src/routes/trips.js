@@ -62,7 +62,7 @@ export async function del (req, res) {
     responses.serveNoContent(res)
   } catch (error) {
     if (error.code === 'SQLITE_CONSTRAINT_TRIGGER') {
-      responses.serveMessage(res, 400, "Error: cannot delete a trip that is part of a packet")
+      responses.serveErrorMessage(res, "Error: cannot delete a trip that is part of a packet", 400)
     } else {
       responses.serveServerError(res)
     }

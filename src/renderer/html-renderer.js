@@ -87,13 +87,6 @@ export function tripsOptions (trips) {
   return trips.map((trip) => `<option>${trip.name}</option>`).join('\n')
 }
 
-export function errorMessage (message) {
-return `<div class=error onclick="this.remove()">
-<p>${message}
-</div>
-`
-}
-
 export function generationError (list) {
   return `<div class=error onclick="this.remove()">
 <p>Something went wrong; the following packages failed to regenerate:
@@ -101,13 +94,6 @@ export function generationError (list) {
 ${list.map(item => `<li>${item}`)}
 </ul>
 <p>Please edit the packets with errors ensure that the trips selected are still valid.
-</div>
-`
-}
-
-export function successMessage (message) {
-return `<div class=success onclick="this.remove()">
-<p>${message}
 </div>
 `
 }
