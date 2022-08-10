@@ -14,13 +14,13 @@ export async function get (req, res) {
   if (!name) {
     const names = sqlite.getAllPacketNames()
     const links = html.packetLinkList(names)
-    responses.serveAsString(res, links)
+    responses.serveAsString(req, res, links)
   } else if (requestUrl.searchParams.has('queryOnly')) {
     const { query } = sqlite.getPacket(name)
-    return responses.serveAsString(res, query)
+    return responses.serveAsString(req, res, query)
   } else {
     const packetHtml = sqlite.getPacket(name)?.html_content
-    return responses.serveHtml(res, packetHtml)
+    return responses.serveHtml(req, res, packetHtml)
   }
 }
 
@@ -29,12 +29,12 @@ export async function post (req, res) {
 
   try {
     generatePacket(body)
-    responses.redirect(res, '/')
+    responses.redirect(req, res, '/')
   } catch (err) {
     // TODO: Add more granular errors
     // i.e. A query parse failure is a bad request, google maps is bad gateway, etc
     console.error(err)
-    responses.serveServerError(res)
+    responses.serveServerError(req, res)
   }
 }
 
@@ -43,9 +43,9 @@ export async function del (req, res) {
   const name = decodeURI(requestUrl.pathname).split('/').at(3)
 
   if (sqlite.deletePacket(name)) {
-    return responses.serveNoContent(res)
+    return responses.serveNoContent(req, res)
   } else {
-    return responses.serveBadRequest(res)
+    return responses.serveBadRequest(req, res)
   }
 }
 

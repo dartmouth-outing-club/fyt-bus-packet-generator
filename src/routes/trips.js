@@ -14,21 +14,21 @@ export async function get (req, res) {
 
   if (format === 'table') {
     const tripsTable = html.tripsTable(trips)
-    responses.serveAsString(res, tripsTable)
+    responses.serveAsString(req, res, tripsTable)
   }
 
   if (format === 'options') {
     const tripsOptions = html.tripsOptions(trips)
-    responses.serveAsString(res, tripsOptions)
+    responses.serveAsString(req, res, tripsOptions)
   }
 
-  responses.serveBadRequest(res)
+  responses.serveBadRequest(req, res)
 }
 
 export async function post (req, res) {
   const content = req.headers['content-type']
   if (content.slice(0, 20) !== 'multipart/form-data;') {
-    responses.serveBadRequest(res)
+    responses.serveBadRequest(req, res)
   }
   console.log(`Uploading file: ${content}`)
 
@@ -44,13 +44,13 @@ export async function post (req, res) {
   readable
     .pipe(csv(['name', 'num_students']))
     .on('data', data => results.push(data))
-    .on('error', () => responses.serveBadRequest(res))
+    .on('error', () => responses.serveBadRequest(req, res))
     .on('end', () => {
       const trips = results
         .filter(row => Object.keys(row).length !== 0)
         .map(row => ({ ...row, name: row.name.toUpperCase() }))
       trips.map(sqlite.saveTrip)
-      responses.redirect(res, '/trips')
+      responses.redirect(req, res, '/trips')
     })
 }
 
@@ -59,12 +59,12 @@ export async function del (req, res) {
 
   try {
     sqlite.deleteTrip(trip)
-    responses.serveNoContent(res)
+    responses.serveNoContent(req, res)
   } catch (error) {
     if (error.code === 'SQLITE_CONSTRAINT_TRIGGER') {
-      responses.serveErrorMessage(res, "Error: cannot delete a trip that is part of a packet", 400)
+      responses.serveErrorMessage(req, res, "Error: cannot delete a trip that is part of a packet", 400)
     } else {
-      responses.serveServerError(res)
+      responses.serveServerError(req, res)
     }
   }
 }

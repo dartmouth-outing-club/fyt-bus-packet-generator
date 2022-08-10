@@ -2,7 +2,7 @@ import * as sqlite from '../clients/sqlite.js'
 import * as html from '../renderer/html-renderer.js'
 import * as responses from '../responses.js'
 
-export async function get (_req, res) {
+export async function get (req, res) {
   const legs = sqlite
     .getAllLegs()
     .sort((a, b) => a.start_name.localeCompare(b.start_name))
@@ -20,5 +20,5 @@ export async function get (_req, res) {
     return html.directionsList(start_name, end_name, steps, duration, distance)
   }).join('')
 
-  responses.serveAsString(res, render)
+  responses.serveAsString(req, res, render)
 }

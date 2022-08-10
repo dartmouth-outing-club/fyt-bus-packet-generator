@@ -21,7 +21,7 @@ import { generatePacket } from './packets.js'
  * levels we're likely to see here however, I do not anticipate it being much
  * of an issue.
  */
-export async function post (_req, res) {
+export async function post (req, res) {
   const packets = sqlite.getAllPackets()
   console.log(`Regenerating ${packets.length} packets`)
 
@@ -30,12 +30,12 @@ export async function post (_req, res) {
   const failedPromises = results.filter(result => result.status === 'rejected')
 
   if (failedPromises.length === 0) {
-    responses.serveSuccessMessage(res, 'Successfully regenerated all packets.')
+    responses.serveSuccessMessage(req, res, 'Successfully regenerated all packets.')
   } else {
     const failedPacketNames = failedPromises.map((result, index) => {
       console.error(`(#${index}) failed:`, result)
       return packets[index].name
     })
-    responses.serveAsString(res, html.generationError(failedPacketNames))
+    responses.serveAsString(req, res, html.generationError(failedPacketNames))
   }
 }

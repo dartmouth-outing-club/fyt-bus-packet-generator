@@ -5,6 +5,6 @@ import { IncomingMessage, ServerResponse } from 'node:http'
 
 test('serveNoContent', () => {
   const res = new ServerResponse(new IncomingMessage())
-  responses.serveNoContent(res)
+  responses.serveNoContent(null, res)
   assert.equal(res.statusCode, 204)
 })
