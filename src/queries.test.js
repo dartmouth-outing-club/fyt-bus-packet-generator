@@ -5,13 +5,13 @@ import * as queries from './queries.js'
 test('parseQuery', () => {
   test('it parses a query with no additional stops', () => {
     const params = new URLSearchParams()
-    params.append('trip-name', 'Trip to Moosilauke')
-    params.append('trip-date', '2022-07-01')
+    params.append('route-name', 'Trip to Moosilauke')
+    params.append('route-date', '2022-07-01')
     params.append('origin-location', 'Hanover')
     params.append('destination-location', 'Moosilauke')
 
     const expected = {
-      tripName: 'Trip to Moosilauke',
+      name: 'Trip to Moosilauke',
       date: '2022-07-01',
       stopNames: ['Hanover', 'Moosilauke'],
       tripsOnboard: []
@@ -21,14 +21,14 @@ test('parseQuery', () => {
 
   test('it parses a query with one stop', () => {
     const params = new URLSearchParams()
-    params.append('trip-name', 'Trip to Moosilauke')
-    params.append('trip-date', '2022-07-01')
+    params.append('route-name', 'Trip to Moosilauke')
+    params.append('route-date', '2022-07-01')
     params.append('origin-location', 'Hanover')
     params.append('stop1-location', 'Dartmouth Skiway')
     params.append('destination-location', 'Moosilauke')
 
     const expected = {
-      tripName: 'Trip to Moosilauke',
+      name: 'Trip to Moosilauke',
       date: '2022-07-01',
       stopNames: ['Hanover', 'Dartmouth Skiway', 'Moosilauke'],
       tripsOnboard: []
@@ -38,8 +38,8 @@ test('parseQuery', () => {
 
   test('it parses a query with four steps, in the correct step order', () => {
     const params = new URLSearchParams()
-    params.append('trip-name', 'Trip to Moosilauke')
-    params.append('trip-date', '2022-07-01')
+    params.append('route-name', 'Trip to Moosilauke')
+    params.append('route-date', '2022-07-01')
     params.append('origin-location', 'Hanover')
     params.append('stop1-location', 'Lyme')
     params.append('stop3-location', 'DOC Cabin')
@@ -48,7 +48,7 @@ test('parseQuery', () => {
     params.append('destination-location', 'Moosilauke')
 
     const expected = {
-      tripName: 'Trip to Moosilauke',
+      name: 'Trip to Moosilauke',
       date: '2022-07-01',
       stopNames: ['Hanover', 'Lyme', 'Dartmouth Skiway', 'DOC Cabin', 'Warren', 'Moosilauke'],
       tripsOnboard: []
@@ -58,16 +58,16 @@ test('parseQuery', () => {
 
   test('it throws an error if missing an origin', () => {
     const params = new URLSearchParams()
-    params.append('trip-name', 'Trip to Moosilauke')
-    params.append('trip-date', '2022-07-01')
+    params.append('route-name', 'Trip to Moosilauke')
+    params.append('route-date', '2022-07-01')
     params.append('destination-location', 'Moosilauke')
     assert.throws(() => queries.parseQuery(params))
   })
 
   test('it throws an error if missing a destination', () => {
     const params = new URLSearchParams()
-    params.append('trip-name', 'Trip to Moosilauke')
-    params.append('trip-date', '2022-07-01')
+    params.append('route-name', 'Trip to Moosilauke')
+    params.append('route-date', '2022-07-01')
     params.append('origin-location', 'Hanover')
     assert.throws(() => queries.parseQuery(params))
   })
