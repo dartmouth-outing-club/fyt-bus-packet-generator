@@ -5,7 +5,7 @@ import * as regenerate from './routes/regenerate.js'
 import * as directions from './routes/directions.js'
 import * as responses from './responses.js'
 
-export function getHandler(url, httpMethod, serveStatic = false) {
+export function getHandler (url, httpMethod, serveStatic = false) {
   const subRoutes = url.pathname.split('/')
   // If the route doesn't start with /api, it's a static route
   if (subRoutes.at(1) !== 'api') {
@@ -45,7 +45,7 @@ function getModuleMethod (module, httpMethod) {
 
   // If a function exists for that HTTP method, return a function that calls it
   // Otherwise, log a warning and return a function that serves 405 METHOD NOT ALLOWED
-  if (typeof handlerForModule === 'function' ) {
+  if (typeof handlerForModule === 'function') {
     return handlerForModule
   }
   console.warn(`Invalid request received for ${httpMethod} method that does not exist this module.`)

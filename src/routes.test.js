@@ -49,5 +49,4 @@ test('api routing', () => {
     const handler = routes.getHandler(url, 'DELETE', true)
     assert.equal(handler.name, 'serveNotAllowed')
   })
-
 })

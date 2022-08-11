@@ -87,7 +87,7 @@ export function deleteTrip (name) {
   return changes
 }
 
-export function savePacketTrips(packetTitle, trips) {
+export function savePacketTrips (packetTitle, trips) {
   trips.forEach(trip => {
     db
       .prepare('INSERT OR REPLACE INTO packet_trips (packet, trip) VALUES (?, ?)')
