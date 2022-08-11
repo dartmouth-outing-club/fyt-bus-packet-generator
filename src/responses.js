@@ -87,7 +87,8 @@ export function serveHtml (req, res, text) {
 }
 
 export function redirect (_req, res, url) {
-  res.setHeader('location', url); setCodeAndEnd(res, 302)
+  res.setHeader('location', url)
+  setCodeAndEnd(res, 302)
 }
 
 export const serveHomepage = (_req, res) => pipeHtmlFile(res, HOMEPAGE_FP)

@@ -12,17 +12,16 @@ export async function get (req, res) {
   const format = requestUrl.searchParams.get('format')
   const trips = sqlite.getAllTrips()
 
-  if (format === 'table') {
-    const tripsTable = html.tripsTable(trips)
-    responses.serveAsString(req, res, tripsTable)
+  switch (format) {
+    case 'table':
+      responses.serveAsString(req, res, html.tripsTable(trips))
+      break
+    case 'options':
+      responses.serveAsString(req, res, html.tripsOptions(trips))
+      break
+    default:
+      responses.serveBadRequest(req, res)
   }
-
-  if (format === 'options') {
-    const tripsOptions = html.tripsOptions(trips)
-    responses.serveAsString(req, res, tripsOptions)
-  }
-
-  responses.serveBadRequest(req, res)
 }
 
 export async function post (req, res) {
