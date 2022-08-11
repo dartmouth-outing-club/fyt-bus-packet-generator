@@ -20,36 +20,33 @@ export function getHandler (url, httpMethod, serveStatic = false) {
   }
 
   // If it starts with /api, send it to the appropriate API handler
-  // Note that getModuleMethod returns a function that can be called later
+  // Note that getModuleMethodHandler returns a function that can be called later
   switch (subRoutes.at(2)) {
     case 'stops':
-      return getModuleMethod(stops, httpMethod)
+      return getModuleMethodHandler(stops, httpMethod)
     case 'packets':
-      return getModuleMethod(packets, httpMethod)
+      return getModuleMethodHandler(packets, httpMethod)
     case 'trips':
-      return getModuleMethod(trips, httpMethod)
+      return getModuleMethodHandler(trips, httpMethod)
     case 'regenerate':
-      return getModuleMethod(regenerate, httpMethod)
+      return getModuleMethodHandler(regenerate, httpMethod)
     case 'directions':
-      return getModuleMethod(directions, httpMethod)
+      return getModuleMethodHandler(directions, httpMethod)
     default:
       return responses.serveNotFound
   }
 }
 
-function getModuleMethod (module, httpMethod) {
+function getModuleMethodHandler (module, httpMethod) {
   // Convert the HTTP Method (GET, POST, etc) into the corresponding function
   // DELETE is converted to 'del' because 'delete' is a JS keyword
-  const methodName = httpMethod === 'DELETE' ? 'del' : httpMethod.toLowerCase()
-  const handlerForModule = module[methodName]
+  const functionName = httpMethod === 'DELETE' ? 'del' : httpMethod.toLowerCase()
+  const moduleMethodHandler = module[functionName]
 
-  // If a function exists for that HTTP method, return a function that calls it
-  // Otherwise, log a warning and return a function that serves 405 METHOD NOT ALLOWED
-  if (typeof handlerForModule === 'function') {
-    return handlerForModule
-  }
-  console.warn(`Invalid request received for ${httpMethod} method that does not exist this module.`)
-  return responses.serveNotAllowed
+  // If a function exists for that HTTP method, return it
+  // Otherwise, return a function that serves 405 METHOD NOT ALLOWED
+  const moduleHasMethod = typeof moduleMethodHandler === 'function'
+  return moduleHasMethod ? moduleMethodHandler : responses.serveNotAllowed
 }
 
 const STATIC_FILE_WARNING = `Error - your server is not configured correctly.
