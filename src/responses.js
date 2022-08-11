@@ -17,7 +17,17 @@ function setMimeType (res, pathname) {
 }
 
 function setCodeAndEnd (res, code) {
+  const body = `<!DOCTYPE html>
+<title>${code}</title>
+<main style="text-align:center">
+<h1>${code}</h1>
+<hr>
+<p>Click <a href="/">here</a> to return to the homepage
+</main>
+`
+  res.setHeader('Content-Type', 'text/html; charset=UTF-8')
   res.statusCode = code
+  res.write(body)
   res.end()
 }
 
