@@ -6,6 +6,7 @@ const GOOGLE_DIRECTIONS_API =
   'https://maps.googleapis.com/maps/api/directions/json'
 
 export async function getDirections (origin, destination) {
+  console.log(`Cache miss for directions from ${origin} to ${destination}`)
   const params = new URLSearchParams({
     ...directions.createDirectionsRequest([origin, destination]),
     key: config.GOOGLE_API_KEY

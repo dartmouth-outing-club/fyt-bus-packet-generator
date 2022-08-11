@@ -26,9 +26,10 @@ export async function get (req, res) {
 
 export async function post (req, res) {
   const body = await utils.streamToString(req)
+  console.log(`Generating packet from query:\n${body}`)
 
   try {
-    generatePacket(body)
+    await generatePacket(body)
     responses.redirect(req, res, '/')
   } catch (err) {
     // TODO: Add more granular errors
@@ -50,10 +51,7 @@ export async function del (req, res) {
 }
 
 export async function generatePacket (body) {
-  console.log(body)
-  const params = queries.parseQuery(body)
-  const { name, date, stopNames, tripsOnboard } = params
-  console.log(`Getting stop information for: ${stopNames}`)
+  const { name, date, stopNames, tripsOnboard } = queries.parseQuery(body)
   const stops = stopNames.map(sqlite.getStop)
   const trips = tripsOnboard.map(trip => (
     { ...trip, num_students: sqlite.getTrip(trip.name)?.num_students }
@@ -63,18 +61,13 @@ export async function generatePacket (body) {
   // Create a list of promises that will resolve the directions between each pair of stops
   const directionsPromises = edgeListOfStops.map(([start, end]) => {
     const directions = sqlite.getDirections(start.coordinates, end.coordinates)
-
-    if (directions) {
-      console.log(`Cache hit for directions from ${start.name} to ${end.name}`)
-      return Promise.resolve(directions)
-    }
-
-    console.log(`Cache miss for directions from ${start.name} to ${end.name}`)
-    return google.getDirections(start.coordinates, end.coordinates)
+    return directions
+      ? Promise.resolve(directions)
+      : google.getDirections(start.coordinates, end.coordinates)
   })
   const directionsList = await Promise.all(directionsPromises)
 
-  const title = name || `From ${stopNames.at(0)} to ${stopNames.at(-1)} (${stopNames.length - 2} stops)`
+  const title = name || `${stops.at(0).name} - ${stops.at(-1).name} (${date})`
   const packet = buildPacket(stops, directionsList, title, date, trips)
   sqlite.savePacket(title, body, packet.toString())
   sqlite.savePacketTrips(title, trips)

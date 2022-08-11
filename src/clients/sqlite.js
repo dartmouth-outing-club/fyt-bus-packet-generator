@@ -28,6 +28,7 @@ export function getDirections (origin, destination) {
   `).get(origin, destination)
 
   if (directions) {
+    console.log(`Cache hit for directions from ${origin} to ${destination}`)
     return JSON.parse(directions.google_directions)
   }
 

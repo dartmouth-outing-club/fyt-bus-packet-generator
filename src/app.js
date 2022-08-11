@@ -12,7 +12,8 @@ const app = http.createServer(async (req, res) => {
   console.log(`${req.method} request receieved for ${requestUrl}`)
   try {
     // Get the function that will handle the request, then call it with (req, res)
-    routes.getHandler(requestUrl, req.method, env === 'development')(req, res)
+    const handler = routes.getHandler(requestUrl, req.method, env === 'development')
+    await handler(req, res)
   } catch (error) {
     console.error('ERROR - uncaught exception while handling request\n', error)
     responses.serveServerError(req, res)
