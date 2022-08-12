@@ -47,7 +47,8 @@ export async function post (req, res) {
     .on('end', () => {
       const trips = results
         .filter(row => Object.keys(row).length !== 0)
-        .map(row => ({ ...row, name: row.name.toUpperCase() }))
+        .map(row => ({ ...row, name: row.name.toUpperCase().trim() }))
+        .filter(row => row.name) // Filter trips with falsy name values
       trips.map(sqlite.saveTrip)
       responses.redirect(req, res, '/trips')
     })

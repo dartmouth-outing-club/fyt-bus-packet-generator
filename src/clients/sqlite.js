@@ -76,8 +76,13 @@ export function getAllTrips () {
 }
 
 export function saveTrip ({ name, num_students }) {
+  console.log(`Inserting ${name} (${num_students} students)`)
+  const statement = `
+INSERT INTO trips (name, num_students) VALUES (?, ?)
+  ON CONFLICT (name) DO UPDATE SET num_students=excluded.num_students
+`
   return db
-    .prepare('INSERT OR REPLACE INTO trips (name, num_students) VALUES (?, ?)')
+    .prepare(statement)
     .run(name, num_students)
 }
 
