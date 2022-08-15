@@ -48,7 +48,7 @@ To change the information included in the packets, see the relevant pages in the
 		required>
 	<option value="" selected disabled hidden>---- Choose a location ----
 </select>
-<button class="delete nodisplay" onclick="this.parentElement.remove()" type=button>Remove</button>
+<button class="delete nodisplay" onclick="deleteWaypoint(this)" type=button>Remove</button>
 <p>
 <button id=add type=button onclick="addNewWaypoint()">&#10133; Insert another trip stop</button>
 <p>
@@ -85,22 +85,53 @@ Source on <a href="https://github.com/dartmouth-outing-club/fyt-bus-packet-gener
 
 <script>
 const WINDOW_URL = new URL(window.location.href)
-const ADD_P = document.querySelector('fieldset[name=route-stops]').children[2]
 
 function addNewWaypoint () {
+	// Grab the origin-location container and make a duplicate of it
 	const routeFieldset = document.querySelector('fieldset[name=route-stops]')
-	const newPara = routeFieldset.children[1].cloneNode(true)
+	const newStopParagraph = routeFieldset.children[1].cloneNode(true)
 
-	const num = document.querySelectorAll('select.location').length - 1
-	const [ label, select, deleteButton ] = newPara.children
+	// Insert the duplicate right before the "add button" container
+	// The newStopParagraph will have a duplicate ID - calling setWaypointNumbers()
+	// will fix that before it gets the chance to render incorrectly
+	const addButton = routeFieldset.children[routeFieldset.children.length - 2]
+	addButton.insertAdjacentElement('beforebegin', newStopParagraph)
+	setWaypointNumbers()
+}
 
-	label.textContent = `Stop ${num}: `
-	label.htmlFor = `stop${num}-location`
-	select.setAttribute('name', `stop${num}-location`)
-	select.setAttribute('id', `stop${num}-location`)
-	deleteButton.classList.remove('nodisplay')
+function deleteWaypoint (element) {
+	element.parentElement.remove()
+	setWaypointNumbers()
+}
 
-	routeFieldset.insertBefore(newPara, ADD_P)
+/** Number the stops on the page.
+* A bus can make n additional stops in addition to its destination, and those
+* should be labeled "Stop 1", "Stop 2" and so on. Calling this function ensures
+* That the stops are labeled in the proper order, even if one of the stops in
+* the middle was removed.
+*
+* For instance: if there are three additional stops in the packets and the user
+* deletes "Stop 2", this function will leave "Stop 1" alone and rename "Stop 3"
+* to "Stop 2".
+*/
+function setWaypointNumbers () {
+	// Select all the paragraphs in the fieldset except the first (start) and
+	// the last two ("add trip" button and destination)
+	const stops = Array
+		.from(document.querySelectorAll('fieldset[name=route-stops] > p'))
+		.slice(1, -2)
+
+	// The controls for each stop (select, delete button, etc.) are contained in a paragraph
+	stops.forEach((stopParagraph, index) => {
+		const [ label, select, deleteButton ] = stopParagraph.children
+		const stopNum = index + 1
+
+		label.textContent = `Stop ${stopNum}: `
+		label.htmlFor = `stop${stopNum}-location`
+		select.setAttribute('name', `stop${stopNum}-location`)
+		select.setAttribute('id', `stop${stopNum}-location`)
+		deleteButton.classList.remove('nodisplay')
+	})
 }
 
 function setTripBoardingOptions () {

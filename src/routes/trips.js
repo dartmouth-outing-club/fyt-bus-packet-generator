@@ -11,6 +11,7 @@ export async function get (req, res) {
   const requestUrl = new URL(req.url, `http://${req.headers.host}`)
   const format = requestUrl.searchParams.get('format')
   const trips = sqlite.getAllTrips()
+  trips.sort((a, b) => utils.tripSort(a.name, b.name))
 
   switch (format) {
     case 'table':

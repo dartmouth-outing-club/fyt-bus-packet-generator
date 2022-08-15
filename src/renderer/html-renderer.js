@@ -67,7 +67,6 @@ export function packetLinkList (names) {
 }
 
 export function tripsTable (trips) {
-  trips.sort((a, b) => utils.tripSort(a.name, b.name))
   const tripsHtml = trips.map((trip) => `<tr>
 <td>${trip.name}
 <td>${trip.num_students}
@@ -83,7 +82,6 @@ ${tripsHtml}
 }
 
 export function tripsOptions (trips) {
-  trips.sort((a, b) => utils.tripSort(a.name, b.name))
   return trips.map((trip) => `<option>${trip.name}</option>`).join('\n')
 }
 
