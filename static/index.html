@@ -22,6 +22,9 @@ Use this form to generate informational packets for the First-Year Trips bus dri
 Here you can generate new packets and view existing ones.
 To change the information included in the packets, see the relevant pages in the nav bar.
 
+<p>
+Please note when editing packets that the packet name is the identity of the packet. So if you edit the packet and change the name, it will be a new packet. If you make a new packet with the same name as an existing packet, it will delete the existing packet.
+
 <!-- New Packet Form -->
 <h2>Generate new packet</h2>
 <form action="/api/packets" method=post>
@@ -195,7 +198,7 @@ function setFormValues(params) {
 
 async function loadDocument () {
 	// Populate existing packets from the backend
-	const packets = fetch('/api/packets').then(res => res.text()).then(text => {
+	const packets = fetch('/api/packets?format=links').then(res => res.text()).then(text => {
 		document.getElementById('packets-list').innerHTML += text
 	})
 

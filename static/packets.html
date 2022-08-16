@@ -26,8 +26,7 @@ Clicking this button will regenerate the existing packets. The primary reason to
 <p>
 <button id=regenerate onclick="regeneratePackets()">Regenerate</button>
 
-<h2>Existing packets</h2>
-<ul id=packets-list></ul>
+<h2 id=packets-header>Existing packets</h2>
 </main>
 
 <footer><span>
@@ -39,8 +38,8 @@ Source on <a href="https://github.com/dartmouth-outing-club/fyt-bus-packet-gener
 const WINDOW_URL = new URL(window.location.href)
 
 // Populate existing packets from the backend, then enable page
-fetch('/api/packets').then(res => res.text()).then(text => {
-	document.getElementById('packets-list').innerHTML += text
+fetch('/api/packets?format=table').then(res => res.text()).then(text => {
+	document.getElementById('packets-header').insertAdjacentHTML('afterend', text)
 })
 
 async function deletePacket (name) {

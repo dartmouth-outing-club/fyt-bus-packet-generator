@@ -66,6 +66,19 @@ export function packetLinkList (names) {
 `).join('')
 }
 
+export function packetsTable (packets) {
+  const packetsTable = packets.map((packet) => `<tr>
+<td>${packet.name}
+<td>${packet.total_students}`).join('\n')
+
+  return `<table>
+<tr>
+<th>Packet
+<th>Total Students
+${packetsTable}
+</table>`
+}
+
 export function tripsTable (trips) {
   const tripsHtml = trips.map((trip) => `<tr>
 <td>${trip.name}
@@ -96,7 +109,7 @@ ${list.map(item => `<li>${item}`)}
 `
 }
 
-export function directionsList (startName, endName, steps, duration, distance) {
+export function directionsList (startName, endName, steps, _duration, _distance) {
   return `
 <li onclick="this.classList.toggle('expanded')">
 <button>${startName} to ${endName}</button>

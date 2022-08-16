@@ -50,6 +50,15 @@ export function getAllPackets () {
   return db.prepare('SELECT name, query FROM packets').all()
 }
 
+export function getAllPacketsWithStats () {
+  return db.prepare(`
+  SELECT packet as name, sum(num_students) as total_students
+  FROM packet_trips
+  LEFT JOIN trips ON trips.name = trip
+  GROUP BY packet
+  `).all()
+}
+
 export function getAllPacketNames () {
   return db.prepare('SELECT name FROM packets').all().map(row => row.name)
 }

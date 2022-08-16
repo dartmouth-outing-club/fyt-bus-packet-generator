@@ -15,13 +15,11 @@ export async function get (req, res) {
 
   switch (format) {
     case 'table':
-      responses.serveAsString(req, res, html.tripsTable(trips))
-      break
+      return responses.serveAsString(req, res, html.tripsTable(trips))
     case 'options':
-      responses.serveAsString(req, res, html.tripsOptions(trips))
-      break
+      return responses.serveAsString(req, res, html.tripsOptions(trips))
     default:
-      responses.serveBadRequest(req, res)
+      return responses.serveBadRequest(req, res)
   }
 }
 
