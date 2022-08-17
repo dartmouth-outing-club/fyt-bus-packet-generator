@@ -83,12 +83,14 @@ export function tripsTable (trips) {
   const tripsHtml = trips.map((trip) => `<tr>
 <td>${trip.name}
 <td>${trip.num_students}
+<td>${trip.packets_present}
 `).join('')
 
   return `<table>
 <tr>
 <th>Trip Name
 <th>Num Students
+<th>Packets Present
 ${tripsHtml}
 </table>
 `

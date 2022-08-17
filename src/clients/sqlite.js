@@ -81,7 +81,12 @@ export function getTrip (name) {
 }
 
 export function getAllTrips () {
-  return db.prepare('SELECT name, num_students FROM trips').all()
+  const statement = `
+SELECT name, num_students, group_concat(packet, ', ') as packets_present
+FROM packet_trips
+LEFT JOIN trips ON name = trip
+GROUP BY trip`
+  return db.prepare(statement).all()
 }
 
 export function saveTrip ({ name, num_students }) {
