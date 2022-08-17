@@ -59,11 +59,14 @@ export function stopsOptionList (stops) {
 }
 
 export function packetLinkList (names) {
-  return names.map(name => `<li>
+  const items = names.map(name => `<li>
 <button class=edit onclick="editPacket('${name}')">Edit</button>
 <button class=delete onclick="deletePacket('${name}')">Delete</button>
-<a href="/api/packets/${encodeURI(name)}">${name}</a>
-`).join('')
+<a href="/api/packets/${encodeURI(name)}">${name}</a>`).join('\n')
+
+  return `<ul>
+${items}
+</ul>`
 }
 
 export function packetsTable (packets) {
@@ -83,6 +86,7 @@ export function tripsTable (trips) {
   const tripsHtml = trips.map((trip) => `<tr>
 <td>${trip.name}
 <td>${trip.num_students}
+<td>${trip.num_packets}
 <td>${trip.packets_present}
 `).join('')
 
@@ -90,6 +94,7 @@ export function tripsTable (trips) {
 <tr>
 <th>Trip Name
 <th>Num Students
+<th>Num Packets
 <th>Packets Present
 ${tripsHtml}
 </table>

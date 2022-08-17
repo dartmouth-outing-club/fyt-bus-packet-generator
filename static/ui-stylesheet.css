@@ -179,10 +179,6 @@ input#delete-trip {
 	width: 70px;
 }
 
-ul#packets-list a {
-	margin-right: 10px;
-}
-
 .error {
 	color: white;
 	background-color: #9d162e;

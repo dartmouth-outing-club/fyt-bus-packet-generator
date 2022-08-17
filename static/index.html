@@ -39,6 +39,7 @@ Please note when editing packets that the packet name is the identity of the pac
 <script>document.getElementById('route-date').valueAsDate = new Date()</script>
 </fieldset>
 
+<!-- Select (and add) locations where the bus route will stop -->
 <fieldset name=route-stops>
 <legend>Route stops</legend>
 <p>
@@ -66,6 +67,7 @@ Please note when editing packets that the packet name is the identity of the pac
 </select>
 </fieldset>
 
+<!-- Add the trips that will be on the bus, along with the locations where they get on and off -->
 <fieldset name=trips>
 <legend>Trips onboard</legend>
 <p>
@@ -77,8 +79,7 @@ Please note when editing packets that the packet name is the identity of the pac
 </form>
 
 <!-- List of existing packets -->
-<h2>Existing packets</h2>
-<ul id=packets-list></ul>
+<h2 id=packets-list>Existing packets</h2>
 </main>
 
 <footer><span>
@@ -199,7 +200,7 @@ function setFormValues(params) {
 async function loadDocument () {
 	// Populate existing packets from the backend
 	const packets = fetch('/api/packets?format=links').then(res => res.text()).then(text => {
-		document.getElementById('packets-list').innerHTML += text
+		document.getElementById('packets-list').insertAdjacentHTML('afterend', text)
 	})
 
 	// Populate select list for trip boardings

@@ -80,9 +80,9 @@ export function getTrip (name) {
   return db.prepare('SELECT name, num_students FROM trips where name = ?').get(name)
 }
 
-export function getAllTrips () {
+export function getAllTripsWithStats () {
   const statement = `
-SELECT name, num_students, group_concat(packet, ', ') as packets_present
+SELECT name, num_students, count(packet) as num_packets, group_concat(packet, ', ') as packets_present
 FROM packet_trips
 LEFT JOIN trips ON name = trip
 GROUP BY trip`
