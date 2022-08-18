@@ -15,7 +15,7 @@ CREATE TABLE packets (
 
 CREATE TABLE stops (
 	coordinates TEXT PRIMARY KEY,
-	name TEXT NOT NULL,
+	name TEXT NOT NULL UNIQUE,
 	address TEXT,
 	special_instructions TEXT
 );
@@ -35,7 +35,7 @@ CREATE TABLE packet_trips (
 
 CREATE TABLE packets_stops (
 	packet TEXT REFERENCES packets ON DELETE CASCADE ON UPDATE CASCADE,
-	stop TEXT REFERENCES stops ON DELETE RESTRICT ON UPDATE CASCADE
+	stop TEXT REFERENCES stops(name) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 CREATE TRIGGER directions_inserted AFTER INSERT ON directions

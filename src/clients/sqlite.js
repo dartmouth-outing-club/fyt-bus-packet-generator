@@ -76,11 +76,25 @@ export function getAllPacketNames () {
   return db.prepare('SELECT name FROM packets').all().map(row => row.name)
 }
 
-export function savePacket (name, query, html) {
+export function savePacket (name, query, html, trips, stops) {
   db.prepare(`
   INSERT OR REPLACE INTO packets (name, query, html_content)
   VALUES (?, ?, ?)
   `).run(name, query, html)
+
+  trips.forEach(trip => {
+    db
+      .prepare('INSERT INTO packet_trips (packet, trip) VALUES (?, ?)')
+      .run(name, trip.name)
+  })
+
+  stops.forEach(stop => {
+    console.log(name)
+    console.log(stop)
+    db
+      .prepare('INSERT INTO packets_stops (packet, stop) VALUES (?, ?)')
+      .run(name, stop)
+  })
 }
 
 export function deletePacket (name) {
@@ -117,22 +131,6 @@ export function deleteTrip (name) {
   const { changes } = db.prepare('DELETE FROM trips WHERE name = ?').run(name)
   console.log(`Deleted ${changes} trip(s)`)
   return changes
-}
-
-export function savePacketTrips (packetTitle, trips) {
-  trips.forEach(trip => {
-    db
-      .prepare('INSERT OR REPLACE INTO packet_trips (packet, trip) VALUES (?, ?)')
-      .run(packetTitle, trip.name)
-  })
-}
-
-export function savePacketStops (packetTitle, stops) {
-  stops.forEach(stop => {
-    db
-      .prepare('INSERT OR REPLACE INTO packets_stops (packet, stop) VALUES (?, ?)')
-      .run(packetTitle, stop)
-  })
 }
 
 export function getAllLegs () {

@@ -86,11 +86,5 @@ export async function generatePacket (body) {
 
   const title = name || `${stops.at(0).name} - ${stops.at(-1).name} (${date})`
   const packet = buildPacket(stops, directionsList, title, date, trips)
-  // TODO: refactor into single method call
-  // You'd never want to save a packet without also updating its associated trips and stops
-  // Also... if you saved a packet that already existed but removed a trip from it, this would be wrong...
-  // That should be fixed ASAP
-  sqlite.savePacket(title, body, packet.toString())
-  sqlite.savePacketTrips(title, trips)
-  sqlite.savePacketStops(title, stopNames)
+  sqlite.savePacket(title, body, packet.toString(), trips, stopNames)
 }

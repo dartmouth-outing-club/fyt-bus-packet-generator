@@ -21,7 +21,7 @@ const values = packets
 console.log(
 `CREATE TABLE packets_stops (
   packet TEXT REFERENCES packets ON DELETE CASCADE ON UPDATE CASCADE,
-  stop TEXT REFERENCES stops ON DELETE RESTRICT ON UPDATE CASCADE
+  stop TEXT REFERENCES stops(name) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 `)
 console.log(`INSERT INTO packets_stops (packet, stop) VALUES\n${values};`)
