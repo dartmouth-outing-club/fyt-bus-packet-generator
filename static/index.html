@@ -12,6 +12,7 @@
 <li><a href="/packets">Packets</a>
 <li><a href="/trips">Trips</a></li>
 <li><a href="/directions">Directions</a></li>
+<li><a href="/stops">Stops</a></li>
 </ul>
 </header>
 
@@ -209,7 +210,7 @@ async function loadDocument () {
 	})
 
 	// Populate "stops" options with the stops from the backend
-	const stops = fetch('/api/stops').then(res => res.text()).then(text => {
+	const stops = fetch('/api/stops?format=options').then(res => res.text()).then(text => {
 		document.getElementsByName('origin-location')[0].innerHTML += text
 		document.getElementsByName('destination-location')[0].innerHTML += text
 	})

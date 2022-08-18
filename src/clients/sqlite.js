@@ -5,7 +5,20 @@ const db = new Database('./packet-generator.db')
 db.pragma('foreign_keys = ON')
 
 export function getAllStops () {
-  return db.prepare('SELECT name FROM stops').all().map(row => row.name)
+  return db.prepare('SELECT name FROM stops').all()
+}
+
+export function getAllStopsWithStats () {
+  const statement = `
+SELECT stops.name, IFNULL(packets_present, 0) as packets_present
+FROM stops
+LEFT JOIN (
+  SELECT stop as name, count(stop) as packets_present
+  FROM packets_stops
+  GROUP BY stop
+) as packet_counts ON packet_counts.name = stops.name
+`
+  return db.prepare(statement).all()
 }
 
 export function getStop (name) {
@@ -111,6 +124,14 @@ export function savePacketTrips (packetTitle, trips) {
     db
       .prepare('INSERT OR REPLACE INTO packet_trips (packet, trip) VALUES (?, ?)')
       .run(packetTitle, trip.name)
+  })
+}
+
+export function savePacketStops (packetTitle, stops) {
+  stops.forEach(stop => {
+    db
+      .prepare('INSERT OR REPLACE INTO packets_stops (packet, stop) VALUES (?, ?)')
+      .run(packetTitle, stop)
   })
 }
 

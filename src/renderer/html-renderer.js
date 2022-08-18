@@ -55,7 +55,16 @@ ${info}`
 }
 
 export function stopsOptionList (stops) {
-  return stops.map(stop => `<option>${stop}`).join('\n')
+  return stops.map(stop => `<option>${stop.name}`).join('\n')
+}
+
+export function stopsTable (stops) {
+  const stopsHtml = stops.map((stop) => `<tr><td>${stop.name}<td>${stop.packets_present}`).join('\n')
+  return `<table>
+<tr><th>Stop Name<th>Packets Present
+${stopsHtml}
+</table>
+`
 }
 
 export function packetLinkList (names) {

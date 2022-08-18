@@ -33,6 +33,11 @@ CREATE TABLE packet_trips (
 	trip TEXT REFERENCES trips ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
+CREATE TABLE packets_stops (
+	packet TEXT REFERENCES packets ON DELETE CASCADE ON UPDATE CASCADE,
+	stop TEXT REFERENCES stops ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
 CREATE TRIGGER directions_inserted AFTER INSERT ON directions
 BEGIN
 	UPDATE directions SET updated_at = unixepoch() WHERE id = NEW.id;
