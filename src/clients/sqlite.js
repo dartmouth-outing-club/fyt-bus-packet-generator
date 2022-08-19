@@ -1,8 +1,19 @@
+import fs from 'node:fs'
 import Database from 'better-sqlite3'
 
-const db = new Database('./packet-generator.db')
+
+const dbName = process.env.DB_NAME || './packet-generator.db'
+const db = new Database(dbName)
 // db.pragma('journal_mode = WAL')
 db.pragma('foreign_keys = ON')
+
+export const databaseFile = db.pragma('database_list')[0].file
+console.log(`Starting sqlite database from file: ${databaseFile}`)
+
+export function execFile (filePath) {
+  const statements = fs.readFileSync(filePath).toString()
+  return db.exec(statements)
+}
 
 export function getAllStops () {
   return db.prepare('SELECT name FROM stops').all()
@@ -107,12 +118,17 @@ export function getTrip (name) {
   return db.prepare('SELECT name, num_students FROM trips where name = ?').get(name)
 }
 
+export function getAllTrips() {
+return db.prepare('SELECT name, num_students FROM trips').all()
+}
+
 export function getAllTripsWithStats () {
   const statement = `
-SELECT name, num_students, count(packet) as num_packets, group_concat(packet, ', ') as packets_present
-FROM packet_trips
-LEFT JOIN trips ON name = trip
-GROUP BY trip`
+SELECT trips.name, num_students, count(packet) as num_packets, IFNULL(group_concat(packet, ', '), '(none)') as packets_present
+FROM trips
+LEFT JOIN packet_trips ON trips.name = trip
+GROUP BY trips.name`
+
   return db.prepare(statement).all()
 }
 

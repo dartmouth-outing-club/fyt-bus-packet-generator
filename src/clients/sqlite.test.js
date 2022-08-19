@@ -1,0 +1,11 @@
+import test from 'node:test'
+import assert from 'node:assert/strict'
+
+import * as sqlite from './sqlite.js'
+
+test('sqlite', () => {
+  test('it opens an empty in-memory database for testing', () => {
+    assert.equal(sqlite.databaseFile, '')
+  })
+})
+
