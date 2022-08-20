@@ -9,7 +9,6 @@ set -e
 DB_FILENAME="packet-generator.db"
 DB_SCHEMA_FP="./db/db-schema.sql"
 STOPS_CSV_FP="./db/stops.csv"
-TRIPS_CSV_FP="./db/trips.csv"
 
 if [[ ! -f $DB_SCHEMA_FP ]]
 then
@@ -38,7 +37,6 @@ echo "Creating $DB_FILENAME"
 sqlite3 $DB_FILENAME << EOF
 .read $DB_SCHEMA_FP
 .import --csv --skip 1 $STOPS_CSV_FP stops
-.import --csv --skip 1 $TRIPS_CSV_FP trips
 EOF
 
 # set -e ensures we only see this if sqlite3 exited successfully
