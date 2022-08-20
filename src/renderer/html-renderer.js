@@ -97,7 +97,7 @@ export function tripsTable (trips) {
 <td>${trip.num_students}
 <td>${trip.num_packets}
 <td>${trip.packets_present}
-`).join('')
+`).join('\n')
 
   return `<table>
 <tr>
@@ -105,6 +105,7 @@ export function tripsTable (trips) {
 <th>Num Students
 <th>Num Packets
 <th>Packets Present
+
 ${tripsHtml}
 </table>
 `

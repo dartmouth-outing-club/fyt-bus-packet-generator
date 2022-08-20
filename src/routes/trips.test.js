@@ -46,6 +46,52 @@ await test('/api/trips route', async (t) => {
 <option>B6</option>`)
   })
 
+  await t.test('serves the trips in table format', async () => {
+    const { req, res } = makeHttpObjects('/api/trips?format=table')
+    await trips.get(req, res)
+    assert.equal(res.statusCode, 200)
+    const expected = `<table>
+<tr>
+<th>Trip Name
+<th>Num Students
+<th>Num Packets
+<th>Packets Present
+
+<tr>
+<td>A4
+<td>9
+<td>0
+<td>(none)
+
+<tr>
+<td>A7
+<td>9
+<td>0
+<td>(none)
+
+<tr>
+<td>A35
+<td>8
+<td>0
+<td>(none)
+
+<tr>
+<td>A174
+<td>10
+<td>0
+<td>(none)
+
+<tr>
+<td>B6
+<td>7
+<td>0
+<td>(none)
+
+</table>
+`
+    assert.equal(res.body, expected)
+  })
+
   // Close the database to reset it for the next test
   sqlite.stop()
 })
