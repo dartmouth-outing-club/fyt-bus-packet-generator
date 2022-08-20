@@ -22,19 +22,21 @@ function makeHttpObjects (url) {
   return { req, res }
 }
 
-await test('/api/trips route', async (t) => {
-  sqlite.start()
-  sqlite.execFile('./db/db-schema.sql')
-  sqlite.execFile('./db/create-trips.sql')
+// Initialize the database
+sqlite.start()
+sqlite.execFile('./db/db-schema.sql')
+sqlite.execFile('./db/create-trips.sql')
 
-  await t.test('server bad request when no format is provided', async () => {
+await test('GET /api/trips', async (t) => {
+
+  await t.test('it server bad request when no format is provided', async () => {
     const { req, res } = makeHttpObjects('/api/trips')
     await trips.get(req, res)
     assert.equal(res.statusCode, 400)
     assert(res.body.includes('<h1>400</h1>'))
   })
 
-  await t.test('serves the trips in options format', async () => {
+  await t.test('it serves the trips in options format', async () => {
     const { req, res } = makeHttpObjects('/api/trips?format=options')
     await trips.get(req, res)
     assert.equal(res.statusCode, 200)
@@ -46,7 +48,7 @@ await test('/api/trips route', async (t) => {
 <option>B6</option>`)
   })
 
-  await t.test('serves the trips in table format', async () => {
+  await t.test('it serves the trips in table format', async () => {
     const { req, res } = makeHttpObjects('/api/trips?format=table')
     await trips.get(req, res)
     assert.equal(res.statusCode, 200)
@@ -91,7 +93,16 @@ await test('/api/trips route', async (t) => {
 `
     assert.equal(res.body, expected)
   })
-
-  // Close the database to reset it for the next test
-  sqlite.stop()
 })
+
+await test('DELETE /api/trips', async (t) => {
+  await t.test('it deletes the provided trip', async () => {
+    const { req, res } = makeHttpObjects('/api/trips/A4')
+    await trips.del(req, res)
+    assert.equal(res.statusCode, 204)
+    assert.equal(sqlite.getAllTrips().length, 4)
+  })
+})
+
+// Close the database to reset it for the next test
+sqlite.stop()

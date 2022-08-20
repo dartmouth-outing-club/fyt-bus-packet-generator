@@ -15,7 +15,6 @@ if [[ ! -f $DB_SCHEMA_FP ]]
 then
 	echo "Could not find database schema"
 	echo "Make sure to run this script via 'npm run init', not directly in the command line."
-
 	exit 1
 fi
 

@@ -55,7 +55,6 @@ export async function post (req, res) {
 
 export async function del (req, res) {
   const trip = req.url.split('/').at(3)
-
   try {
     sqlite.deleteTrip(trip)
     responses.serveNoContent(req, res)
