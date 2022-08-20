@@ -5,7 +5,7 @@
     "standard": "^17.0.0"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=18.7.0"
   },
   "main": "src/app.js",
   "name": "fyt-bus-packet-generator",
@@ -14,7 +14,7 @@
     "format": "standard --fix",
     "init": "scripts/init-db.sh",
     "start": "NODE_ENV=production node src/app.js",
-    "test": "DB_NAME=:memory: node --test",
+    "test": "node --test",
     "validate": "vnu --skip-non-html --also-check-css static"
   },
   "type": "module",

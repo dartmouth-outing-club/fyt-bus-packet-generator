@@ -5,7 +5,9 @@ import * as sqlite from './sqlite.js'
 
 test('sqlite', () => {
   test('it opens an empty in-memory database for testing', () => {
-    assert.equal(sqlite.databaseFile, '')
+    sqlite.start()
+    assert.equal(sqlite.getDatabaseFile(), '')
+    sqlite.stop()
   })
 })
 

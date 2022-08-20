@@ -22,18 +22,19 @@ function makeHttpObjects (url) {
   return { req, res }
 }
 
-test('/api/trips route', async () => {
+await test('/api/trips route', async (t) => {
+  sqlite.start()
   sqlite.execFile('./scripts/db-schema.sql')
   sqlite.execFile('./test-data/create-trips.sql')
 
-  test('server bad request when no format is provided', async () => {
+  await t.test('server bad request when no format is provided', async () => {
     const { req, res } = makeHttpObjects('/api/trips')
     await trips.get(req, res)
     assert.equal(res.statusCode, 400)
     assert(res.body.includes('<h1>400</h1>'))
   })
 
-  test('serves the trips in table format', async () => {
+  await t.test('serves the trips in options format', async () => {
     const { req, res } = makeHttpObjects('/api/trips?format=options')
     await trips.get(req, res)
     assert.equal(res.statusCode, 200)
@@ -45,6 +46,6 @@ test('/api/trips route', async () => {
 <option>B6</option>`)
   })
 
+  // Close the database to reset it for the next test
+  sqlite.stop()
 })
-
-

@@ -2,13 +2,24 @@ import fs from 'node:fs'
 import Database from 'better-sqlite3'
 
 
-const dbName = process.env.DB_NAME || './packet-generator.db'
-const db = new Database(dbName)
-// db.pragma('journal_mode = WAL')
-db.pragma('foreign_keys = ON')
+let db
 
-export const databaseFile = db.pragma('database_list')[0].file
-console.log(`Starting sqlite database from file: ${databaseFile}`)
+export function start (name) {
+  if (db !== undefined) throw new Error('ERROR: tried to start sqlite db that was already running')
+
+  const dbName = name || ':memory:'
+  db = new Database(dbName)
+  db.pragma('journal_mode = WAL')
+  db.pragma('foreign_keys = ON')
+  console.log(`Starting sqlite database from file: ${getDatabaseFile()}`)
+}
+
+export const getDatabaseFile = () => db.pragma('database_list')[0].file
+
+export function stop () {
+  db.close()
+  db = undefined
+}
 
 export function execFile (filePath) {
   const statements = fs.readFileSync(filePath).toString()
