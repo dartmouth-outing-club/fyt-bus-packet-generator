@@ -24,8 +24,8 @@ function makeHttpObjects (url) {
 
 await test('/api/trips route', async (t) => {
   sqlite.start()
-  sqlite.execFile('./scripts/db-schema.sql')
-  sqlite.execFile('./test-data/create-trips.sql')
+  sqlite.execFile('./db/db-schema.sql')
+  sqlite.execFile('./db/create-trips.sql')
 
   await t.test('server bad request when no format is provided', async () => {
     const { req, res } = makeHttpObjects('/api/trips')

@@ -1,10 +1,3 @@
-/**
- * create-packets-stops.js
- *
- * I used this script to generate to populate the packets_stops table.
- * A fresh start to the program wouldn't require this; it is preserved for
- * historical and educational purposes.
- */
 import * as sqlite from '../src/clients/sqlite.js'
 import * as queries from '../src/queries.js'
 

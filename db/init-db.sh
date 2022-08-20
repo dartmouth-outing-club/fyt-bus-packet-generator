@@ -1,9 +1,23 @@
 #!/bin/bash
-#Run this from the root directory, via `npm run init`
+#
+# Name: init-db.sh
+# Author: Alexander Petros
+#
+# Run this from the root directory, via `npm run init`
+
 set -e
 DB_FILENAME="packet-generator.db"
-STOPS_CSV="stops.csv"
-TRIPS_CSV="trips.csv"
+DB_SCHEMA_FP="./db/db-schema.sql"
+STOPS_CSV_FP="./db/stops.csv"
+TRIPS_CSV_FP="./db/trips.csv"
+
+if [[ ! -f $DB_SCHEMA_FP ]]
+then
+	echo "Could not find database schema"
+	echo "Make sure to run this script via 'npm run init', not directly in the command line."
+
+	exit 1
+fi
 
 if [[ -f $DB_FILENAME ]]
 then
@@ -23,9 +37,9 @@ fi
 
 echo "Creating $DB_FILENAME"
 sqlite3 $DB_FILENAME << EOF
-.read ./scripts/db-schema.sql
-.import --csv --skip 1 ./scripts/$STOPS_CSV stops
-.import --csv --skip 1 ./scripts/$TRIPS_CSV trips
+.read $DB_SCHEMA_FP
+.import --csv --skip 1 $STOPS_CSV_FP stops
+.import --csv --skip 1 $TRIPS_CSV_FP trips
 EOF
 
 # set -e ensures we only see this if sqlite3 exited successfully
