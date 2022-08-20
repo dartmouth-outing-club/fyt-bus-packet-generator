@@ -39,13 +39,15 @@ await test('GET /api/trips', async (t) => {
   await t.test('it serves the trips in options format', async () => {
     const { req, res } = makeHttpObjects('/api/trips?format=options')
     await trips.get(req, res)
-    assert.equal(res.statusCode, 200)
-    assert.equal(res.body,
+    const expected =
 `<option>A4</option>
 <option>A7</option>
 <option>A35</option>
 <option>A174</option>
-<option>B6</option>`)
+<option>B6</option>`
+
+    assert.equal(res.statusCode, 200)
+    assert.equal(res.body, expected)
   })
 
   await t.test('it serves the trips in table format', async () => {
@@ -91,6 +93,7 @@ await test('GET /api/trips', async (t) => {
 
 </table>
 `
+    assert.equal(res.statusCode, 200)
     assert.equal(res.body, expected)
   })
 })

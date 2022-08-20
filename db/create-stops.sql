@@ -1,0 +1,4 @@
+INSERT INTO stops (coordinates, name, address, special_instructions) VALUES
+('43.977253,-71.8154831','Moosilauke Ravine Lodge','','Bear right at the fork at the end of the road, turn around at the end of the gravel.'),
+('44.875039,-71.05471','Second College Grant','','On DEAD DIAMOND RD continue until you get to the gate. There will be a person there (or there shortly) to let you in the gate. Continue to over the bridge, to a large turn around area on your right. Here is where you will drop off your trip and turn around. Head back south on the road and stop in front of GATE CAMP (the cabin on your right). Here is where you will pick up trips. A person will be there (or there shortly) to let you back out the gate.'),
+('43.779475008698675,-72.25872857823947','Sweetland Farm','742 VT-132, Norwich, VT 05055','Drop off by the farm stand (on the right coming out of norwich). IF you see the Y for union village, you''ve gone too far.');
