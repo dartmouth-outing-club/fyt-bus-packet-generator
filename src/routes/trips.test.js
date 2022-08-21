@@ -1,26 +1,10 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
+// import stream from 'node:stream'
 
 import * as trips from './trips.js'
 import * as sqlite from '../clients/sqlite.js'
-
-function makeHttpObjects (url) {
-  const req = {
-    url,
-    headers: { host: 'example.com' }
-  }
-
-  const res = {
-    body: '',
-    headers: {},
-    isDone: false,
-    setHeader: (name, content) => { res.headers[name] = content },
-    write: (str) => { res.body = str },
-    end: () => res.isDone = true
-  }
-
-  return { req, res }
-}
+import * as testUtils from '../../test/test-utils.js'
 
 // Initialize the database
 sqlite.start()
@@ -30,14 +14,14 @@ sqlite.execFile('./db/create-trips.sql')
 await test('GET /api/trips', async (t) => {
 
   await t.test('it server bad request when no format is provided', async () => {
-    const { req, res } = makeHttpObjects('/api/trips')
+    const { req, res } = testUtils.makeHttpObjects('/api/trips')
     await trips.get(req, res)
     assert.equal(res.statusCode, 400)
     assert(res.body.includes('<h1>400</h1>'))
   })
 
   await t.test('it serves the trips in options format', async () => {
-    const { req, res } = makeHttpObjects('/api/trips?format=options')
+    const { req, res } = testUtils.makeHttpObjects('/api/trips?format=options')
     await trips.get(req, res)
     const expected =
 `<option>A4</option>
@@ -51,7 +35,7 @@ await test('GET /api/trips', async (t) => {
   })
 
   await t.test('it serves the trips in table format', async () => {
-    const { req, res } = makeHttpObjects('/api/trips?format=table')
+    const { req, res } = testUtils.makeHttpObjects('/api/trips?format=table')
     await trips.get(req, res)
     assert.equal(res.statusCode, 200)
     const expected = `<table>
@@ -98,9 +82,31 @@ await test('GET /api/trips', async (t) => {
   })
 })
 
+// await test('POST /api/trips', async (t) => {
+//   await t.test('it posts a CSV', async () => {
+//     const body = `-----------------------------173775914214642084952696962115
+// Content-Disposition: form-data; name="trips-csv"; filename="trips.csv"
+// Content-Type: text/csv
+
+// J4,8
+// J174,9
+
+// -----------------------------173775914214642084952696962115--`
+//     const { req, res } = makeHttpObjects('/api/trips')
+//     req.headers = {
+//       'content-type': 'multipart/form-data; boundary=---------------------------173775914214642084952696962115'
+//     }
+//     req.body = stream.Readable.from(body)
+//     await trips.post(req, res)
+//     Buffer.from()
+//     assert.equal(res.statusCode, 200)
+//     assert.equal(sqlite.getAllTrips().length, 6)
+//   })
+// })
+
 await test('DELETE /api/trips', async (t) => {
   await t.test('it deletes the provided trip', async () => {
-    const { req, res } = makeHttpObjects('/api/trips/A4')
+    const { req, res } = testUtils.makeHttpObjects('/api/trips/A4')
     await trips.del(req, res)
     assert.equal(res.statusCode, 204)
     assert.equal(sqlite.getAllTrips().length, 4)
