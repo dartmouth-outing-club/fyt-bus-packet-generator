@@ -20,6 +20,13 @@ await test('GET /api/trips', async (t) => {
     assert(res.body.includes('<h1>400</h1>'))
   })
 
+  await t.test('it server bad request when unknown format is provided', async () => {
+    const { req, res } = testUtils.makeHttpObjects('/api/trips?list')
+    await trips.get(req, res)
+    assert.equal(res.statusCode, 400)
+    assert(res.body.includes('<h1>400</h1>'))
+  })
+
   await t.test('it serves the trips in options format', async () => {
     const { req, res } = testUtils.makeHttpObjects('/api/trips?format=options')
     await trips.get(req, res)
@@ -105,6 +112,13 @@ await test('GET /api/trips', async (t) => {
 // })
 
 await test('DELETE /api/trips', async (t) => {
+  await t.test('it does nothing if trip does not exist', async () => {
+    const { req, res } = testUtils.makeHttpObjects('/api/trips/A10')
+    await trips.del(req, res)
+    assert.equal(res.statusCode, 204)
+    assert.equal(sqlite.getAllTrips().length, 5)
+  })
+
   await t.test('it deletes the provided trip', async () => {
     const { req, res } = testUtils.makeHttpObjects('/api/trips/A4')
     await trips.del(req, res)
