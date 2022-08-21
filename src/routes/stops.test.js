@@ -8,7 +8,7 @@ import * as testUtils from '../../test/test-utils.js'
 // Initialize the database
 sqlite.start()
 sqlite.execFile('./db/db-schema.sql')
-sqlite.execFile('./db/create-stops.sql')
+sqlite.execFile('./test/test-stops.sql')
 
 await test('GET /api/stops', async (t) => {
 

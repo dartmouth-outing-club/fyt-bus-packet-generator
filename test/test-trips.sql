@@ -4,4 +4,3 @@ INSERT INTO trips (name, num_students) VALUES
 	('A35', 8),
 	('A174', 10),
 	('B6', 7);
-

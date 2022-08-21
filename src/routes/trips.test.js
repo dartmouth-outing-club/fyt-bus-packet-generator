@@ -9,7 +9,7 @@ import * as testUtils from '../../test/test-utils.js'
 // Initialize the database
 sqlite.start()
 sqlite.execFile('./db/db-schema.sql')
-sqlite.execFile('./db/create-trips.sql')
+sqlite.execFile('./test/test-trips.sql')
 
 await test('GET /api/trips', async (t) => {
 
