@@ -32,6 +32,7 @@ await test('GET /api/stops', async (t) => {
     assert.equal(res.statusCode, 200)
     assert.equal(res.body,
 `<option>Moosilauke Ravine Lodge
+<option>Robinson Hall
 <option>Second College Grant
 <option>Sweetland Farm`)
   })
@@ -43,6 +44,7 @@ await test('GET /api/stops', async (t) => {
     const expected = `<table>
 <tr><th>Stop Name<th>Packets Present
 <tr><td>Moosilauke Ravine Lodge<td>0
+<tr><td>Robinson Hall<td>0
 <tr><td>Second College Grant<td>0
 <tr><td>Sweetland Farm<td>0
 </table>

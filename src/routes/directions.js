@@ -15,7 +15,7 @@ export async function get (req, res) {
       const instructionsHtml = step.html_instructions
       const distanceText = step.distance?.text
       return html.step(instructionsHtml, distanceText)
-    })
+    }).join('\n')
 
     return html.directionsList(start_name, end_name, steps, duration, distance)
   }).join('')
