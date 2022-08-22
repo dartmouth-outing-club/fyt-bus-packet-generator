@@ -25,32 +25,49 @@ export async function get (req, res) {
 
 export async function post (req, res) {
   const content = req.headers['content-type']
-  if (content.slice(0, 20) !== 'multipart/form-data;') {
-    responses.serveBadRequest(req, res)
-  }
+  if (content.slice(0, 20) !== 'multipart/form-data;') return responses.serveBadRequest(req, res)
+
+  // Attempt to parse the file from the HTTP Request
+  // For legitimate requests this is done by the browser, so failures are bad requests
   console.log(`Uploading file: ${content}`)
+  let fileContent
+  try {
+    // The boundary string is preceeded by a --
+    // See: https://www.rfc-editor.org/rfc/rfc7578#section-4.1
+    const boundary = '--' + content.split('=')[1]
+    const body = await utils.streamToString(req)
+    const fileWithHeaders = body.split(boundary)[1]
+    fileContent = fileWithHeaders.slice(fileWithHeaders.match(/\r\n\r\n/).index)
+  } catch (error) {
+    console.error('Error parsing input', error)
+    return responses.serveBadRequest(req, res)
+  }
 
-  // The boundary string is preceeded by a --
-  // See: https://www.rfc-editor.org/rfc/rfc7578#section-4.1
-  const boundary = '--' + content.split('=')[1]
-  const body = await utils.streamToString(req)
-  const fileWithHeaders = body.split(boundary)[1]
-  const fileContent = fileWithHeaders.slice(fileWithHeaders.match(/^\r?\n$/m).index)
-
+  // Promisify the CSV stream and return the promise
+  // This is idiomatic but I do think it's a little clunky
+  // A non-stream CSV parser wouldn't have to be written like this
   const readable = stream.Readable.from([fileContent])
   const results = []
-  readable
-    .pipe(csv(['name', 'num_students']))
-    .on('data', data => results.push(data))
-    .on('error', () => responses.serveBadRequest(req, res))
-    .on('end', () => {
-      const trips = results
-        .filter(row => Object.keys(row).length !== 0)
-        .map(row => ({ ...row, name: row.name.toUpperCase().trim() }))
-        .filter(row => row.name) // Filter trips with falsy name values
-      trips.map(sqlite.saveTrip)
-      responses.redirect(req, res, '/trips')
-    })
+  return new Promise((resolve, reject) => {
+    readable
+      .pipe(csv(['name', 'num_students']))
+      .on('data', data => results.push(data))
+      .on('error', () => {
+        responses.serveBadRequest(req, res)
+        reject()
+      })
+      // If successful, save the trips and redirect the user to the homepage
+      .on('end', () => {
+        const trips = results
+          .filter(row => Object.keys(row).length !== 0)
+          .map(row => ({ ...row, name: row.name.toUpperCase().trim() }))
+          .filter(row => row.name) // Filter trips with falsy name values
+        trips.map(sqlite.saveTrip)
+        responses.redirect(req, res, '/trips')
+        resolve()
+      })
+
+  })
 }
 
 export async function del (req, res) {

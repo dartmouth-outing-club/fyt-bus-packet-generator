@@ -1,6 +1,5 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-// import stream from 'node:stream'
 
 import * as trips from './trips.js'
 import * as sqlite from '../clients/sqlite.js'
@@ -89,41 +88,41 @@ await test('GET /api/trips', async (t) => {
   })
 })
 
-// await test('POST /api/trips', async (t) => {
-//   await t.test('it posts a CSV', async () => {
-//     const body = `-----------------------------173775914214642084952696962115
-// Content-Disposition: form-data; name="trips-csv"; filename="trips.csv"
-// Content-Type: text/csv
+await test('POST /api/trips', async (t) => {
+  await t.test('it posts a CSV', async () => {
+    // Note that the web spec always includes carriage returns before newlines in metadata
+    const body = `-----------------------------173775914214642084952696962115\r
+Content-Disposition: form-data; name="trips-csv"; filename="trips.csv"\r
+Content-Type: text/csv\r
+\r
+J4,8
+J174,9
 
-// J4,8
-// J174,9
+-----------------------------173775914214642084952696962115--`
 
-// -----------------------------173775914214642084952696962115--`
-//     const { req, res } = makeHttpObjects('/api/trips')
-//     req.headers = {
-//       'content-type': 'multipart/form-data; boundary=---------------------------173775914214642084952696962115'
-//     }
-//     req.body = stream.Readable.from(body)
-//     await trips.post(req, res)
-//     Buffer.from()
-//     assert.equal(res.statusCode, 200)
-//     assert.equal(sqlite.getAllTrips().length, 6)
-//   })
-// })
+    const { req, res } = testUtils.makeHttpObjects('/api/trips', body)
+    req.headers = {
+      'content-type': 'multipart/form-data; boundary=---------------------------173775914214642084952696962115'
+    }
+    await trips.post(req, res)
+    assert.equal(res.statusCode, 302)
+    assert.equal(sqlite.getAllTrips().length, 7)
+  })
+})
 
 await test('DELETE /api/trips', async (t) => {
   await t.test('it does nothing if trip does not exist', async () => {
     const { req, res } = testUtils.makeHttpObjects('/api/trips/A10')
     await trips.del(req, res)
     assert.equal(res.statusCode, 204)
-    assert.equal(sqlite.getAllTrips().length, 5)
+    assert.equal(sqlite.getAllTrips().length, 7)
   })
 
   await t.test('it deletes the provided trip', async () => {
     const { req, res } = testUtils.makeHttpObjects('/api/trips/A4')
     await trips.del(req, res)
     assert.equal(res.statusCode, 204)
-    assert.equal(sqlite.getAllTrips().length, 4)
+    assert.equal(sqlite.getAllTrips().length, 6)
   })
 })
 
