@@ -71,4 +71,4 @@ export function buildPacket (stops, directionsList, title, date, tripsOnboard) {
   return html.packet([...legs, finalStop], title, date)
 }
 
-const FIFTEEN_MINUTE_BREAK= 900000 // 15 minutes in milliseconds
+const FIFTEEN_MINUTE_BREAK = 900000 // 15 minutes in milliseconds

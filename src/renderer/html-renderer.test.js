@@ -20,7 +20,7 @@ test('html.step', () => {
 })
 
 test('stopsOptionList', () => {
-  const stops = [{name: 'Hanover'}, {name: 'Moosilauke Ravine Lodge'}, {name: 'The Grant'}]
+  const stops = [{ name: 'Hanover' }, { name: 'Moosilauke Ravine Lodge' }, { name: 'The Grant' }]
   const expected = `<option>Hanover
 <option>Moosilauke Ravine Lodge
 <option>The Grant`

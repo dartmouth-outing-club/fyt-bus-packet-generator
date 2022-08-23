@@ -10,10 +10,10 @@ const host = 'localhost'
 
 // Start the db and set the connection to close when it exists
 sqlite.start('./packet-generator.db')
-process.on('exit', () => sqlite.stop());
-process.on('SIGHUP', () => process.exit(128 + 1));
-process.on('SIGINT', () => process.exit(128 + 2));
-process.on('SIGTERM', () => process.exit(128 + 15));
+process.on('exit', () => sqlite.stop())
+process.on('SIGHUP', () => process.exit(128 + 1))
+process.on('SIGINT', () => process.exit(128 + 2))
+process.on('SIGTERM', () => process.exit(128 + 15))
 
 const app = http.createServer(async (req, res) => {
   const requestUrl = new URL(req.url, `http://${req.headers.host}`)

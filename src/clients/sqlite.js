@@ -1,7 +1,6 @@
 import fs from 'node:fs'
 import Database from 'better-sqlite3'
 
-
 let db
 
 export function start (name) {
@@ -127,8 +126,8 @@ export function getTrip (name) {
   return db.prepare('SELECT name, num_students FROM trips where name = ?').get(name)
 }
 
-export function getAllTrips() {
-return db.prepare('SELECT name, num_students FROM trips').all()
+export function getAllTrips () {
+  return db.prepare('SELECT name, num_students FROM trips').all()
 }
 
 export function getAllTripsWithStats () {

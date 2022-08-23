@@ -11,7 +11,6 @@ sqlite.execFile('./db/db-schema.sql')
 sqlite.execFile('./test/test-stops.sql')
 
 await test('GET /api/stops', async (t) => {
-
   await t.test('it server bad request when no format is provided', async () => {
     const { req, res } = testUtils.makeHttpObjects('/api/stops')
     await stops.get(req, res)
@@ -56,4 +55,3 @@ await test('GET /api/stops', async (t) => {
 
 // Close the database to reset it for the next test
 sqlite.stop()
-

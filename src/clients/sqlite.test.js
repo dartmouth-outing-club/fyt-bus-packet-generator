@@ -10,4 +10,3 @@ test('sqlite', () => {
     sqlite.stop()
   })
 })
-

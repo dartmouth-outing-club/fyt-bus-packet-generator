@@ -54,7 +54,7 @@ export async function post (req, res) {
       .on('data', data => results.push(data))
       .on('error', () => {
         responses.serveBadRequest(req, res)
-        reject()
+        reject(new Error('Failed to parse CSV'))
       })
       // If successful, save the trips and redirect the user to the homepage
       .on('end', () => {
@@ -66,7 +66,6 @@ export async function post (req, res) {
         responses.redirect(req, res, '/trips')
         resolve()
       })
-
   })
 }
 

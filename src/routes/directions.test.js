@@ -45,10 +45,7 @@ await test('GET /api/directions', async (t) => {
     assert.equal(res.statusCode, 200)
     assert.equal(res.body, expected)
   })
-
 })
 
 // Close the database to reset it for the next test
 sqlite.stop()
-
-

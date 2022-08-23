@@ -11,7 +11,6 @@ sqlite.execFile('./db/db-schema.sql')
 sqlite.execFile('./test/test-trips.sql')
 
 await test('GET /api/trips', async (t) => {
-
   await t.test('it server bad request when no format is provided', async () => {
     const { req, res } = testUtils.makeHttpObjects('/api/trips')
     await trips.get(req, res)
