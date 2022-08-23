@@ -7,7 +7,7 @@ const packetStylets = await utils.loadFile('./src/renderer/packet-stylesheet.css
 // Technically there is an opportunity for XSS here
 // We don't have any cookies to be stolen with XSS, but it's worth fixing
 export function packet (listItems, title, date) {
-  const monthDay = date.slice(5).replace('-', '/')
+  const monthDay = `${date.getMonth()}/${date.getDate()}`
 
   return `${emptyPacket}
 <title>${title}</title>
@@ -37,13 +37,15 @@ function tripsList (trips) {
   return trips.length > 0 ? `<ul>\n${items.join('\n')}\n</ul>` : ''
 }
 
-export function destination (name, tripsOn, tripsOff, instructions, duration, distance) {
-  const specialInstructions = instructions ? `<p>${instructions}` : null
+export function destination (name, tripsOn, tripsOff, instructions, duration, distance, departureTime) {
+  const specialInstructions = instructions ? `<p>${instructions}` : ''
   const nextDesinationText = duration && distance
-    ? `<p><b>${distance.text}</b> to next destination (<b>${duration.text}</b>)`
-    : null
-  const tripsOnList = tripsOn.length > 0 ? `<h3>Picking up</h3>\n${tripsList(tripsOn)}\n` : null
-  const tripsOffList = tripsOff.length > 0 ? `<h3>Dropping off</h3>\n${tripsList(tripsOff)}\n` : null
+    ? `<p>
+<b>${distance.text}</b> to next destination (<b>${duration.text}</b>).
+You should be leaving by <b>${departureTime.toTimeString().slice(0,5)}</b>.`
+    : ''
+  const tripsOnList = tripsOn.length > 0 ? `<h3>Picking up</h3>\n${tripsList(tripsOn)}\n` : ''
+  const tripsOffList = tripsOff.length > 0 ? `<h3>Dropping off</h3>\n${tripsList(tripsOff)}\n` : ''
 
   const info = [specialInstructions, nextDesinationText, tripsOnList, tripsOffList]
     .filter(item => item) // Filter out all the falsy values

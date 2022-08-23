@@ -30,6 +30,7 @@ export async function post (req, res) {
   const failedPromises = results.filter(result => result.status === 'rejected')
 
   if (failedPromises.length === 0) {
+    console.log('Successfully regenerated all packets.')
     responses.serveSuccessMessage(req, res, 'Successfully regenerated all packets.')
   } else {
     const failedPacketNames = failedPromises.map((result, index) => {

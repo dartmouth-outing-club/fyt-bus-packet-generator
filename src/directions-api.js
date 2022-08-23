@@ -48,14 +48,20 @@ export function buildPacket (stops, directionsList, title, date, tripsOnboard) {
     tripBoardingsByStop[end].off.push({ name, num_students })
   })
 
+  let departureTime = new Date(date.getTime())
   const legs = directionsList.map((directions, index) => {
     const { duration, distance, steps: rawSteps } = directions?.routes.at(0)?.legs.at(0)
     const start = stops[index]
     const tripsOn = tripBoardingsByStop[start.name].on
     const tripsOff = tripBoardingsByStop[start.name].off
 
-    const nextStop = html.destination(start.name, tripsOn, tripsOff, start.specialInstructions, duration, distance)
+    // Build the next section as HTML
+    const nextStop = html.destination(start.name, tripsOn, tripsOff, start.specialInstructions, duration, distance, departureTime)
     const steps = rawSteps.map(convertRawStep).join('\n')
+
+    // Finish the loop by adding more time to the ETA
+    const estimatedTripTimeMilliseconds = duration.value * 1000 // Value is in seconds
+    departureTime = new Date(departureTime.getTime() + estimatedTripTimeMilliseconds + FIFTEEN_MINUTE_BREAK)
     return nextStop + steps + '\n'
   })
 
@@ -64,3 +70,5 @@ export function buildPacket (stops, directionsList, title, date, tripsOnboard) {
 
   return html.packet([...legs, finalStop], title, date)
 }
+
+const FIFTEEN_MINUTE_BREAK= 900000 // 15 minutes in milliseconds

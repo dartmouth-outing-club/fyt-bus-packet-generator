@@ -35,9 +35,12 @@ Please note when editing packets that the packet name is the identity of the pac
 <label for=route-name>Bus route name: </label>
 <input type=text name=route-name placeholder="Leave blank for default name">
 <p>
-<label for=route-date>Bus route date: </label>
+<label for=route-date>Bus departure date: </label>
 <input type=date name=route-date id=route-date required>
 <script>document.getElementById('route-date').valueAsDate = new Date()</script>
+<p>
+<label for=route-time>Bus departure time (EDT): </label>
+<input type=time name=route-time id=route-time required>
 </fieldset>
 
 <!-- Select (and add) locations where the bus route will stop -->

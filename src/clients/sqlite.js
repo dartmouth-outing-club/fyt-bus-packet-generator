@@ -111,8 +111,6 @@ export function savePacket (name, query, html, trips, stops) {
   })
 
   stops.forEach(stop => {
-    console.log(name)
-    console.log(stop)
     db
       .prepare('INSERT INTO packets_stops (packet, stop) VALUES (?, ?)')
       .run(name, stop)

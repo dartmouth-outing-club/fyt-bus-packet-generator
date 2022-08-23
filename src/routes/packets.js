@@ -84,7 +84,8 @@ export async function generatePacket (body) {
   })
   const directionsList = await Promise.all(directionsPromises)
 
-  const title = name || `${stops.at(0).name} - ${stops.at(-1).name} (${date})`
+  const monthDay = `${date.getMonth()}-${date.getDate()}`
+  const title = name || `${stops.at(0).name} - ${stops.at(-1).name} (${monthDay})`
   const packet = buildPacket(stops, directionsList, title, date, trips)
   sqlite.savePacket(title, body, packet.toString(), trips, stopNames)
 }
