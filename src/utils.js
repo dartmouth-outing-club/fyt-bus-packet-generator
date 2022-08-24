@@ -34,3 +34,18 @@ export function tripSort (a, b) {
     ? firstLetterComp
     : parseInt(a.slice(1)) - parseInt(b.slice(1))
 }
+
+export function sanitizeHTML(string) {
+  const entityMap = {
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#x27;',
+      "/": '&#x2F;',
+      "`": '&grave;',
+      '=': '&#x3D;'
+  }
+  const regex = /[&<>"'`=\/]/ig // Match any of the characters inside /[ ... ]/
+  return string.replace(regex, (match)=>(entityMap[match]))
+}
