@@ -59,7 +59,7 @@ export function parseQuery (body) {
 
   const stops = parseStopList(params)
   const tripsOnboard = parseTripBoardings(params)
-  const datetime = new Date(`${date} ${time} EDT`)
+  const datetime = new Date(`${date} ${time} UTC`)
 
   if (!origin || !destination) throw new Error(`Bad request, stops = ${stops}`)
 

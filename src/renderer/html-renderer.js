@@ -39,10 +39,11 @@ function tripsList (trips) {
 
 export function destination (name, tripsOn, tripsOff, instructions, duration, distance, departureTime) {
   const specialInstructions = instructions ? `<p>${instructions}` : ''
+  const minutes = departureTime?.getUTCMinutes()
   const nextDesinationText = duration && distance
     ? `<p>
 <b>${distance.text}</b> to next destination (<b>${duration.text}</b>).
-You should be leaving by <b>${departureTime.toTimeString().slice(0, 5)}</b>.`
+You should be leaving by <b>${departureTime.getUTCHours()}:${minutes < 10 ? 0 : ''}${minutes}</b>.`
     : ''
   const tripsOnList = tripsOn.length > 0 ? `<h3>Picking up</h3>\n${tripsList(tripsOn)}\n` : ''
   const tripsOffList = tripsOff.length > 0 ? `<h3>Dropping off</h3>\n${tripsList(tripsOff)}\n` : ''
