@@ -1,11 +1,11 @@
-import * as html from '../renderer/html-renderer.js'
+import * as builder from '../packets/packet-builder.js'
 import * as sqlite from '../clients/sqlite.js'
 import * as google from '../clients/google-client.js'
 import * as queries from '../queries.js'
 import * as utils from '../utils.js'
 import * as responses from '../responses.js'
 
-import { buildPacket } from '../directions-api.js'
+import { buildPacket } from '../packets/packet-builder.js'
 
 export async function get (req, res) {
   const requestUrl = new URL(req.url, `http://${req.headers.host}`)
@@ -17,12 +17,12 @@ export async function get (req, res) {
     switch (format) {
       case 'links': {
         const names = sqlite.getAllPacketNames()
-        const links = html.packetLinkList(names)
+        const links = builder.packetLinkList(names)
         return responses.serveHtml(req, res, links)
       }
       case 'table': {
         const packets = sqlite.getAllPacketsWithStats()
-        const table = html.packetsTable(packets)
+        const table = builder.packetsTable(packets)
         return responses.serveHtml(req, res, table)
       }
       default:

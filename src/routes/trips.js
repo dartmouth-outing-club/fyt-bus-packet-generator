@@ -3,6 +3,7 @@ import stream from 'node:stream'
 import * as sqlite from '../clients/sqlite.js'
 import * as responses from '../responses.js'
 import * as utils from '../utils.js'
+import { html } from '../templates.js'
 
 import csv from 'csv-parser'
 
@@ -87,14 +88,14 @@ export function tripsOptions (trips) {
 }
 
 export function tripsTable (trips) {
-  const tripsHtml = trips.map((trip) => `<tr>
+  const tripsHtml = trips.map((trip) => html`<tr>
 <td>${trip.name}
 <td>${trip.num_students}
 <td>${trip.num_packets}
 <td>${trip.packets_present}
-`).join('\n')
+`)
 
-  return `<table>
+  return html`<table>
 <tr>
 <th>Trip Name
 <th>Num Students

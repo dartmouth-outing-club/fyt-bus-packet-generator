@@ -1,5 +1,5 @@
 import * as sqlite from '../clients/sqlite.js'
-import * as html from '../renderer/html-renderer.js'
+import * as builder from '../packets/packet-builder.js'
 import * as responses from '../responses.js'
 
 export async function get (req, res) {
@@ -14,7 +14,7 @@ export async function get (req, res) {
     const steps = rawSteps.map((step) => {
       const instructionsHtml = step.html_instructions
       const distanceText = step.distance?.text
-      return html.step(instructionsHtml, distanceText)
+      return builder.step(instructionsHtml, distanceText)
     }).join('\n')
 
     return directionsList(start_name, end_name, steps, duration, distance)

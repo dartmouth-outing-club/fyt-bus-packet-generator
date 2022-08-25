@@ -1,5 +1,5 @@
 import * as responses from '../responses.js'
-import * as html from '../renderer/html-renderer.js'
+import * as builder from '../packets/packet-builder.js'
 import * as sqlite from '../clients/sqlite.js'
 import { generatePacket } from './packets.js'
 
@@ -37,6 +37,6 @@ export async function post (req, res) {
       console.error(`(#${index}) failed:`, result)
       return packets[index].name
     })
-    responses.serveHtml(req, res, html.generationError(failedPacketNames))
+    responses.serveHtml(req, res, builder.generationError(failedPacketNames))
   }
 }

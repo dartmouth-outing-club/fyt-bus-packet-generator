@@ -1,5 +1,6 @@
 import * as sqlite from '../clients/sqlite.js'
 import * as responses from '../responses.js'
+import { html } from '../templates.js'
 
 export async function get (req, res) {
   const requestUrl = new URL(req.url, `http://${req.headers.host}`)
@@ -17,12 +18,12 @@ export async function get (req, res) {
 
 /** Rendering Functions **/
 function stopsOptionList (stops) {
-  return stops.map(stop => `<option>${stop.name}`).join('\n')
+  return stops.map(stop => html`<option>${stop.name}`).join('\n')
 }
 
 function stopsTable (stops) {
-  const stopsHtml = stops.map((stop) => `<tr><td>${stop.name}<td>${stop.packets_present}`).join('\n')
-  return `<table>
+  const stopsHtml = stops.map((stop) => html`<tr><td>${stop.name}<td>${stop.packets_present}`)
+  return html`<table>
 <tr><th>Stop Name<th>Packets Present
 ${stopsHtml}
 </table>
