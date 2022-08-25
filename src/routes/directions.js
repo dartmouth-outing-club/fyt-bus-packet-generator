@@ -25,6 +25,8 @@ export async function get (req, res) {
 
 /** Rendering Functions **/
 function directionsList (startName, endName, steps, _duration, _distance) {
+  // We can't template this right now because its populated with Google-generated html
+  // TODO more investigation in this area
   return `
 <li onclick="this.classList.toggle('expanded')">
 <button>${startName} to ${endName}</button>

@@ -1,6 +1,7 @@
 import * as responses from '../responses.js'
 import * as sqlite from '../clients/sqlite.js'
 import { generatePacket } from './packets.js'
+import { html } from '../templates.js'
 
 /** Regenerate existing packets using stored info.
  *
@@ -41,10 +42,11 @@ export async function post (req, res) {
 }
 
 function generationError (list) {
-  return `<div class=error onclick="this.remove()">
+  const items = list.map(item => html`<li>${item}`)
+  return html`<div class=error onclick="this.remove()">
 <p>Something went wrong; the following packages failed to regenerate:
 <ul>
-${list.map(item => `<li>${item}`)}
+${items}
 </ul>
 <p>Please edit the packets with errors ensure that the trips selected are still valid.
 </div>
