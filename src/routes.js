@@ -1,8 +1,9 @@
-import * as packets from './packets/handler.js'
-import * as stops from './stops/handler.js'
-import * as trips from './trips/handler.js'
-import * as regenerate from './regenerate/handler.js'
-import * as directions from './directions/handler.js'
+import * as packets from './routes/packets.js'
+import * as stops from './routes/stops.js'
+import * as trips from './routes/trips.js'
+import * as regenerate from './routes/regenerate.js'
+import * as directions from './routes/directions.js'
+
 import * as responses from './responses.js'
 
 export function getHandler (url, httpMethod, serveStatic = false) {

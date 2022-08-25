@@ -17,8 +17,19 @@ export async function get (req, res) {
       return html.step(instructionsHtml, distanceText)
     }).join('\n')
 
-    return html.directionsList(start_name, end_name, steps, duration, distance)
+    return directionsList(start_name, end_name, steps, duration, distance)
   }).join('')
 
   responses.serveAsString(req, res, render)
+}
+
+/** Rendering Functions **/
+function directionsList (startName, endName, steps, _duration, _distance) {
+  return `
+<li onclick="this.classList.toggle('expanded')">
+<button>${startName} to ${endName}</button>
+<ol>
+${steps}
+</ol>
+`
 }

@@ -1,7 +1,6 @@
 import stream from 'node:stream'
 
 import * as sqlite from '../clients/sqlite.js'
-import * as html from '../renderer/html-renderer.js'
 import * as responses from '../responses.js'
 import * as utils from '../utils.js'
 
@@ -15,9 +14,9 @@ export async function get (req, res) {
 
   switch (format) {
     case 'table':
-      return responses.serveAsString(req, res, html.tripsTable(trips))
+      return responses.serveAsString(req, res, tripsTable(trips))
     case 'options':
-      return responses.serveAsString(req, res, html.tripsOptions(trips))
+      return responses.serveAsString(req, res, tripsOptions(trips))
     default:
       return responses.serveBadRequest(req, res)
   }
@@ -81,4 +80,28 @@ export async function del (req, res) {
       responses.serveServerError(req, res)
     }
   }
+}
+
+export function tripsOptions (trips) {
+  return trips.map((trip) => `<option>${trip.name}</option>`).join('\n')
+}
+
+export function tripsTable (trips) {
+  const tripsHtml = trips.map((trip) => `<tr>
+<td>${trip.name}
+<td>${trip.num_students}
+<td>${trip.num_packets}
+<td>${trip.packets_present}
+`).join('\n')
+
+  return `<table>
+<tr>
+<th>Trip Name
+<th>Num Students
+<th>Num Packets
+<th>Packets Present
+
+${tripsHtml}
+</table>
+`
 }

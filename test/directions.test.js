@@ -1,7 +1,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 
-import * as directions from '../src/directions/handler.js'
+import * as directions from '../src/routes/directions.js'
 import * as sqlite from '../src/clients/sqlite.js'
 import * as testUtils from './test-utils.js'
 

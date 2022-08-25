@@ -1,7 +1,7 @@
 import * as responses from '../responses.js'
 import * as html from '../renderer/html-renderer.js'
 import * as sqlite from '../clients/sqlite.js'
-import { generatePacket } from '../packets/handler.js'
+import { generatePacket } from './packets.js'
 
 /** Regenerate existing packets using stored info.
  *

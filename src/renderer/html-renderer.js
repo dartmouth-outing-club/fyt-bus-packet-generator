@@ -57,19 +57,6 @@ You should be leaving by <b>${departureTime.getUTCHours()}:${minutes < 10 ? 0 : 
 ${info}`
 }
 
-export function stopsOptionList (stops) {
-  return stops.map(stop => `<option>${stop.name}`).join('\n')
-}
-
-export function stopsTable (stops) {
-  const stopsHtml = stops.map((stop) => `<tr><td>${stop.name}<td>${stop.packets_present}`).join('\n')
-  return `<table>
-<tr><th>Stop Name<th>Packets Present
-${stopsHtml}
-</table>
-`
-}
-
 export function packetLinkList (names) {
   const items = names.map(name => `<li>
 <button class=edit onclick="editPacket('${name}')">Edit</button>
@@ -94,30 +81,6 @@ ${packetsTable}
 </table>`
 }
 
-export function tripsTable (trips) {
-  const tripsHtml = trips.map((trip) => `<tr>
-<td>${trip.name}
-<td>${trip.num_students}
-<td>${trip.num_packets}
-<td>${trip.packets_present}
-`).join('\n')
-
-  return `<table>
-<tr>
-<th>Trip Name
-<th>Num Students
-<th>Num Packets
-<th>Packets Present
-
-${tripsHtml}
-</table>
-`
-}
-
-export function tripsOptions (trips) {
-  return trips.map((trip) => `<option>${trip.name}</option>`).join('\n')
-}
-
 export function generationError (list) {
   return `<div class=error onclick="this.remove()">
 <p>Something went wrong; the following packages failed to regenerate:
@@ -126,15 +89,5 @@ ${list.map(item => `<li>${item}`)}
 </ul>
 <p>Please edit the packets with errors ensure that the trips selected are still valid.
 </div>
-`
-}
-
-export function directionsList (startName, endName, steps, _duration, _distance) {
-  return `
-<li onclick="this.classList.toggle('expanded')">
-<button>${startName} to ${endName}</button>
-<ol>
-${steps}
-</ol>
 `
 }
