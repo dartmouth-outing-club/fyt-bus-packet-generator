@@ -1,4 +1,3 @@
-import * as builder from '../packets/packet-builder.js'
 import * as sqlite from '../clients/sqlite.js'
 import * as google from '../clients/google-client.js'
 import * as queries from '../queries.js'
@@ -17,12 +16,12 @@ export async function get (req, res) {
     switch (format) {
       case 'links': {
         const names = sqlite.getAllPacketNames()
-        const links = builder.packetLinkList(names)
+        const links = packetLinkList(names)
         return responses.serveHtml(req, res, links)
       }
       case 'table': {
         const packets = sqlite.getAllPacketsWithStats()
-        const table = builder.packetsTable(packets)
+        const table = packetsTable(packets)
         return responses.serveHtml(req, res, table)
       }
       default:
@@ -65,6 +64,30 @@ export async function del (req, res) {
   } else {
     return responses.serveBadRequest(req, res)
   }
+}
+
+function packetLinkList (names) {
+  const items = names.map(name => `<li>
+<button class=edit onclick="editPacket('${name}')">Edit</button>
+<button class=delete onclick="deletePacket('${name}')">Delete</button>
+<a href="/api/packets/${encodeURI(name)}">${name}</a>`).join('\n')
+
+  return `<ul>
+${items}
+</ul>`
+}
+
+function packetsTable (packets) {
+  const packetsTable = packets.map((packet) => `<tr>
+<td>${packet.name}
+<td>${packet.total_students}`).join('\n')
+
+  return `<table>
+<tr>
+<th>Packet
+<th>Total Students
+${packetsTable}
+</table>`
 }
 
 export async function generatePacket (body) {

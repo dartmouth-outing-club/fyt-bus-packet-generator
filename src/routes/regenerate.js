@@ -1,5 +1,4 @@
 import * as responses from '../responses.js'
-import * as builder from '../packets/packet-builder.js'
 import * as sqlite from '../clients/sqlite.js'
 import { generatePacket } from './packets.js'
 
@@ -37,6 +36,17 @@ export async function post (req, res) {
       console.error(`(#${index}) failed:`, result)
       return packets[index].name
     })
-    responses.serveHtml(req, res, builder.generationError(failedPacketNames))
+    responses.serveHtml(req, res, generationError(failedPacketNames))
   }
+}
+
+function generationError (list) {
+  return `<div class=error onclick="this.remove()">
+<p>Something went wrong; the following packages failed to regenerate:
+<ul>
+${list.map(item => `<li>${item}`)}
+</ul>
+<p>Please edit the packets with errors ensure that the trips selected are still valid.
+</div>
+`
 }

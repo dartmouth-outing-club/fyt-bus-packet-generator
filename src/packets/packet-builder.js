@@ -49,7 +49,7 @@ export function buildPacket (stops, directionsList, title, date, tripsOnboard) {
 
 // Technically there is an opportunity for XSS here
 // We don't have any cookies to be stolen with XSS, but it's worth fixing
-export function packet (listItems, title, date) {
+function packet (listItems, title, date) {
   const monthDay = `${date.getMonth()}/${date.getDate()}`
 
   return `${emptyPacket}
@@ -80,7 +80,7 @@ function tripsList (trips) {
   return trips.length > 0 ? `<ul>\n${items.join('\n')}\n</ul>` : ''
 }
 
-export function destination (name, tripsOn, tripsOff, instructions, duration, distance, departureTime) {
+function destination (name, tripsOn, tripsOff, instructions, duration, distance, departureTime) {
   const specialInstructions = instructions ? `<p>${instructions}` : ''
   const minutes = departureTime?.getUTCMinutes()
   const nextDesinationText = duration && distance
@@ -98,41 +98,6 @@ You should be leaving by <b>${departureTime.getUTCHours()}:${minutes < 10 ? 0 : 
   return `<li>
 <h2>${name}</h2>
 ${info}`
-}
-
-export function packetLinkList (names) {
-  const items = names.map(name => `<li>
-<button class=edit onclick="editPacket('${name}')">Edit</button>
-<button class=delete onclick="deletePacket('${name}')">Delete</button>
-<a href="/api/packets/${encodeURI(name)}">${name}</a>`).join('\n')
-
-  return `<ul>
-${items}
-</ul>`
-}
-
-export function packetsTable (packets) {
-  const packetsTable = packets.map((packet) => `<tr>
-<td>${packet.name}
-<td>${packet.total_students}`).join('\n')
-
-  return `<table>
-<tr>
-<th>Packet
-<th>Total Students
-${packetsTable}
-</table>`
-}
-
-export function generationError (list) {
-  return `<div class=error onclick="this.remove()">
-<p>Something went wrong; the following packages failed to regenerate:
-<ul>
-${list.map(item => `<li>${item}`)}
-</ul>
-<p>Please edit the packets with errors ensure that the trips selected are still valid.
-</div>
-`
 }
 
 const FIFTEEN_MINUTE_BREAK = 900000 // 15 minutes in milliseconds
