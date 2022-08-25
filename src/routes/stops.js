@@ -7,9 +7,9 @@ export async function get (req, res) {
 
   switch (format) {
     case 'table':
-      return responses.serveAsString(req, res, stopsTable(sqlite.getAllStopsWithStats()))
+      return responses.serveHtml(req, res, stopsTable(sqlite.getAllStopsWithStats()))
     case 'options':
-      return responses.serveAsString(req, res, stopsOptionList(sqlite.getAllStops()))
+      return responses.serveHtml(req, res, stopsOptionList(sqlite.getAllStops()))
     default:
       return responses.serveBadRequest(req, res)
   }

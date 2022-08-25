@@ -14,9 +14,9 @@ export async function get (req, res) {
 
   switch (format) {
     case 'table':
-      return responses.serveAsString(req, res, tripsTable(trips))
+      return responses.serveHtml(req, res, tripsTable(trips))
     case 'options':
-      return responses.serveAsString(req, res, tripsOptions(trips))
+      return responses.serveHtml(req, res, tripsOptions(trips))
     default:
       return responses.serveBadRequest(req, res)
   }

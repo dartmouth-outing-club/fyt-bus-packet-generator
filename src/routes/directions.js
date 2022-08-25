@@ -20,7 +20,7 @@ export async function get (req, res) {
     return directionsList(start_name, end_name, steps, duration, distance)
   }).join('')
 
-  responses.serveAsString(req, res, render)
+  responses.serveHtml(req, res, render)
 }
 
 /** Rendering Functions **/

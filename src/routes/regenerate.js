@@ -37,6 +37,6 @@ export async function post (req, res) {
       console.error(`(#${index}) failed:`, result)
       return packets[index].name
     })
-    responses.serveAsString(req, res, html.generationError(failedPacketNames))
+    responses.serveHtml(req, res, html.generationError(failedPacketNames))
   }
 }

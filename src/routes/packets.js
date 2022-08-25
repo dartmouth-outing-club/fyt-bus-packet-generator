@@ -18,12 +18,12 @@ export async function get (req, res) {
       case 'links': {
         const names = sqlite.getAllPacketNames()
         const links = html.packetLinkList(names)
-        return responses.serveAsString(req, res, links)
+        return responses.serveHtml(req, res, links)
       }
       case 'table': {
         const packets = sqlite.getAllPacketsWithStats()
         const table = html.packetsTable(packets)
-        return responses.serveAsString(req, res, table)
+        return responses.serveHtml(req, res, table)
       }
       default:
         console.warn(`Unkown format specified: ${format}`)
@@ -34,7 +34,7 @@ export async function get (req, res) {
   // Otherwise, serve the packet in the requesed format
   if (requestUrl.searchParams.has('queryOnly')) {
     const { query } = sqlite.getPacket(name)
-    return responses.serveAsString(req, res, query)
+    return responses.serveHtml(req, res, query)
   } else {
     const packetHtml = sqlite.getPacket(name)?.html_content
     return responses.serveHtml(req, res, packetHtml)

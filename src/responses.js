@@ -78,12 +78,8 @@ export function serveErrorMessage (_req, res, message, code) {
 }
 
 export function serveHtml (req, res, text) {
-  if (text) {
-    res.setHeader('Content-Type', 'text/html; charset=UTF-8')
-    serveAsString(req, res, text)
-  } else {
-    serveNotFound(req, res)
-  }
+  res.setHeader('Content-Type', 'text/html; charset=UTF-8')
+  serveAsString(req, res, text)
 }
 
 export function redirect (_req, res, url) {
