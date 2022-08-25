@@ -1,7 +1,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 
-import * as routes from './routes.js'
+import * as routes from '../src/routes.js'
 
 const makeUrl = (path) => new URL(`http://buspackets.dev/${path}`)
 

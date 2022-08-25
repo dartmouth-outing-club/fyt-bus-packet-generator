@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import * as responses from './responses.js'
+import * as responses from '../src/responses.js'
 import { IncomingMessage, ServerResponse } from 'node:http'
 
 test('serveNoContent', () => {

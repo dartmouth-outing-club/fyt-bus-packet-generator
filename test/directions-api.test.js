@@ -1,7 +1,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 
-import { createDirectionsRequest } from './directions-api.js'
+import { createDirectionsRequest } from '../src/directions-api.js'
 
 const HANOVER_COORDINATES = '44.875039,-71.05471'
 const LODJ_COORDINATES = '43.977253,-71.8154831'

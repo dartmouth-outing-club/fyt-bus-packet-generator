@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import * as queries from './queries.js'
+import * as queries from '../src/queries.js'
 
 test('parseQuery', () => {
   test('it parses a query with no additional stops', () => {

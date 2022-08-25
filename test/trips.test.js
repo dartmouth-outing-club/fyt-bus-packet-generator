@@ -1,9 +1,10 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 
-import * as trips from './trips.js'
-import * as sqlite from '../clients/sqlite.js'
-import * as testUtils from '../../test/test-utils.js'
+import * as trips from '../src/trips/handler.js'
+import * as sqlite from '../src/clients/sqlite.js'
+import * as testUtils from './test-utils.js'
+
 
 // Initialize the database
 sqlite.start()

@@ -1,11 +1,11 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import * as html from './html-renderer.js'
+import * as html from '../src/renderer/html-renderer.js'
 
 const STEP_ONE = html.step('Go <em>left</em>', '2 miles')
-const STEP_TWO = html.step('Turn <em>right</em>', '5 miles')
+// const STEP_TWO = html.step('Turn <em>right</em>', '5 miles')
 const STEP_MISSING_DIRECTION = html.step('Go <em>left</em>', undefined)
-const TRIP_J174 = [{ name: 'J174', num_students: 10 }]
+// const TRIP_J174 = [{ name: 'J174', num_students: 10 }]
 
 test('html.step', () => {
   test('it concatenates the step with the distance', () => {

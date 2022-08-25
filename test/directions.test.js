@@ -1,9 +1,9 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 
-import * as directions from './directions.js'
-import * as sqlite from '../clients/sqlite.js'
-import * as testUtils from '../../test/test-utils.js'
+import * as directions from '../src/directions/handler.js'
+import * as sqlite from '../src/clients/sqlite.js'
+import * as testUtils from './test-utils.js'
 
 await test('GET /api/directions', async (t) => {
   // Initialize the database
