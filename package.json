@@ -15,6 +15,7 @@
     "init": "db/init-db.sh",
     "start": "NODE_ENV=production node src/app.js",
     "test": "node --test",
+		"update_stops": "sqlite3 ./packet-generator.db '.read db/update-stops.sql'",
     "validate": "vnu --skip-non-html --also-check-css static"
   },
   "type": "module",
