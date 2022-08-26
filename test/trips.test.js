@@ -5,7 +5,6 @@ import * as trips from '../src/routes/trips.js'
 import * as sqlite from '../src/clients/sqlite.js'
 import * as testUtils from './test-utils.js'
 
-
 // Initialize the database
 sqlite.start()
 sqlite.execFile('./db/db-schema.sql')

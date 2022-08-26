@@ -34,15 +34,15 @@
  * template literals. It should be pretty intuitive, but check some of the
  * simpler usages (in, say, `stops.js`) for examples.
  */
-export function html(strings, ...values) {
+export function html (strings, ...values) {
   const entityMap = {
     '&': '&amp;',
     '<': '&lt;',
     '>': '&gt;',
     '"': '&quot;',
     "'": '&#x27;',
-    "/": '&#x2F;',
-    "`": '&grave;',
+    '/': '&#x2F;',
+    '`': '&grave;',
     '=': '&#x3D;'
   }
   const regex = /[&<>"'`=\/]/g // Match any of the characters inside /[ ... ]/
@@ -50,12 +50,11 @@ export function html(strings, ...values) {
   const sanitizedValues = values
     .map(value => (
       Array.isArray(value)
-      ? value.join('\n') // If it's an array, join the strings with newlines
-      : value.toString().replace(regex, match=>entityMap[match]) // Else, escape the string value
+        ? value.join('\n') // If it's an array, join the strings with newlines
+        : value.toString().replace(regex, match => entityMap[match]) // Else, escape the string value
     ))
 
   // Using the sanitized values, perform the regular templatization process
   // i.e. substitute the values into the string
   return String.raw({ raw: strings }, ...sanitizedValues)
 }
-
