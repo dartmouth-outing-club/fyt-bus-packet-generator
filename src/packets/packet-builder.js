@@ -26,7 +26,7 @@ export function buildPacket (stops, directionsList, title, date, tripsOnboard) {
 
   let departureTime = new Date(date.getTime())
   const legs = directionsList.map((directions, index) => {
-    const { duration, distance, steps: rawSteps } = directions?.routes.at(0)?.legs.at(0)
+    const { duration, distance, steps: rawSteps } = directions.routes[0].legs[0]
     const start = stops[index]
     const tripsOn = tripBoardingsByStop[start.name].on
     const tripsOff = tripBoardingsByStop[start.name].off

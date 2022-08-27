@@ -3,8 +3,15 @@ import { config } from '../config.js'
 
 const GOOGLE_DIRECTIONS_API =
   'https://maps.googleapis.com/maps/api/directions/json'
+const BACKOFF_DELAY = 1000
 
-export async function getDirections (origin, destination) {
+/** Wait an exponentially increasing time before retrying the API again. */
+function delay (attempts) {
+  const ms = BACKOFF_DELAY * (2 ^ attempts)
+  return new Promise((resolve) => setTimeout(() => resolve(), ms))
+}
+
+export async function getDirections (origin, destination, attempts = 0) {
   console.log(`Cache miss for directions from ${origin} to ${destination}`)
   const params = new URLSearchParams({
     ...createDirectionsRequest([origin, destination]),
@@ -13,12 +20,25 @@ export async function getDirections (origin, destination) {
   const request = `${GOOGLE_DIRECTIONS_API}?${params}`
 
   console.log('Fetching directions from Google')
-  return fetch(request)
-    .then((res) => res.text())
-    .then((text) => {
-      sqlite.saveDirections(origin, destination, text)
-      return JSON.parse(text)
-    })
+  const res = await fetch(request)
+  const text = await res.text()
+  const apiResponse = JSON.parse(text)
+
+  // If successful, save the directions and return them
+  if (apiResponse.status === 'OK') {
+    sqlite.saveDirections(origin, destination, text)
+    return JSON.parse(text)
+  }
+
+  // If we hit the query limit, attempt it again after a delay
+  if (apiResponse.status  === 'OVER_QUERY_LIMIT' && attempts < 3) {
+    console.log(`Hit query limit for attempt ${attempts + 1}`)
+    await delay(attempts)
+    return getDirections(origin, destination, attempts + 1)
+  }
+
+  // Otherwise, throw an error for the fallthrough case
+  throw new Error(apiResponse.error_message)
 }
 
 /**
