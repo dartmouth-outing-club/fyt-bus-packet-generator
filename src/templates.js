@@ -45,7 +45,11 @@ export function html (strings, ...values) {
     '`': '&grave;',
     '=': '&#x3D;'
   }
-  const regex = /[&<>"'`=\/]/g // Match any of the characters inside /[ ... ]/
+
+  // Match any of the characters inside /[ ... ]/
+  // Your editor might highlight this incorrectly
+  // The second `/` does not need to be escpaed since it's inside brackets
+  const regex = /[&<>"'`=/]/g
 
   const sanitizedValues = values
     .map(value => (

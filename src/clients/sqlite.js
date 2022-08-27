@@ -164,12 +164,11 @@ FROM directions
 LEFT JOIN stops AS start_names ON start_coordinates=start_names.coordinates
 LEFT JOIN stops AS end_names ON end_coordinates=end_names.coordinates
 WHERE start_name IS NOT NULL
-  AND end_name IS NOT NULL
+  AND end_name IS NOT NULL;
 `
 
   const legs = db.prepare(statement).all()
   return legs.map((leg) => {
-    console.log(leg.start_name)
     return { ...leg, directions: JSON.parse(leg.google_directions) }
   })
 }

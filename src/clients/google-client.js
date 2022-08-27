@@ -31,7 +31,7 @@ export async function getDirections (origin, destination, attempts = 0) {
   }
 
   // If we hit the query limit, attempt it again after a delay
-  if (apiResponse.status  === 'OVER_QUERY_LIMIT' && attempts < 3) {
+  if (apiResponse.status === 'OVER_QUERY_LIMIT' && attempts < 3) {
     console.log(`Hit query limit for attempt ${attempts + 1}`)
     await delay(attempts)
     return getDirections(origin, destination, attempts + 1)
