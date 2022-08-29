@@ -24,21 +24,24 @@ import { html } from '../templates.js'
 export async function post (req, res) {
   const requestUrl = new URL(req.url, `http://${req.headers.host}`)
   const name = decodeURI(requestUrl.pathname).split('/').at(3)
+
+  // If there's a name provided, regenerate just that packet
   const packets = name ? [sqlite.getPacket(name)] : sqlite.getAllPackets()
   console.log(`Regenerating ${packets.length} packets`)
 
+  // Collect all the regeneration promsises into a single packet
   const promises = packets.map(packet => generatePacket(packet.query))
   const results = await Promise.allSettled(promises)
-  const failedPromises = results.filter(result => result.status === 'rejected')
 
-  if (failedPromises.length === 0) {
+  const allSuccess = !results.some(result => result.status === 'rejected')
+  if (allSuccess) {
     console.log('Successfully regenerated all packets.')
     responses.serveSuccessMessage(req, res, 'Successfully regenerated all packets.')
   } else {
-    const failedPacketNames = failedPromises.map((result, index) => {
-      console.error(`(#${index}) failed:`, result)
-      return packets[index].name
-    })
+    // Get the packet names of all the promises that failed, filtering out all the successes
+    const failedPacketNames = results
+      .map((result, index) => (result.status === 'rejected' ? packets[index].name : undefined))
+      .filter(name => name !== undefined)
     responses.serveHtml(req, res, generationError(failedPacketNames))
   }
 }
