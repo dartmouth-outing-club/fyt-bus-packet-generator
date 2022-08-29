@@ -32,7 +32,7 @@ export function buildPacket (stops, directionsList, title, date, tripsOnboard) {
     const tripsOff = tripBoardingsByStop[start.name].off
 
     // Build the next section as HTML
-    const nextStop = destination(start.name, tripsOn, tripsOff, start.specialInstructions, duration, distance, departureTime)
+    const nextStop = destination(start.name, tripsOn, tripsOff, start.special_instructions, duration, distance, departureTime)
     const steps = rawSteps.map(convertRawStep).join('\n')
 
     // Finish the loop by adding more time to the ETA
@@ -42,7 +42,7 @@ export function buildPacket (stops, directionsList, title, date, tripsOnboard) {
   })
 
   const finalStop = stops.at(-1)
-  const finalLeg = destination(finalStop.name, [], tripBoardingsByStop[finalStop.name].off, finalStop.specialInstructions)
+  const finalLeg = destination(finalStop.name, [], tripBoardingsByStop[finalStop.name].off, finalStop.special_instructions)
 
   return packet([...legs, finalLeg], title, date)
 }
@@ -81,7 +81,7 @@ function tripsList (trips) {
 }
 
 function destination (name, tripsOn, tripsOff, instructions, duration, distance, departureTime) {
-  const specialInstructions = instructions ? `<p>${instructions}` : ''
+  const special_instructions = instructions ? `<p>${instructions}` : ''
   const minutes = departureTime?.getUTCMinutes()
   const nextDesinationText = duration && distance
     ? `<p>
@@ -91,7 +91,7 @@ You should be leaving by <b>${departureTime.getUTCHours()}:${minutes < 10 ? 0 : 
   const tripsOnList = tripsOn.length > 0 ? `<h3>Picking up</h3>\n${tripsList(tripsOn)}\n` : ''
   const tripsOffList = tripsOff.length > 0 ? `<h3>Dropping off</h3>\n${tripsList(tripsOff)}\n` : ''
 
-  const info = [specialInstructions, nextDesinationText, tripsOnList, tripsOffList]
+  const info = [special_instructions, nextDesinationText, tripsOnList, tripsOffList]
     .filter(item => item) // Filter out all the falsy values
     .join('\n')
 

@@ -47,11 +47,7 @@ export function getStop (name) {
   SELECT name, special_instructions, coordinates
   FROM stops
   WHERE name = ?`).get(name)
-
-  if (!stop) return undefined
-
-  const specialInstructions = stop.special_instructions
-  return { specialInstructions, ...stop }
+  return stop
 }
 
 export function getDirections (origin, destination) {
