@@ -22,7 +22,9 @@ import { html } from '../templates.js'
  * of an issue.
  */
 export async function post (req, res) {
-  const packets = sqlite.getAllPackets()
+  const requestUrl = new URL(req.url, `http://${req.headers.host}`)
+  const name = decodeURI(requestUrl.pathname).split('/').at(3)
+  const packets = name ? [sqlite.getPacket(name)] : sqlite.getAllPackets()
   console.log(`Regenerating ${packets.length} packets`)
 
   const promises = packets.map(packet => generatePacket(packet.query))
