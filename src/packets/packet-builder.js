@@ -99,9 +99,16 @@ You should be leaving by <b>${departureTime.getUTCHours()}:${minutes < 10 ? 0 : 
     .filter(item => item) // Filter out all the falsy values
     .join('\n')
 
+  const addressText = stopInfo.address ? ` -- ${getShortAddress(stopInfo.address)}` : ''
   return `<li>
-<h2>${name}</h2>
+<h2>${name}${addressText} (${stopInfo.coordinates})</h2>
 ${info}`
+}
+
+// Not-especially-efficient function to get the first two fields of an address
+// "6 N Main St, Hanover, NH 03755, USA" becomes "6 N Main St, Hanover"
+function getShortAddress (address) {
+  return address.split(',').slice(0, 2).join(', ')
 }
 
 const FIFTEEN_MINUTE_BREAK = 900000 // 15 minutes in milliseconds

@@ -44,7 +44,7 @@ LEFT JOIN (
 
 export function getStop (name) {
   const stop = db.prepare(`
-  SELECT name, special_instructions, coordinates
+  SELECT name, special_instructions, coordinates, address
   FROM stops
   WHERE name = ?`).get(name)
   return stop
