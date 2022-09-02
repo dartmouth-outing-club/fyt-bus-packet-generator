@@ -66,6 +66,29 @@ export async function del (req, res) {
   }
 }
 
+export async function generatePacket (body) {
+  const { name, date, stopNames, tripsOnboard } = queries.parseQuery(body)
+  const stops = stopNames.map(sqlite.getStop)
+  const trips = tripsOnboard.map(trip => (
+    { ...trip, num_students: sqlite.getTrip(trip.name)?.num_students }
+  ))
+  const edgeListOfStops = queries.makeEdgeList(stops)
+
+  // Create a list of promises that will resolve the directions between each pair of stops
+  const directionsPromises = edgeListOfStops.map(([start, end]) => {
+    const directions = sqlite.getDirections(start.coordinates, end.coordinates)
+    return directions
+      ? Promise.resolve(directions)
+      : google.getDirections(start.coordinates, end.coordinates)
+  })
+  const directionsList = await Promise.all(directionsPromises)
+
+  const monthDay = `${date.getMonth()}-${date.getDate()}`
+  const title = name || `${stops.at(0).name} - ${stops.at(-1).name} (${monthDay})`
+  const packet = buildPacket(stops, directionsList, title, date, trips)
+  sqlite.savePacket(title, body, packet.toString(), trips, stopNames)
+}
+
 function packetLinkList (names) {
   const items = names.map(name => `<li>
 <button class=edit onclick="editPacket('${name}')">Edit</button>
@@ -88,27 +111,4 @@ function packetsTable (packets) {
 <th>Total Students
 ${packetsTable}
 </table>`
-}
-
-export async function generatePacket (body) {
-  const { name, date, stopNames, tripsOnboard } = queries.parseQuery(body)
-  const stops = stopNames.map(sqlite.getStop)
-  const trips = tripsOnboard.map(trip => (
-    { ...trip, num_students: sqlite.getTrip(trip.name)?.num_students }
-  ))
-  const edgeListOfStops = queries.makeEdgeList(stops)
-
-  // Create a list of promises that will resolve the directions between each pair of stops
-  const directionsPromises = edgeListOfStops.map(([start, end]) => {
-    const directions = sqlite.getDirections(start.coordinates, end.coordinates)
-    return directions
-      ? Promise.resolve(directions)
-      : google.getDirections(start.coordinates, end.coordinates)
-  })
-  const directionsList = await Promise.all(directionsPromises)
-
-  const monthDay = `${date.getMonth()}-${date.getDate()}`
-  const title = name || `${stops.at(0).name} - ${stops.at(-1).name} (${monthDay})`
-  const packet = buildPacket(stops, directionsList, title, date, trips)
-  sqlite.savePacket(title, body, packet.toString(), trips, stopNames)
 }

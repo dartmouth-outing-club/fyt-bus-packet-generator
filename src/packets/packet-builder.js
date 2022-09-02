@@ -27,12 +27,15 @@ export function buildPacket (stops, directionsList, title, date, tripsOnboard) {
   let departureTime = new Date(date.getTime())
   const legs = directionsList.map((directions, index) => {
     const { duration, distance, steps: rawSteps } = directions.routes[0].legs[0]
-    const start = stops[index]
-    const tripsOn = tripBoardingsByStop[start.name].on
-    const tripsOff = tripBoardingsByStop[start.name].off
+    const currentStop = stops[index]
 
     // Build the next section as HTML
-    const nextStop = destination(start.name, tripsOn, tripsOff, start.special_instructions, duration, distance, departureTime)
+    const stopInfo = {
+      tripsOn: tripBoardingsByStop[currentStop.name].on,
+      tripsOff: tripBoardingsByStop[currentStop.name].off,
+      ...currentStop
+    }
+    const nextStop = destination(stopInfo, duration, distance, departureTime)
     const steps = rawSteps.map(convertRawStep).join('\n')
 
     // Finish the loop by adding more time to the ETA
@@ -41,14 +44,14 @@ export function buildPacket (stops, directionsList, title, date, tripsOnboard) {
     return nextStop + steps + '\n'
   })
 
+  // Finish up by adding the final stop to the packet
   const finalStop = stops.at(-1)
-  const finalLeg = destination(finalStop.name, [], tripBoardingsByStop[finalStop.name].off, finalStop.special_instructions)
+  const finalStopInfo = { tripsOn: [], tripsOff: tripBoardingsByStop[finalStop.name].off, ...finalStop }
+  const finalLeg = destination(finalStopInfo)
 
   return packet([...legs, finalLeg], title, date)
 }
 
-// Technically there is an opportunity for XSS here
-// We don't have any cookies to be stolen with XSS, but it's worth fixing
 function packet (listItems, title, date) {
   const monthDay = `${date.getMonth()}/${date.getDate()}`
 
@@ -80,18 +83,19 @@ function tripsList (trips) {
   return trips.length > 0 ? `<ul>\n${items.join('\n')}\n</ul>` : ''
 }
 
-function destination (name, tripsOn, tripsOff, instructions, duration, distance, departureTime) {
-  const special_instructions = instructions ? `<p>${instructions}` : ''
+function destination (stopInfo, duration, distance, departureTime) {
+  const { name, tripsOn, tripsOff, special_instructions } = stopInfo
+  const instructions = special_instructions ? `<p>${special_instructions}` : ''
   const minutes = departureTime?.getUTCMinutes()
   const nextDesinationText = duration && distance
     ? `<p>
 <b>${distance.text}</b> to next destination (<b>${duration.text}</b>).
 You should be leaving by <b>${departureTime.getUTCHours()}:${minutes < 10 ? 0 : ''}${minutes}</b>.`
     : ''
-  const tripsOnList = tripsOn.length > 0 ? `<h3>Picking up</h3>\n${tripsList(tripsOn)}\n` : ''
-  const tripsOffList = tripsOff.length > 0 ? `<h3>Dropping off</h3>\n${tripsList(tripsOff)}\n` : ''
+  const tripsOnList = tripsOn?.length > 0 ? `<h3>Picking up</h3>\n${tripsList(tripsOn)}\n` : ''
+  const tripsOffList = tripsOff?.length > 0 ? `<h3>Dropping off</h3>\n${tripsList(tripsOff)}\n` : ''
 
-  const info = [special_instructions, nextDesinationText, tripsOnList, tripsOffList]
+  const info = [instructions, nextDesinationText, tripsOnList, tripsOffList]
     .filter(item => item) // Filter out all the falsy values
     .join('\n')
 

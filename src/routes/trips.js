@@ -83,11 +83,11 @@ export async function del (req, res) {
   }
 }
 
-export function tripsOptions (trips) {
+function tripsOptions (trips) {
   return trips.map((trip) => `<option>${trip.name}</option>`).join('\n')
 }
 
-export function tripsTable (trips) {
+function tripsTable (trips) {
   const tripsHtml = trips.map((trip) => html`<tr>
 <td>${trip.name}
 <td>${trip.num_students}
