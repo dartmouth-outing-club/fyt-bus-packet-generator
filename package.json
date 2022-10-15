@@ -2,7 +2,8 @@
   "author": "Alexander Petros",
   "description": "",
   "devDependencies": {
-    "standard": "^17.0.0"
+    "eslint": "^8.25.0",
+    "eslint-config-standard": "^17.0.0"
   },
   "engines": {
     "node": ">=18.7.0"
@@ -11,11 +12,12 @@
   "name": "fyt-bus-packet-generator",
   "scripts": {
     "dev": "NODE_ENV=development npx nodemon src/app.js",
-    "format": "standard --fix",
+    "format": "eslint src --fix",
     "init": "db/init-db.sh",
+    "lint": "eslint src",
     "start": "NODE_ENV=production node src/app.js",
     "test": "node --test",
-		"update_stops": "sqlite3 ./packet-generator.db '.read db/update-stops.sql'",
+    "update_stops": "sqlite3 ./packet-generator.db '.read db/update-stops.sql'",
     "validate": "vnu --skip-non-html --also-check-css static"
   },
   "type": "module",
