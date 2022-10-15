@@ -1,10 +1,10 @@
 import fs from 'node:fs'
 
-let configString
+let configString = ''
 try {
   configString = fs.readFileSync('./.env').toString()
 } catch {
-  console.error('Failed to open config file - ensure that .env is in the source root.')
+  console.error('WARNING: Failed to open config file - ensure that .env is in the source root.')
 }
 
 export const config = configString.split(/\r?\n/)
