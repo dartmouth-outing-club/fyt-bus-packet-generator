@@ -3,7 +3,8 @@
   "description": "",
   "devDependencies": {
     "eslint": "^8.25.0",
-    "eslint-config-standard": "^17.0.0"
+    "eslint-config-standard": "^17.0.0",
+    "nodemon": "^3.0.1"
   },
   "engines": {
     "node": ">=18.7.0"
@@ -11,7 +12,7 @@
   "main": "src/app.js",
   "name": "fyt-bus-packet-generator",
   "scripts": {
-    "dev": "NODE_ENV=development npx nodemon src/app.js",
+    "dev": "NODE_ENV=development nodemon src/app.js",
     "format": "eslint src --fix",
     "init": "db/init-db.sh",
     "lint": "eslint src",

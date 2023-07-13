@@ -1,5 +1,5 @@
 # FYT Bus Packet Generator
-The “bus packet” is a human-readable document containing all the information that the bus driver will require to succesfully complete their trip.
+The “bus packet” is a human-readable document containing all the information that the bus driver will require to successfully complete their trip.
 This is a simple webapp to generate the bus packets for each trip.
 A example of the kind of packet that this generates can be found in the `samples` directory.
 
