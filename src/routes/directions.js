@@ -1,3 +1,4 @@
+import nunjucks from 'nunjucks'
 import * as sqlite from '../clients/sqlite.js'
 import * as builder from '../packets/packet-builder.js'
 import * as responses from '../responses.js'
@@ -7,7 +8,7 @@ export async function get (req, res) {
     .getAllLegs()
     .sort((a, b) => a.start_name.localeCompare(b.start_name))
 
-  const render = legs.map((leg) => {
+  const directionsList = legs.map((leg) => {
     const { start_name, end_name, directions } = leg
     const { duration, distance, steps: rawSteps } = directions?.routes.at(0)?.legs.at(0)
 
@@ -17,14 +18,15 @@ export async function get (req, res) {
       return builder.step(instructionsHtml, distanceText)
     }).join('\n')
 
-    return directionsList(start_name, end_name, steps, duration, distance)
+    return getDirectionsList(start_name, end_name, steps, duration, distance)
   }).join('')
 
-  responses.serveHtml(req, res, render)
+  const html = nunjucks.render('src/views/directions.njk', { directionsList })
+  responses.serveHtml(req, res, html)
 }
 
 /** Rendering Functions **/
-function directionsList (startName, endName, steps, _duration, _distance) {
+function getDirectionsList (startName, endName, steps, _duration, _distance) {
   // We can't template this right now because its populated with Google-generated html
   // TODO more investigation in this area
   return `

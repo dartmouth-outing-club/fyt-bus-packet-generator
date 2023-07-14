@@ -2,8 +2,8 @@
 <html lang=en>
 <title>FYT Bus Packet Generator</title>
 <meta charset="UTF-8">
-<link rel="icon" href="/favicon.ico">
-<link rel="stylesheet" href="/ui-stylesheet.css">
+<link rel="icon" href="/static/favicon.ico">
+<link rel="stylesheet" href="/static/ui-stylesheet.css">
 
 <header>
 <h1>FYT Bus Packet Generator</h1>
@@ -30,7 +30,9 @@ View the directions for every trip leg that is included in the packets. The dire
 <button onclick="collapseAll()">Collapse All</button>
 <button onclick="expandAll()">Expand All</button>
 
-<ul class=accordion id=directions-list></ul>
+<ul class=accordion id=directions-list>
+{{ directionsList | safe }}
+</ul>
 </main>
 
 <footer><span>
@@ -39,11 +41,6 @@ Questions? Email <a href="mailto:Alexander.W.Petros@dartmouth.edu">Alexander.W.P
 Source on <a href="https://github.com/dartmouth-outing-club/fyt-bus-packet-generator">Github</a></span></footer>
 
 <script>
-// Populate existing directions from the backend, then enable page
-fetch('/api/directions').then(res => res.text()).then(text => {
-	document.getElementById('directions-list').innerHTML += text
-})
-
 function collapseAll () {
 	Array
 		.from(document.getElementById('directions-list').children)

@@ -10,23 +10,9 @@ sqlite.start()
 sqlite.execFile('./db/db-schema.sql')
 sqlite.execFile('./test/test-stops.sql')
 
-await test('GET /api/stops', async (t) => {
-  await t.test('it server bad request when no format is provided', async () => {
-    const { req, res } = testUtils.makeHttpObjects('/api/stops')
-    await stops.get(req, res)
-    assert.equal(res.statusCode, 400)
-    assert(res.body.includes('<h1>400</h1>'))
-  })
-
-  await t.test('it server bad request when unknown format is provided', async () => {
-    const { req, res } = testUtils.makeHttpObjects('/api/stops?format=list')
-    await stops.get(req, res)
-    assert.equal(res.statusCode, 400)
-    assert(res.body.includes('<h1>400</h1>'))
-  })
-
+await test('GET /stops', async (t) => {
   await t.test('it serves the stops in options format', async () => {
-    const { req, res } = testUtils.makeHttpObjects('/api/stops?format=options')
+    const { req, res } = testUtils.makeHttpObjects('/stops?format=options')
     await stops.get(req, res)
     assert.equal(res.statusCode, 200)
     assert.equal(res.body,
@@ -37,7 +23,7 @@ await test('GET /api/stops', async (t) => {
   })
 
   await t.test('it serves the stops in table format', async () => {
-    const { req, res } = testUtils.makeHttpObjects('/api/stops?format=table')
+    const { req, res } = testUtils.makeHttpObjects('/stops?format=table')
     await stops.get(req, res)
     assert.equal(res.statusCode, 200)
     const expected = `<table>

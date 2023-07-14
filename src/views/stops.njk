@@ -2,8 +2,8 @@
 <html lang=en>
 <title>FYT Bus Packet Generator</title>
 <meta charset="UTF-8">
-<link rel="icon" href="/favicon.ico">
-<link rel="stylesheet" href="/ui-stylesheet.css">
+<link rel="icon" href="/static/favicon.ico">
+<link rel="stylesheet" href="/static/ui-stylesheet.css">
 
 <header>
 <h1>FYT Bus Packet Generator</h1>
@@ -20,13 +20,11 @@
 <h2>Stops</h2>
 <p>
 View the all the stops that are currently loaded into the packet generator.
+{{ table | safe }}
 </main>
 
 
 <script>
 // Populate existing directions from the backend, then enable page
-fetch('/api/stops?format=table').then(res => res.text()).then(text => {
-	document.getElementsByTagName('main')[0].insertAdjacentHTML('beforeend', text)
-})
 </script>
 

@@ -1,28 +1,29 @@
+import nunjucks from 'nunjucks'
 import * as packets from './routes/packets.js'
 import * as stops from './routes/stops.js'
 import * as trips from './routes/trips.js'
 import * as regenerate from './routes/regenerate.js'
 import * as directions from './routes/directions.js'
-
 import * as responses from './responses.js'
 
 export function getHandler (url, httpMethod, serveStatic = false) {
   const subRoutes = url.pathname.split('/')
-  // If the route doesn't start with /api, it's a static route
-  if (subRoutes.at(1) !== 'api') {
+  if (subRoutes.at(1) === 'static') {
     if (httpMethod !== 'GET') {
       return responses.serveBadRequest
     } else if (serveStatic) {
-      return (req, res) => responses.serveStaticFile(req, res, url.pathname)
+      return (req, res) => responses.serveStaticFile(req, res, url.pathname.substring(7))
     }
 
     console.error(STATIC_FILE_WARNING)
     return responses.serveNotFound
   }
 
-  // If it starts with /api, send it to the appropriate API handler
+  // Send it to the appropriate API handler
   // Note that getModuleMethodHandler returns a function that can be called later
-  switch (subRoutes.at(2)) {
+  switch (subRoutes.at(1)) {
+    case '':
+      return (req, res) => { responses.serveHtml(req, res, nunjucks.render('src/views/index.njk')) }
     case 'stops':
       return getModuleMethodHandler(stops, httpMethod)
     case 'packets':

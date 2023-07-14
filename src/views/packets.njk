@@ -2,8 +2,8 @@
 <html lang=en>
 <title>FYT Bus Packet Generator</title>
 <meta charset="UTF-8">
-<link rel="icon" href="/favicon.ico">
-<link rel="stylesheet" href="/ui-stylesheet.css">
+<link rel="icon" href="/static/favicon.ico">
+<link rel="stylesheet" href="/static/ui-stylesheet.css">
 
 <header>
 <h1>FYT Bus Packet Generator</h1>
@@ -28,6 +28,7 @@ Clicking this button will regenerate the existing packets. The primary reason to
 <button id=regenerate onclick="regeneratePackets()">Regenerate</button>
 
 <h2 id=packets-header>Existing packets</h2>
+{{ table | safe }}
 </main>
 
 <footer><span>
@@ -38,25 +39,20 @@ Source on <a href="https://github.com/dartmouth-outing-club/fyt-bus-packet-gener
 <script>
 const WINDOW_URL = new URL(window.location.href)
 
-// Populate existing packets from the backend, then enable page
-fetch('/api/packets?format=table').then(res => res.text()).then(text => {
-	document.getElementById('packets-header').insertAdjacentHTML('afterend', text)
-})
-
 async function deletePacket (name) {
-	await fetch(`/api/packets/${name}`, { method: 'DELETE' })
+	await fetch(`/packets/${name}`, { method: 'DELETE' })
 	location.reload()
 	console.log('Failed to delete packet')
 }
 
 async function editPacket (name) {
-	const res = await fetch(`/api/packets/${name}?queryOnly`, { method: 'GET' })
+	const res = await fetch(`/packets/${name}?queryOnly`, { method: 'GET' })
 	const queryString = await res.text()
 	location.assign(`${WINDOW_URL.origin}?${queryString}`)
 }
 
 async function regeneratePackets () {
-	const res = await fetch(`/api/regenerate`, { method: 'POST' })
+	const res = await fetch(`/regenerate`, { method: 'POST' })
 	const text = await res.text()
 	document.getElementById('regenerate').insertAdjacentHTML("afterend", text)
 }

@@ -1,3 +1,5 @@
+import nunjucks from 'nunjucks'
+
 import * as sqlite from '../clients/sqlite.js'
 import * as google from '../clients/google-client.js'
 import * as queries from '../queries.js'
@@ -8,7 +10,7 @@ import { buildPacket } from '../packets/packet-builder.js'
 
 export async function get (req, res) {
   const requestUrl = new URL(req.url, `http://${req.headers.host}`)
-  const name = decodeURI(requestUrl.pathname).split('/').at(3)
+  const name = decodeURI(requestUrl.pathname).split('/').at(2)
 
   // If no name is specified, serve the whole packets list in the requesed format
   if (!name) {
@@ -25,8 +27,10 @@ export async function get (req, res) {
         return responses.serveHtml(req, res, table)
       }
       default:
-        console.warn(`Unkown format specified: ${format}`)
-        return responses.serveNotFound(req, res)
+        const packets = sqlite.getAllPacketsWithStats()
+        const table = packetsTable(packets)
+        const html = nunjucks.render('src/views/packets.njk', { table })
+        return responses.serveHtml(req, res, html)
     }
   }
 
@@ -93,7 +97,7 @@ function packetLinkList (names) {
   const items = names.map(name => `<li>
 <button class=edit onclick="editPacket('${name}')">Edit</button>
 <button class=delete onclick="deletePacket('${name}')">Delete</button>
-<a href="/api/packets/${encodeURI(name)}">${name}</a>`).join('\n')
+<a href="/packets/${encodeURI(name)}">${name}</a>`).join('\n')
 
   return `<ul>
 ${items}

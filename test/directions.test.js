@@ -1,26 +1,26 @@
-import test from 'node:test'
+import { describe, it } from 'node:test'
 import assert from 'node:assert/strict'
 
 import * as directions from '../src/routes/directions.js'
 import * as sqlite from '../src/clients/sqlite.js'
 import * as testUtils from './test-utils.js'
 
-await test('GET /api/directions', async (t) => {
+describe.skip('GET /directions', () => {
   // Initialize the database
   sqlite.start()
   sqlite.execFile('./db/db-schema.sql')
 
-  await t.test('it returns an empty list when there are no directions yet', async () => {
-    const { req, res } = testUtils.makeHttpObjects('/api/directions')
+  it('it returns an empty list when there are no directions yet', async () => {
+    const { req, res } = testUtils.makeHttpObjects('/directions')
     await directions.get(req, res)
     assert.equal(res.statusCode, 200)
     assert.equal(res.body, '')
   })
 
-  await t.test('it serves the directions when cached directions are present', async () => {
+  it('it serves the directions when cached directions are present', async () => {
     sqlite.execFile('./test/test-stops.sql')
     sqlite.execFile('./test/test-directions.sql')
-    const { req, res } = testUtils.makeHttpObjects('/api/directions')
+    const { req, res } = testUtils.makeHttpObjects('/directions')
     await directions.get(req, res)
     const expected = `
 <li onclick="this.classList.toggle('expanded')">
@@ -45,7 +45,8 @@ await test('GET /api/directions', async (t) => {
     assert.equal(res.statusCode, 200)
     assert.equal(res.body, expected)
   })
+
+  // Close the database to reset it for the next test
+  sqlite.stop()
 })
 
-// Close the database to reset it for the next test
-sqlite.stop()

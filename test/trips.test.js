@@ -10,23 +10,9 @@ sqlite.start()
 sqlite.execFile('./db/db-schema.sql')
 sqlite.execFile('./test/test-trips.sql')
 
-await test('GET /api/trips', async (t) => {
-  await t.test('it server bad request when no format is provided', async () => {
-    const { req, res } = testUtils.makeHttpObjects('/api/trips')
-    await trips.get(req, res)
-    assert.equal(res.statusCode, 400)
-    assert(res.body.includes('<h1>400</h1>'))
-  })
-
-  await t.test('it server bad request when unknown format is provided', async () => {
-    const { req, res } = testUtils.makeHttpObjects('/api/trips?list')
-    await trips.get(req, res)
-    assert.equal(res.statusCode, 400)
-    assert(res.body.includes('<h1>400</h1>'))
-  })
-
+await test('GET /trips', async (t) => {
   await t.test('it serves the trips in options format', async () => {
-    const { req, res } = testUtils.makeHttpObjects('/api/trips?format=options')
+    const { req, res } = testUtils.makeHttpObjects('/trips?format=options')
     await trips.get(req, res)
     const expected =
 `<option>A4</option>
@@ -40,7 +26,7 @@ await test('GET /api/trips', async (t) => {
   })
 
   await t.test('it serves the trips in table format', async () => {
-    const { req, res } = testUtils.makeHttpObjects('/api/trips?format=table')
+    const { req, res } = testUtils.makeHttpObjects('/trips?format=table')
     await trips.get(req, res)
     assert.equal(res.statusCode, 200)
     const expected = `<table>
@@ -87,7 +73,7 @@ await test('GET /api/trips', async (t) => {
   })
 })
 
-await test('POST /api/trips', async (t) => {
+await test('POST /trips', async (t) => {
   await t.test('it posts a CSV', async () => {
     // Note that the web spec always includes carriage returns before newlines in metadata
     const body = `-----------------------------173775914214642084952696962115\r
@@ -99,7 +85,7 @@ J174,9
 
 -----------------------------173775914214642084952696962115--`
 
-    const { req, res } = testUtils.makeHttpObjects('/api/trips', body)
+    const { req, res } = testUtils.makeHttpObjects('/trips', body)
     req.headers = {
       'content-type': 'multipart/form-data; boundary=---------------------------173775914214642084952696962115'
     }
@@ -109,16 +95,16 @@ J174,9
   })
 })
 
-await test('DELETE /api/trips', async (t) => {
+await test('DELETE /trips', async (t) => {
   await t.test('it does nothing if trip does not exist', async () => {
-    const { req, res } = testUtils.makeHttpObjects('/api/trips/A10')
+    const { req, res } = testUtils.makeHttpObjects('/trips/A10')
     await trips.del(req, res)
     assert.equal(res.statusCode, 204)
     assert.equal(sqlite.getAllTrips().length, 7)
   })
 
   await t.test('it deletes the provided trip', async () => {
-    const { req, res } = testUtils.makeHttpObjects('/api/trips/A4')
+    const { req, res } = testUtils.makeHttpObjects('/trips/A4')
     await trips.del(req, res)
     assert.equal(res.statusCode, 204)
     assert.equal(sqlite.getAllTrips().length, 6)

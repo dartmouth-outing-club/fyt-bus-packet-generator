@@ -1,3 +1,4 @@
+import nunjucks from 'nunjucks'
 import * as sqlite from '../clients/sqlite.js'
 import * as responses from '../responses.js'
 import { html } from '../templates.js'
@@ -12,7 +13,9 @@ export async function get (req, res) {
     case 'options':
       return responses.serveHtml(req, res, stopsOptionList(sqlite.getAllStops()))
     default:
-      return responses.serveBadRequest(req, res)
+      const table = stopsTable(sqlite.getAllStopsWithStats())
+      const html = nunjucks.render('src/views/stops.njk', { table })
+      return responses.serveHtml(req, res, html)
   }
 }
 

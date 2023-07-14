@@ -12,7 +12,7 @@
   "main": "src/app.js",
   "name": "fyt-bus-packet-generator",
   "scripts": {
-    "dev": "NODE_ENV=development nodemon src/app.js",
+    "dev": "NODE_ENV=development nodemon -e js,njk src/app.js",
     "format": "eslint src --fix",
     "init": "db/init-db.sh",
     "lint": "eslint src",
@@ -25,6 +25,7 @@
   "version": "1.0.0",
   "dependencies": {
     "better-sqlite3": "^8.0.0",
-    "csv-parser": "^3.0.0"
+    "csv-parser": "^3.0.0",
+    "nunjucks": "^3.2.4"
   }
 }

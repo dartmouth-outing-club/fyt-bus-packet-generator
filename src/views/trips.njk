@@ -2,8 +2,8 @@
 <html lang=en>
 <title>FYT Bus Packet Generator</title>
 <meta charset="UTF-8">
-<link rel="icon" href="/favicon.ico">
-<link rel="stylesheet" href="/ui-stylesheet.css">
+<link rel="icon" href="/static/favicon.ico">
+<link rel="stylesheet" href="/static/ui-stylesheet.css">
 
 <header>
 <h1>FYT Bus Packet Generator</h1>
@@ -28,17 +28,20 @@
 
 <p>Make sure to upload the CSV <em>without headers, in the following order:</em> name, # students
 
-<form action=/api/trips method=POST enctype=multipart/form-data>
+<form action=/trips method=POST enctype=multipart/form-data>
 <p><input required name=trips-csv type=file accept=.csv>
 <p><button type=submit>Upload</button>
 </form>
 
 <h2>Delete Trip</h2>
 <input list=trip-list id=delete-trip type=text>
-<datalist id=trip-list></datalist>
+<datalist id=trip-list>
+{{ options | safe }}
+</datalist>
 <button type=button class=delete onclick="deleteTrip()">Delete</button>
 
 <h2>Current Trips</h2>
+{{ table | safe }}
 </main>
 
 <footer><span>
@@ -47,19 +50,11 @@ Questions? Email <a href="mailto:Alexander.W.Petros@dartmouth.edu">Alexander.W.P
 Source on <a href="https://github.com/dartmouth-outing-club/fyt-bus-packet-generator">Github</a></span></footer>
 
 <script>
-fetch('/api/trips?format=table').then(res => res.text()).then(text => {
-	document.getElementsByTagName('main')[0].innerHTML += text
-})
-
-fetch('/api/trips?format=options').then(res => res.text()).then(text => {
-	document.getElementById('trip-list').innerHTML += text
-})
-
 async function deleteTrip() {
 	const trip = document.getElementById('delete-trip').value
 	if (!window.confirm(`Delete trip ${trip}?`)) return
 
-	const res = await fetch(`/api/trips/${trip}`, { method: 'DELETE' })
+	const res = await fetch(`/trips/${trip}`, { method: 'DELETE' })
 	if (res.status >= 400) {
 		const text = await res.text()
 		document.getElementsByTagName('main')[0].insertAdjacentHTML("afterbegin", text)
@@ -67,5 +62,4 @@ async function deleteTrip() {
 		location.reload()
 	}
 }
-
 </script>

@@ -2,8 +2,8 @@
 <html lang=en>
 <title>FYT Bus Packet Generator</title>
 <meta charset="UTF-8">
-<link rel="icon" href="/favicon.ico">
-<link rel="stylesheet" href="/ui-stylesheet.css">
+<link rel="icon" href="/static/favicon.ico">
+<link rel="stylesheet" href="/static/ui-stylesheet.css">
 
 <header>
 <h1>FYT Bus Packet Generator</h1>
@@ -30,7 +30,7 @@ If you make a new packet with the same name as an existing packet, it will delet
 
 <!-- New Packet Form -->
 <h2>Generate new packet</h2>
-<form action="/api/packets" method=post>
+<form action="/packets" method=post>
 <fieldset name=route-info>
 <legend>Route info</legend>
 <p>
@@ -166,7 +166,7 @@ function setTripBoardingOptions () {
 }
 
 async function editPacket (name) {
-	const res = await fetch(`/api/packets/${name}?queryOnly`, { method: 'GET' })
+	const res = await fetch(`/packets/${name}?queryOnly`, { method: 'GET' })
 	const queryString = await res.text()
 	location.assign(`${WINDOW_URL.origin}?${queryString}`)
 }
@@ -191,7 +191,7 @@ function onAddTripClick() {
 async function deletePacket (name) {
 	if (!window.confirm('Are you sure you want to delete?')) return
 
-	fetch(`/api/packets/${name}`, { method: 'DELETE' })
+	fetch(`/packets/${name}`, { method: 'DELETE' })
 		.then(() => location.reload())
 		.catch(() => alert('Something went wrong trying to delete the packet.'))
 }
@@ -205,17 +205,17 @@ function setFormValues(params) {
 
 async function loadDocument () {
 	// Populate existing packets from the backend
-	const packets = fetch('/api/packets?format=links').then(res => res.text()).then(text => {
+	const packets = fetch('/packets?format=links').then(res => res.text()).then(text => {
 		document.getElementById('packets-list').insertAdjacentHTML('afterend', text)
 	})
 
 	// Populate select list for trip boardings
-	const boardings = fetch('/api/trips?format=options').then(res => res.text()).then(text => {
+	const boardings = fetch('/trips?format=options').then(res => res.text()).then(text => {
 		document.getElementById('add-trip').innerHTML = text
 	})
 
 	// Populate "stops" options with the stops from the backend
-	const stops = fetch('/api/stops?format=options').then(res => res.text()).then(text => {
+	const stops = fetch('/stops?format=options').then(res => res.text()).then(text => {
 		document.getElementsByName('origin-location')[0].innerHTML += text
 		document.getElementsByName('destination-location')[0].innerHTML += text
 	})

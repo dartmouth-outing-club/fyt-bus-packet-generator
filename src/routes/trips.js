@@ -1,4 +1,5 @@
 import stream from 'node:stream'
+import nunjucks from 'nunjucks'
 
 import * as sqlite from '../clients/sqlite.js'
 import * as responses from '../responses.js'
@@ -19,7 +20,10 @@ export async function get (req, res) {
     case 'options':
       return responses.serveHtml(req, res, tripsOptions(trips))
     default:
-      return responses.serveBadRequest(req, res)
+      const table = tripsTable(trips)
+      const options = tripsOptions(trips)
+      const html = nunjucks.render('src/views/trips.njk', { options, table })
+      return responses.serveHtml(req, res, html)
   }
 }
 
@@ -70,7 +74,7 @@ export async function post (req, res) {
 }
 
 export async function del (req, res) {
-  const trip = req.url.split('/').at(3)
+  const trip = req.url.split('/').at(2)
   try {
     sqlite.deleteTrip(trip)
     responses.serveNoContent(req, res)
