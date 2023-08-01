@@ -4,7 +4,6 @@ import * as responses from './responses.js'
 import * as routes from './routes.js'
 import * as sqlite from './clients/sqlite.js'
 
-const env = process.env.NODE_ENV
 const port = process.env.PORT || 3000
 const host = 'localhost'
 
@@ -20,7 +19,7 @@ const app = http.createServer(async (req, res) => {
   console.log(`${req.method} request receieved for ${requestUrl}`)
   try {
     // Get the function that will handle the request, then call it with (req, res)
-    const handler = routes.getHandler(requestUrl, req.method, env === 'development')
+    const handler = routes.getHandler(requestUrl, req.method)
     await handler(req, res)
   } catch (error) {
     console.error('ERROR - uncaught exception while handling request\n', error)

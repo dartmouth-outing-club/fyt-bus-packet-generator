@@ -6,17 +6,19 @@ import * as regenerate from './routes/regenerate.js'
 import * as directions from './routes/directions.js'
 import * as responses from './responses.js'
 
-export function getHandler (url, httpMethod, serveStatic = false) {
+const HTMX_ROUTE = './node_modules/htmx.org/dist/htmx.js'
+const ONE_YEAR_IN_SECONDS = 3.156e+7
+
+export function getHandler (url, httpMethod) {
   const subRoutes = url.pathname.split('/')
   if (subRoutes.at(1) === 'static') {
-    if (httpMethod !== 'GET') {
-      return responses.serveBadRequest
-    } else if (serveStatic) {
-      return (req, res) => responses.serveStaticFile(req, res, url.pathname.substring(7))
+    if (httpMethod !== 'GET') return responses.serveBadRequest
+    // Serve HTMX with a long cache time
+    if (subRoutes.at(2).includes('htmx')) {
+      return (req, res) => responses.serveDistFile(req, res, HTMX_ROUTE, ONE_YEAR_IN_SECONDS)
     }
 
-    console.error(STATIC_FILE_WARNING)
-    return responses.serveNotFound
+    return (req, res) => responses.serveStaticFile(req, res, url.pathname.substring(7))
   }
 
   // Send it to the appropriate API handler
@@ -50,7 +52,3 @@ function getModuleMethodHandler (module, httpMethod) {
   const moduleHasMethod = typeof moduleMethodHandler === 'function'
   return moduleHasMethod ? moduleMethodHandler : responses.serveNotAllowed
 }
-
-const STATIC_FILE_WARNING = `Error - your server is not configured correctly.
-All requests to this server should be prefixed with /api/, but this one was not.
-Check your nginx configuration and ensure that only /api/ requests get sent here.`

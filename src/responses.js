@@ -1,9 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 
-const pagePath = (staticFp) => path.join(path.resolve(), '/static', staticFp)
-
-const HOMEPAGE_FP = pagePath('index.html')
+const ONE_DAY_IN_SECONDS = 86400
 
 function setMimeType (res, pathname) {
   if (pathname.endsWith('.html')) {
@@ -38,25 +36,24 @@ function pipeFile (res, filepath, code = 200) {
   stream.pipe(res)
 }
 
-function pipeHtmlFile (res, filepath, code = 200) {
-  res.setHeader('Content-Type', 'text/html; charset=UTF-8')
-  pipeFile(res, filepath, code)
-}
-
 export function serveAsString (_req, res, object) {
   res.statusCode = 200
   res.write(object.toString())
   res.end()
 }
 
-export function serveStaticFile (req, res, pathname) {
-  // Protects against directory traversal! See https://url.spec.whatwg.org/#path-state
-  let filepath = path.join(path.resolve(), '/static', pathname)
-  if (pathname === '/') return serveHomepage(req, res)
-  // Serve the html file if there's no file extension in the path
-  if (!pathname.includes('.')) filepath += '.html'
+// Don't use user-generated pathnames, only absolute ones
+export function serveDistFile (_req, res, pathname, cacheTime = ONE_DAY_IN_SECONDS) {
+  res.setHeader('Cache-Control', `max-age=${cacheTime}`)
   setMimeType(res, pathname)
+  pipeFile(res, pathname)
+}
 
+export function serveStaticFile (_req, res, pathname, cacheTime = ONE_DAY_IN_SECONDS) {
+  // Protects against directory traversal! See https://url.spec.whatwg.org/#path-state
+  const filepath = path.join(path.resolve(), '/static', pathname)
+  res.setHeader('Cache-Control', `max-age=${cacheTime}`)
+  setMimeType(res, pathname)
   pipeFile(res, filepath)
 }
 
@@ -86,7 +83,6 @@ export function redirect (_req, res, url) {
   setCodeAndEnd(res, 302)
 }
 
-export const serveHomepage = (_req, res) => pipeHtmlFile(res, HOMEPAGE_FP)
 export const serveNoContent = (_req, res) => setCodeAndEnd(res, 204)
 export const serveBadRequest = (_req, res) => setCodeAndEnd(res, 400)
 export const serveNotFound = (_req, res) => setCodeAndEnd(res, 404)
