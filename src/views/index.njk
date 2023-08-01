@@ -43,6 +43,9 @@ If you make a new packet with the same name as an existing packet, it will delet
 		onchange="setTripBoardingOptions()"
 		required>
 	<option value="" selected disabled hidden>---- Choose a location ----
+  {% for stop in stops %}
+  <option>{{ stop.name }}
+  {% endfor %}
 </select>
 <button class="delete nodisplay" onclick="deleteWaypoint(this)" type=button>Remove</button>
 <p>
@@ -56,6 +59,9 @@ If you make a new packet with the same name as an existing packet, it will delet
 		onchange="setTripBoardingOptions()"
 		required>
 	<option value="" selected disabled hidden>---- Choose a location ----
+  {% for stop in stops %}
+  <option>{{ stop.name }}
+  {% endfor %}
 </select>
 </fieldset>
 
@@ -207,14 +213,6 @@ function setFormValues(params) {
 }
 
 async function loadDocument () {
-	// Populate "stops" options with the stops from the backend
-	const stops = fetch('/stops?format=options').then(res => res.text()).then(text => {
-		document.getElementsByName('origin-location')[0].innerHTML += text
-		document.getElementsByName('destination-location')[0].innerHTML += text
-	})
-
-	await Promise.all([packets, boardings, stops])
-
 	// Pre-populate form if there's a query in the window
 	const params = Array.from(WINDOW_URL.searchParams.entries())
 	params.filter(param => param[0].includes('stop')).forEach(addNewWaypoint)

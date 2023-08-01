@@ -6,7 +6,12 @@
 <h2>Stops</h2>
 <p>
 View the all the stops that are currently loaded into the packet generator.
-{{ table | safe }}
+<table>
+  <tr><th>Stop Name<th>Packets Present
+  {% for stop in stops %}
+  <tr><td>{{ stop.name }}<td>{{ stop.packets_present }}
+  {% endfor %}
+</table>
 </main>
 
 

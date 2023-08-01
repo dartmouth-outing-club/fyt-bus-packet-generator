@@ -6,6 +6,7 @@ import * as responses from '../responses.js'
 export function get (req, res) {
   const packets = sqlite.getAllPackets()
   const trips = sqlite.getAllTrips()
-  const html = nunjucks.render('src/views/index.njk', { trips, packets })
+  const stops = sqlite.getAllStopsWithStats()
+  const html = nunjucks.render('src/views/index.njk', { trips, packets, stops })
   responses.serveHtml(req, res, html)
 }
