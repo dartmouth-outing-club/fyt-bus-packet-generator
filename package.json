@@ -12,7 +12,7 @@
   "main": "src/app.js",
   "name": "fyt-bus-packet-generator",
   "scripts": {
-    "dev": "NODE_ENV=development nodemon -e js,njk src/app.js",
+    "dev": "NODE_ENV=development nodemon -e js,njk,html src/app.js",
     "format": "eslint src --fix",
     "init": "db/init-db.sh",
     "lint": "eslint src",

@@ -4,7 +4,6 @@ import path from 'node:path'
 const pagePath = (staticFp) => path.join(path.resolve(), '/static', staticFp)
 
 const HOMEPAGE_FP = pagePath('index.html')
-const ERROR_FP = pagePath('404.html')
 
 function setMimeType (res, pathname) {
   if (pathname.endsWith('.html')) {
@@ -90,6 +89,6 @@ export function redirect (_req, res, url) {
 export const serveHomepage = (_req, res) => pipeHtmlFile(res, HOMEPAGE_FP)
 export const serveNoContent = (_req, res) => setCodeAndEnd(res, 204)
 export const serveBadRequest = (_req, res) => setCodeAndEnd(res, 400)
-export const serveNotFound = (_req, res) => pipeHtmlFile(res, ERROR_FP, 404)
+export const serveNotFound = (_req, res) => setCodeAndEnd(res, 404)
 export const serveNotAllowed = (_req, res) => setCodeAndEnd(res, 405)
 export const serveServerError = (_req, res) => setCodeAndEnd(res, 500)
