@@ -11,10 +11,15 @@ When you create a packet, that packet is saved as-is. Even you change the number
 Clicking this button will regenerate the existing packets. The primary reason to do this is if the trips have changed since the packets were created, but it will also update any new special instructions.
 
 <p>
-<button id=regenerate onclick="regeneratePackets()">Regenerate</button>
+<button hx-post=/regenerate hx-swap=afterend>Regenerate</button>
 
 <h2 id=packets-header>Existing packets</h2>
-{{ table | safe }}
+<table>
+  <tr><th>Packet<th>Total Students
+  {% for packet in packets %}
+  <tr><td>{{ packet.name }}<td>{{ packet.total_students }}
+  {% endfor %}
+</table>
 </main>
 
 <footer><span>
@@ -24,24 +29,6 @@ Source on <a href="https://github.com/dartmouth-outing-club/fyt-bus-packet-gener
 
 <script>
 const WINDOW_URL = new URL(window.location.href)
-
-async function deletePacket (name) {
-	await fetch(`/packets/${name}`, { method: 'DELETE' })
-	location.reload()
-	console.log('Failed to delete packet')
-}
-
-async function editPacket (name) {
-	const res = await fetch(`/packets/${name}?queryOnly`, { method: 'GET' })
-	const queryString = await res.text()
-	location.assign(`${WINDOW_URL.origin}?${queryString}`)
-}
-
-async function regeneratePackets () {
-	const res = await fetch(`/regenerate`, { method: 'POST' })
-	const text = await res.text()
-	document.getElementById('regenerate').insertAdjacentHTML("afterend", text)
-}
 
 </script>
 

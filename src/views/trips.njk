@@ -15,7 +15,7 @@ input#delete-trip { width: 70px; }
 <p> Add or update a single trip:
 <form hx-put=/trips id=add-trip hx-on::after-request="this.reset(); location.reload()">
 <label>Name: <input name=trip-name type=text required></label>
-<label>Num Students: <input name=num-students type=number required></label>
+<label># Students: <input name=num-students type=number required></label>
 <button type=submit>Add Trip</button>
 </form>
 
@@ -32,15 +32,32 @@ input#delete-trip { width: 70px; }
 <p><button type=submit>Upload CSV</button>
 </form>
 
-<h2>Delete Trip</h2>
-<input list=trip-list id=delete-trip type=text>
-<datalist id=trip-list>
-{{ options | safe }}
-</datalist>
-<button type=button class=delete onclick="deleteTrip()">Delete</button>
-
 <h2>Current Trips</h2>
-{{ table | safe }}
+<table>
+<tr>
+<th>Trip Name
+<th>Num Students
+<th>Num Packets
+<th>Packets Present
+<th>Actions
+
+{% for trip in trips %}
+<tr>
+<td>{{ trip.name }}
+<td>{{ trip.num_students }}
+<td>{{ trip.num_packets }}
+<td>{{ trip.packets_present }}
+<td><button class=delete
+            hx-delete=/trips/{{ trip.name }}
+            hx-confirm="Delete trip &quot;{{ trip.name }}&quot;?"
+            hx-target="closest tr"
+            hx-swap="outerHTML"
+            >Delete
+    </button>
+{% endfor %}
+
+</table>
+
 </main>
 
 <footer><span>
@@ -48,17 +65,3 @@ Questions? Email <a href="mailto:Alexander.W.Petros@dartmouth.edu">Alexander.W.P
 </span><span>
 Source on <a href="https://github.com/dartmouth-outing-club/fyt-bus-packet-generator">Github</a></span></footer>
 
-<script>
-async function deleteTrip() {
-	const trip = document.getElementById('delete-trip').value
-	if (!window.confirm(`Delete trip ${trip}?`)) return
-
-	const res = await fetch(`/trips/${trip}`, { method: 'DELETE' })
-	if (res.status >= 400) {
-		const text = await res.text()
-		document.getElementsByTagName('main')[0].insertAdjacentHTML("afterbegin", text)
-	} else {
-		location.reload()
-	}
-}
-</script>

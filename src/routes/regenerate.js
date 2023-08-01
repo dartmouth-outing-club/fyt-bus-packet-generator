@@ -23,10 +23,10 @@ import { html } from '../templates.js'
  */
 export async function post (req, res) {
   const requestUrl = new URL(req.url, `http://${req.headers.host}`)
-  const name = decodeURI(requestUrl.pathname).split('/').at(3)
+  const id = decodeURI(requestUrl.pathname).split('/').at(3)
 
   // If there's a name provided, regenerate just that packet
-  const packets = name ? [sqlite.getPacket(name)] : sqlite.getAllPackets()
+  const packets = id ? [sqlite.getPacket(id)] : sqlite.getAllPackets()
   console.log(`Regenerating ${packets.length} packets`)
 
   // Collect all the regeneration promsises into a single packet

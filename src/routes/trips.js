@@ -4,28 +4,15 @@ import nunjucks from 'nunjucks'
 import * as sqlite from '../clients/sqlite.js'
 import * as responses from '../responses.js'
 import * as utils from '../utils.js'
-import { html } from '../templates.js'
 
 import csv from 'csv-parser'
 
 export async function get (req, res) {
-  const requestUrl = new URL(req.url, `http://${req.headers.host}`)
-  const format = requestUrl.searchParams.get('format')
   const trips = sqlite.getAllTripsWithStats()
   trips.sort((a, b) => utils.tripSort(a.name, b.name))
 
-  switch (format) {
-    case 'table':
-      return responses.serveHtml(req, res, tripsTable(trips))
-    case 'options':
-      return responses.serveHtml(req, res, tripsOptions(trips))
-    default: {
-      const table = tripsTable(trips)
-      const options = tripsOptions(trips)
-      const html = nunjucks.render('src/views/trips.njk', { options, table })
-      return responses.serveHtml(req, res, html)
-    }
-  }
+  const html = nunjucks.render('src/views/trips.njk', { trips })
+  return responses.serveHtml(req, res, html)
 }
 
 export async function post (req, res) {
@@ -86,7 +73,7 @@ export async function del (req, res) {
   const trip = req.url.split('/').at(2)
   try {
     sqlite.deleteTrip(trip)
-    responses.serveNoContent(req, res)
+    responses.serveHtml(req, res, '')
   } catch (error) {
     if (error.code === 'SQLITE_CONSTRAINT_TRIGGER') {
       responses.serveErrorMessage(req, res, 'Error: cannot delete a trip that is part of a packet', 400)
@@ -94,28 +81,4 @@ export async function del (req, res) {
       responses.serveServerError(req, res)
     }
   }
-}
-
-function tripsOptions (trips) {
-  return trips.map((trip) => `<option>${trip.name}</option>`).join('\n')
-}
-
-function tripsTable (trips) {
-  const tripsHtml = trips.map((trip) => html`<tr>
-<td>${trip.name}
-<td>${trip.num_students}
-<td>${trip.num_packets}
-<td>${trip.packets_present}
-`)
-
-  return html`<table>
-<tr>
-<th>Trip Name
-<th>Num Students
-<th>Num Packets
-<th>Packets Present
-
-${tripsHtml}
-</table>
-`
 }

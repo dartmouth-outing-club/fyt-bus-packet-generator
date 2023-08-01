@@ -27,16 +27,22 @@ body {
 	min-height: 100vh;
 }
 
-button {
+button, a.button {
 	background-color: #f7f7f7;
 	border-radius: 2px;
 	border: 1px solid #424141;
+  font-size: .9rem;
 	cursor: pointer;
 	margin: 3px;
-	min-width: 50px;
+  padding: 1px 4px;
 }
 
-button:hover {
+a.button {
+  display: inline-block;
+  text-decoration: none;
+}
+
+button:hover, a.button:hover{
 	background-color: #e2e2e2;
 }
 
@@ -55,11 +61,11 @@ header li:hover, button[type=submit]:hover {
 	background-color: #12312b;
 }
 
-button.edit {
+a.edit, button.edit {
 	color: #00693e;
 }
 
-button.delete {
+a.delete, button.delete {
 	color: rgb(205, 62, 43);
 }
 

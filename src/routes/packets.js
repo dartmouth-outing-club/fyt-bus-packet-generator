@@ -10,26 +10,15 @@ import { buildPacket } from '../packets/packet-builder.js'
 
 export async function get (req, res) {
   const requestUrl = new URL(req.url, `http://${req.headers.host}`)
-  const name = decodeURI(requestUrl.pathname).split('/').at(2)
+  const id = requestUrl.pathname.split('/').at(2)
 
   // If no name is specified, serve the whole packets list in the requesed format
-  if (!name) {
+  if (!id) {
     const format = requestUrl.searchParams.get('format')
     switch (format) {
-      case 'links': {
-        const names = sqlite.getAllPacketNames()
-        const links = packetLinkList(names)
-        return responses.serveHtml(req, res, links)
-      }
-      case 'table': {
-        const packets = sqlite.getAllPacketsWithStats()
-        const table = packetsTable(packets)
-        return responses.serveHtml(req, res, table)
-      }
       default: {
         const packets = sqlite.getAllPacketsWithStats()
-        const table = packetsTable(packets)
-        const html = nunjucks.render('src/views/packets.njk', { table })
+        const html = nunjucks.render('src/views/packets.njk', { packets })
         return responses.serveHtml(req, res, html)
       }
     }
@@ -37,10 +26,10 @@ export async function get (req, res) {
 
   // Otherwise, serve the packet in the requesed format
   if (requestUrl.searchParams.has('queryOnly')) {
-    const { query } = sqlite.getPacket(name)
+    const { query } = sqlite.getPacket(id)
     return responses.serveHtml(req, res, query)
   } else {
-    const packetHtml = sqlite.getPacket(name)?.html_content
+    const packetHtml = sqlite.getPacket(id)?.html_content
     return responses.serveHtml(req, res, packetHtml)
   }
 }
@@ -62,10 +51,10 @@ export async function post (req, res) {
 
 export async function del (req, res) {
   const requestUrl = new URL(req.url, `http://${req.headers.host}`)
-  const name = decodeURI(requestUrl.pathname).split('/').at(2)
+  const id = requestUrl.pathname.split('/').at(2)
 
-  if (sqlite.deletePacket(name)) {
-    return responses.serveNoContent(req, res)
+  if (sqlite.deletePacket(id)) {
+    return responses.serveHtml(req, res, '')
   } else {
     return responses.serveBadRequest(req, res)
   }
@@ -92,28 +81,4 @@ export async function generatePacket (body) {
   const title = name || `${stops.at(0).name} - ${stops.at(-1).name} (${monthDay})`
   const packet = buildPacket(stops, directionsList, title, date, trips)
   sqlite.savePacket(title, body, packet.toString(), trips, stopNames)
-}
-
-function packetLinkList (names) {
-  const items = names.map(name => `<li>
-<button class=edit onclick="editPacket('${name}')">Edit</button>
-<button class=delete onclick="deletePacket('${name}')">Delete</button>
-<a href="/packets/${encodeURI(name)}">${name}</a>`).join('\n')
-
-  return `<ul>
-${items}
-</ul>`
-}
-
-function packetsTable (packets) {
-  const packetsTable = packets.map((packet) => `<tr>
-<td>${packet.name}
-<td>${packet.total_students}`).join('\n')
-
-  return `<table>
-<tr>
-<th>Packet
-<th>Total Students
-${packetsTable}
-</table>`
 }

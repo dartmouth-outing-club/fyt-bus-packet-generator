@@ -12,10 +12,11 @@ export async function get (req, res) {
       return responses.serveHtml(req, res, stopsTable(sqlite.getAllStopsWithStats()))
     case 'options':
       return responses.serveHtml(req, res, stopsOptionList(sqlite.getAllStops()))
-    default:
+    default: {
       const table = stopsTable(sqlite.getAllStopsWithStats())
       const html = nunjucks.render('src/views/stops.njk', { table })
       return responses.serveHtml(req, res, html)
+    }
   }
 }
 

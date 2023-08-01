@@ -1,4 +1,4 @@
-import nunjucks from 'nunjucks'
+import * as index from './routes/index.js'
 import * as packets from './routes/packets.js'
 import * as stops from './routes/stops.js'
 import * as trips from './routes/trips.js'
@@ -25,7 +25,7 @@ export function getHandler (url, httpMethod) {
   // Note that getModuleMethodHandler returns a function that can be called later
   switch (subRoutes.at(1)) {
     case '':
-      return (req, res) => { responses.serveHtml(req, res, nunjucks.render('src/views/index.njk')) }
+      return getModuleMethodHandler(index, httpMethod)
     case 'stops':
       return getModuleMethodHandler(stops, httpMethod)
     case 'packets':

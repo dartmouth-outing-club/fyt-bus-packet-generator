@@ -12,12 +12,6 @@ describe('static file handler', () => {
     assert.equal(handler.name, 'serveBadRequest')
   })
 
-  it('it returns the NOT FOUND handler when static files are turned off', () => {
-    const url = makeUrl('static/favicon.icon')
-    const handler = routes.getHandler(url, 'GET', false)
-    assert.equal(handler.name, 'serveNotFound')
-  })
-
   it('it returns the static file handler when static files are turned on', () => {
     const url = makeUrl('static/favicon.icon')
     const handler = routes.getHandler(url, 'GET', true)

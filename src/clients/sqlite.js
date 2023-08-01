@@ -35,7 +35,7 @@ SELECT stops.name, IFNULL(packets_present, 0) as packets_present
 FROM stops
 LEFT JOIN (
   SELECT stop as name, count(stop) as packets_present
-  FROM packets_stops
+  FROM packet_stops
   GROUP BY stop
 ) as packet_counts ON packet_counts.name = stops.name
 `
@@ -72,19 +72,23 @@ export function saveDirections (start, end, directions) {
   `).run(start, end, directions)
 }
 
-export function getPacket (name) {
-  return db.prepare('SELECT query, html_content FROM packets WHERE name = ?').get(name)
+export function getPacket (id) {
+  return db.prepare('SELECT query, html_content FROM packets WHERE id = ?').get(id)
 }
 
 export function getAllPackets () {
-  return db.prepare('SELECT name, query FROM packets').all()
+  return db.prepare('SELECT id, name, query FROM packets').all()
 }
 
 export function getAllPacketsWithStats () {
   return db.prepare(`
-  SELECT packet as name, sum(num_students) as total_students
-  FROM packet_trips
-  LEFT JOIN trips ON trips.name = trip
+  SELECT
+    packets.id,
+    packets.name,
+    coalesce(sum(num_students), 0) as total_students
+  FROM packets
+  LEFT JOIN packet_trips ON packets.id = packet_trips.packet
+  LEFT JOIN trips ON trips.name = packet_trips.trip
   GROUP BY packet
   `).all()
 }
@@ -94,26 +98,27 @@ export function getAllPacketNames () {
 }
 
 export function savePacket (name, query, html, trips, stops) {
-  db.prepare(`
+  const info = db.prepare(`
   INSERT OR REPLACE INTO packets (name, query, html_content)
   VALUES (?, ?, ?)
   `).run(name, query, html)
+  const packetId = info.lastInsertRowid
 
   trips.forEach(trip => {
     db
       .prepare('INSERT INTO packet_trips (packet, trip) VALUES (?, ?)')
-      .run(name, trip.name)
+      .run(packetId, trip.name)
   })
 
   stops.forEach(stop => {
     db
-      .prepare('INSERT INTO packets_stops (packet, stop) VALUES (?, ?)')
-      .run(name, stop)
+      .prepare('INSERT INTO packet_stops (packet, stop) VALUES (?, ?)')
+      .run(packetId, stop)
   })
 }
 
-export function deletePacket (name) {
-  const { changes } = db.prepare('DELETE FROM packets WHERE name = ?').run(name)
+export function deletePacket (id) {
+  const { changes } = db.prepare('DELETE FROM packets WHERE id = ?').run(id)
   console.log(`Deleted ${changes} packet(s)`)
   return changes
 }
@@ -128,10 +133,15 @@ export function getAllTrips () {
 
 export function getAllTripsWithStats () {
   const statement = `
-SELECT trips.name, num_students, count(packet) as num_packets, IFNULL(group_concat(packet, ', '), '(none)') as packets_present
-FROM trips
-LEFT JOIN packet_trips ON trips.name = trip
-GROUP BY trips.name`
+    SELECT
+      trips.name,
+      num_students,
+      count(packet) as num_packets,
+      IFNULL(group_concat(packet, ', '), '(none)') as packets_present
+    FROM trips
+    LEFT JOIN packet_trips ON trips.name = trip
+    GROUP BY trips.name
+`
 
   return db.prepare(statement).all()
 }
