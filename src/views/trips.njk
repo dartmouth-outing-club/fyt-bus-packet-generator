@@ -2,11 +2,24 @@
 <title>Trips - FYT</title>
 {% include 'src/views/common/site-nav.njk' %}
 
+<style>
+#add-trip input { width: 70px; }
+#add-trip button { display: block; margin: 20px 0; }
+select#add-trip { margin-left: 5px; width: 70px; }
+input#delete-trip { width: 70px; }
+</style>
+
 <main>
 
 <h2>Add Trips</h2>
-<p>Upload a CSV of the current trips. How it works:
+<p> Add or update a single trip:
+<form hx-put=/trips id=add-trip hx-on::after-request="this.reset(); location.reload()">
+<label>Name: <input name=trip-name type=text required></label>
+<label>Num Students: <input name=num-students type=number required></label>
+<button type=submit>Add Trip</button>
+</form>
 
+<p> Or you can upload a CSV of the current trips. How it works:
 <ul>
 <li>Uploading a trip of the same name as an existing one will replace the existing trip
 <li>The upload will never delete an existing trip, only replace them
@@ -16,7 +29,7 @@
 
 <form action=/trips method=POST enctype=multipart/form-data>
 <p><input required name=trips-csv type=file accept=.csv>
-<p><button type=submit>Upload</button>
+<p><button type=submit>Upload CSV</button>
 </form>
 
 <h2>Delete Trip</h2>

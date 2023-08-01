@@ -170,15 +170,6 @@ p > label[for=add-trip] {
 	min-width: 0px;
 }
 
-select#add-trip {
-	margin-left: 5px;
-	width: 70px;
-}
-
-input#delete-trip {
-	width: 70px;
-}
-
 .error {
 	color: white;
 	background-color: #9d162e;

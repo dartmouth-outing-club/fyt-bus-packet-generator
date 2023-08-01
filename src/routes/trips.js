@@ -19,11 +19,12 @@ export async function get (req, res) {
       return responses.serveHtml(req, res, tripsTable(trips))
     case 'options':
       return responses.serveHtml(req, res, tripsOptions(trips))
-    default:
+    default: {
       const table = tripsTable(trips)
       const options = tripsOptions(trips)
       const html = nunjucks.render('src/views/trips.njk', { options, table })
       return responses.serveHtml(req, res, html)
+    }
   }
 }
 
@@ -71,6 +72,14 @@ export async function post (req, res) {
         resolve()
       })
   })
+}
+
+export async function put (req, res) {
+  const body = await utils.streamToString(req)
+  const formData = new URLSearchParams(body)
+  const trip = { name: formData.get('trip-name'), num_students: formData.get('num-students') }
+  sqlite.saveTrip(trip)
+  responses.serveNoContent(req, res)
 }
 
 export async function del (req, res) {
