@@ -1,11 +1,15 @@
 CREATE TABLE temp (
-	coordinates TEXT PRIMARY KEY,
+	coordinates TEXT,
 	name TEXT NOT NULL UNIQUE,
 	address TEXT,
 	special_instructions TEXT
 );
 
 .import --csv --skip 1 ./db/stops.csv temp
+
+UPDATE temp
+SET coordinates = NULL
+WHERE coordinates = "";
 
 INSERT OR REPLACE INTO stops
 SELECT coordinates, name, address, special_instructions

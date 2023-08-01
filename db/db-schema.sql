@@ -1,7 +1,7 @@
 CREATE TABLE directions (
 	id INTEGER PRIMARY KEY,
-	start_coordinates TEXT REFERENCES stops ON UPDATE SET NULL,
-	end_coordinates TEXT REFERENCES stops ON UPDATE SET NULL,
+	start_coordinates TEXT REFERENCES stops(coordinates) ON UPDATE SET NULL,
+	end_coordinates TEXT REFERENCES stops(coordinates) ON UPDATE SET NULL,
 	google_directions TEXT,
 	updated_at INTEGER
 ) STRICT;
@@ -15,7 +15,7 @@ CREATE TABLE packets (
 ) STRICT;
 
 CREATE TABLE stops (
-	coordinates TEXT PRIMARY KEY,
+	coordinates TEXT UNIQUE,
 	name TEXT NOT NULL UNIQUE,
 	address TEXT,
 	special_instructions TEXT

@@ -42,8 +42,8 @@ If you make a new packet with the same name as an existing packet, it will delet
 		name=origin-location
 		onchange="setTripBoardingOptions()"
 		required>
-	<option value="" selected disabled hidden>---- Choose a location ----
-  {% for stop in stops %}
+  <option value="" selected disabled hidden>---- Choose a location ----
+  {% for stop in stops -%}
   <option>{{ stop.name }}
   {% endfor %}
 </select>
@@ -59,7 +59,7 @@ If you make a new packet with the same name as an existing packet, it will delet
 		onchange="setTripBoardingOptions()"
 		required>
 	<option value="" selected disabled hidden>---- Choose a location ----
-  {% for stop in stops %}
+  {% for stop in stops -%}
   <option>{{ stop.name }}
   {% endfor %}
 </select>
@@ -123,16 +123,18 @@ function deleteWaypoint (element) {
 	setWaypointNumbers()
 }
 
-/** Number the stops on the page.
-* A bus can make n additional stops in addition to its destination, and those
-* should be labeled "Stop 1", "Stop 2" and so on. Calling this function ensures
-* That the stops are labeled in the proper order, even if one of the stops in
-* the middle was removed.
-*
-* For instance: if there are three additional stops in the packets and the user
-* deletes "Stop 2", this function will leave "Stop 1" alone and rename "Stop 3"
-* to "Stop 2".
-*/
+/**
+ * Number the stops on the page.
+ *
+ * A bus can make n additional stops in addition to its destination, and those
+ * should be labeled "Stop 1", "Stop 2" and so on. Calling this function ensures
+ * That the stops are labeled in the proper order, even if one of the stops in
+ * the middle was removed.
+ *
+ * For instance: if there are three additional stops in the packets and the user
+ * deletes "Stop 2", this function will leave "Stop 1" alone and rename "Stop 3"
+ * to "Stop 2".
+ */
 function setWaypointNumbers () {
 	// Select all the paragraphs in the fieldset except the first (start) and
 	// the last two ("add trip" button and destination)
