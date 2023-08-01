@@ -26,11 +26,12 @@ export async function get (req, res) {
         const table = packetsTable(packets)
         return responses.serveHtml(req, res, table)
       }
-      default:
+      default: {
         const packets = sqlite.getAllPacketsWithStats()
         const table = packetsTable(packets)
         const html = nunjucks.render('src/views/packets.njk', { table })
         return responses.serveHtml(req, res, html)
+      }
     }
   }
 
@@ -61,7 +62,7 @@ export async function post (req, res) {
 
 export async function del (req, res) {
   const requestUrl = new URL(req.url, `http://${req.headers.host}`)
-  const name = decodeURI(requestUrl.pathname).split('/').at(3)
+  const name = decodeURI(requestUrl.pathname).split('/').at(2)
 
   if (sqlite.deletePacket(name)) {
     return responses.serveNoContent(req, res)
