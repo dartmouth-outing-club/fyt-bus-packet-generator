@@ -36,10 +36,26 @@ export async function get (req, res) {
 
 export async function post (req, res) {
   const body = await utils.streamToString(req)
-  console.log(`Generating packet from query:\n${body}`)
-
   try {
     await generatePacket(body)
+    responses.hxRedirect(req, res, '/')
+  } catch (err) {
+    // TODO: Add more granular errors
+    // i.e. A query parse failure is a bad request, google maps is bad gateway, etc
+    console.error(err)
+    responses.serveServerError(req, res)
+  }
+}
+
+export async function put (req, res) {
+  const body = await utils.streamToString(req)
+  const requestUrl = new URL(req.url, `http://${req.headers.host}`)
+  const id = requestUrl.pathname.split('/').at(2)
+  if (!id) return responses.serveBadRequest(req, res)
+
+  try {
+    sqlite.deletePacket(id)
+    await generatePacket(body, id)
     responses.hxRedirect(req, res, '/')
   } catch (err) {
     // TODO: Add more granular errors
@@ -60,7 +76,9 @@ export async function del (req, res) {
   }
 }
 
-export async function generatePacket (body) {
+export async function generatePacket (body, id) {
+  console.log(`Generating packet from query:\n${body}`)
+
   const { name, date, stopNames, tripsOnboard } = queries.parseQuery(body)
   const stops = stopNames.map(sqlite.getStop)
   const trips = tripsOnboard.map(trip => (
@@ -80,5 +98,5 @@ export async function generatePacket (body) {
   const monthDay = `${date.getMonth()}-${date.getDate()}`
   const title = name || `${stops.at(0).name} - ${stops.at(-1).name} (${monthDay})`
   const packet = buildPacket(stops, directionsList, title, date, trips)
-  sqlite.savePacket(title, body, packet.toString(), trips, stopNames)
+  sqlite.savePacket(title, body, packet.toString(), trips, stopNames, id)
 }

@@ -73,7 +73,7 @@ export function saveDirections (start, end, directions) {
 }
 
 export function getPacket (id) {
-  return db.prepare('SELECT query, html_content FROM packets WHERE id = ?').get(id)
+  return db.prepare('SELECT id, name, query, html_content FROM packets WHERE id = ?').get(id)
 }
 
 export function getAllPackets () {
@@ -97,12 +97,21 @@ export function getAllPacketNames () {
   return db.prepare('SELECT name FROM packets').all().map(row => row.name)
 }
 
-export function savePacket (name, query, html, trips, stops) {
-  const info = db.prepare(`
-  INSERT OR REPLACE INTO packets (name, query, html_content)
-  VALUES (?, ?, ?)
-  `).run(name, query, html)
-  const packetId = info.lastInsertRowid
+export function savePacket (name, query, html, trips, stops, id) {
+  let packetId = id
+
+  if (id) {
+    db.prepare(`
+      INSERT INTO packets (id, name, query, html_content)
+      VALUES (?, ?, ?, ?)
+    `).run(id, name, query, html)
+  } else {
+    const info = db.prepare(`
+      INSERT INTO packets (name, query, html_content)
+      VALUES (?, ?, ?)
+    `).run(name, query, html)
+    packetId = info.lastInsertRowid
+  }
 
   trips.forEach(trip => {
     db

@@ -1,5 +1,6 @@
 import * as index from './routes/index.js'
 import * as packets from './routes/packets.js'
+import * as edit from './routes/edit.js'
 import * as stops from './routes/stops.js'
 import * as trips from './routes/trips.js'
 import * as regenerate from './routes/regenerate.js'
@@ -30,6 +31,8 @@ export function getHandler (url, httpMethod) {
       return getModuleMethodHandler(stops, httpMethod)
     case 'packets':
       return getModuleMethodHandler(packets, httpMethod)
+    case 'edit':
+      return getModuleMethodHandler(edit, httpMethod)
     case 'trips':
       return getModuleMethodHandler(trips, httpMethod)
     case 'regenerate':

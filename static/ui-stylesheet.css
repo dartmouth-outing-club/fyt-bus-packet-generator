@@ -248,3 +248,7 @@ ul.accordion ol > li {
 .nodisplay {
 	display: none;
 }
+
+.trip-selector {
+  width: 70px;
+}
