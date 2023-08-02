@@ -14,7 +14,8 @@ test('parseQuery', async () => {
       name: 'Trip to Moosilauke',
       date: new Date('2022-07-01T08:00:00.000Z'),
       stopNames: ['Hanover', 'Moosilauke'],
-      tripsOnboard: []
+      tripsOnboard: [],
+      notes: null
     }
     assert.deepEqual(queries.parseQuery(params), expected)
   })
@@ -31,7 +32,8 @@ test('parseQuery', async () => {
       name: 'Trip to Moosilauke',
       date: new Date('2022-07-01T08:00:00.000Z'),
       stopNames: ['Hanover', 'Dartmouth Skiway', 'Moosilauke'],
-      tripsOnboard: []
+      tripsOnboard: [],
+      notes: null
     }
     assert.deepEqual(queries.parseQuery(params), expected)
   })
@@ -51,7 +53,8 @@ test('parseQuery', async () => {
       name: 'Trip to Moosilauke',
       date: new Date('2022-07-01T08:00:00.000Z'),
       stopNames: ['Hanover', 'Lyme', 'Dartmouth Skiway', 'DOC Cabin', 'Warren', 'Moosilauke'],
-      tripsOnboard: []
+      tripsOnboard: [],
+      notes: null
     }
     assert.deepEqual(queries.parseQuery(params), expected)
   })
