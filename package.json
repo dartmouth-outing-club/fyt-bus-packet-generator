@@ -2,6 +2,7 @@
   "author": "Alexander Petros",
   "description": "",
   "devDependencies": {
+    "@flydotio/dockerfile": "^0.4.1",
     "eslint": "^8.25.0",
     "eslint-config-standard": "^17.0.0",
     "nodemon": "^3.0.1"
@@ -12,11 +13,11 @@
   "main": "src/app.js",
   "name": "fyt-bus-packet-generator",
   "scripts": {
+    "deploy": "flyctl deploy --config ./fly/fly.toml --dockerfile ./fly/Dockerfile",
     "dev": "NODE_ENV=development nodemon -e js,njk,html src/app.js",
     "format": "eslint src --fix",
-    "init": "db/init-db.sh",
     "lint": "eslint src",
-    "start": "NODE_ENV=production node src/app.js",
+    "start": "./db/init-db.sh && NODE_ENV=production node src/app.js",
     "test": "node --test",
     "update_stops": "sqlite3 ./packet-generator.db '.read db/update-stops.sql'",
     "validate": "vnu --skip-non-html --also-check-css static"

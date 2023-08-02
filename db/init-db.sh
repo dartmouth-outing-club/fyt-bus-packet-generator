@@ -5,12 +5,16 @@
 #
 # Run this from the root directory, via `npm run init`
 
-set -e
-DB_FILENAME="packet-generator.db"
-STOPS_CSV_FP="./db/stops.csv"
+set -euo pipefail
 
-DB_SCHEMA_FP="./db/db-schema.sql"
-UPDATE_STOPS_FP="./db/update-stops.sql"
+# If there's a DB FILEPATH in the env, initialize it there, otherwise use the source root
+if [ -z ${DB_FILEPATH+x} ]; then
+  DB_FILEPATH="./packet-generator.db"
+fi
+
+STOPS_CSV_FP=$(realpath "./db/stops.csv")
+DB_SCHEMA_FP=$(realpath "./db/db-schema.sql")
+UPDATE_STOPS_FP=$(realpath "./db/update-stops.sql")
 
 if [[ ! -f $DB_SCHEMA_FP ]]
 then
@@ -19,10 +23,10 @@ then
 	exit 1
 fi
 
-if [[ -f $DB_FILENAME ]]
+if [[ -f $DB_FILEPATH ]]
 then
-	echo "Error - $DB_FILENAME already exists"
-	exit 1
+	echo "$DB_FILEPATH already exists - skipping initialization"
+	exit 0
 fi
 
 SQLITE_VERSION=$(sqlite3 --version | cut -d ' ' -f 1)
@@ -35,8 +39,8 @@ then
 fi
 
 
-echo "Creating $DB_FILENAME"
-sqlite3 $DB_FILENAME << EOF
+echo "Creating $DB_FILEPATH"
+sqlite3 $DB_FILEPATH << EOF
 .read $DB_SCHEMA_FP
 .read $UPDATE_STOPS_FP
 EOF

@@ -6,11 +6,11 @@ import * as routes from './routes.js'
 import * as sqlite from './clients/sqlite.js'
 
 const port = process.env.PORT || 3000
-const host = 'localhost'
+const host = '0.0.0.0'
 
 if (process.env.NODE_ENV === 'development') config.loadEnv()
 
-const databaseUrl = process.env.NODE_ENV === 'development' ? './packet-generator.db' : process.env.DATABASE_URL
+const databaseUrl = process.env.NODE_ENV === 'development' ? './packet-generator.db' : process.env.DB_FILEPATH
 
 // Start the db and set the connection to close when it exists
 sqlite.start(databaseUrl)
