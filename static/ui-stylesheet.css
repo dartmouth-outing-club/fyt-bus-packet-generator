@@ -161,6 +161,12 @@ select {
 	width: 300px;
 }
 
+textarea {
+  height: 4rem;
+  width: 100%;
+  resize: vertical;
+}
+
 legend {
 	background-color: #00693e;
 	color: #fff;

@@ -56,6 +56,7 @@ export function parseQuery (body) {
   const time = params.get('route-time') || '08:00'
   const origin = params.get('origin-location')
   const destination = params.get('destination-location')
+  const notes = params.get('notes')
 
   const stops = parseStopList(params)
   const tripsOnboard = parseTripBoardings(params)
@@ -64,5 +65,5 @@ export function parseQuery (body) {
   if (!origin || !destination) throw new Error(`Bad request, stops = ${stops}`)
 
   const stopNames = [origin, ...stops, destination]
-  return { name, date: datetime, stopNames, tripsOnboard }
+  return { name, date: datetime, stopNames, tripsOnboard, notes }
 }

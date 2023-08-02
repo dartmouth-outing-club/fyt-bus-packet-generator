@@ -1,3 +1,4 @@
+import {html} from '../templates.js'
 import * as utils from '../utils.js'
 
 // Note: imports are relative to current file, but non-import FPs are relative to source root
@@ -13,7 +14,7 @@ export function convertRawStep (rawStep) {
 /**
  * Create a list of Legs from the raw JSON of the directions response.
  */
-export function buildPacket (stops, directionsList, title, date, tripsOnboard) {
+export function buildPacket (stops, directionsList, title, date, tripsOnboard, notes) {
   const tripBoardingsByStop = stops.reduce((boardings, stop) => {
     boardings[stop.name] = { on: [], off: [] }
     return boardings
@@ -49,11 +50,12 @@ export function buildPacket (stops, directionsList, title, date, tripsOnboard) {
   const finalStopInfo = { tripsOn: [], tripsOff: tripBoardingsByStop[finalStop.name].off, ...finalStop }
   const finalLeg = destination(finalStopInfo)
 
-  return packet([...legs, finalLeg], title, date)
+  return packet([...legs, finalLeg], title, date, notes)
 }
 
-function packet (listItems, title, date) {
+function packet (listItems, title, date, notes) {
   const monthDay = `${date.getMonth()}/${date.getDate()}`
+  const notesMemo = notes ? html`<h3>Notes</h3><p>${notes}</p>` : ''
 
   return `${emptyPacket}
 <title>${title}</title>
@@ -64,9 +66,9 @@ ${packetStylets}</style>
 <h1>${title}</h1>
 <span>${monthDay}</span>
 </header>
-
+${notesMemo}
 <ol>
-${listItems.join('\n')}
+${listItems.join()}
 </ol>
 `
 }

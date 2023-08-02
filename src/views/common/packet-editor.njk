@@ -73,8 +73,17 @@
 </select>
 <button type=button class=edit onclick="onAddTripClick()">Add</button>
 </fieldset>
+
+<!-- Add the trips that will be on the bus, along with the locations where they get on and off -->
+<fieldset name=additional-notes>
+<legend>Additional notes</legend>
+<p>
+<label for=notes style="display: none">Notes</label>
+<textarea id=notes name=notes style="width: 100%; height: 4rem;"></textarea>
+</fieldset>
 <button type=submit>Submit</button>
 </form>
+
 
 <script>
 function addNewWaypoint () {

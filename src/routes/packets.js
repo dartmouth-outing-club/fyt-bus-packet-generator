@@ -79,7 +79,7 @@ export async function del (req, res) {
 export async function generatePacket (body, id) {
   console.log(`Generating packet from query:\n${body}`)
 
-  const { name, date, stopNames, tripsOnboard } = queries.parseQuery(body)
+  const { name, date, stopNames, tripsOnboard, notes } = queries.parseQuery(body)
   const stops = stopNames.map(sqlite.getStop)
   const trips = tripsOnboard.map(trip => (
     { ...trip, num_students: sqlite.getTrip(trip.name)?.num_students }
@@ -97,6 +97,6 @@ export async function generatePacket (body, id) {
 
   const monthDay = `${date.getMonth()}-${date.getDate()}`
   const title = name || `${stops.at(0).name} - ${stops.at(-1).name} (${monthDay})`
-  const packet = buildPacket(stops, directionsList, title, date, trips)
+  const packet = buildPacket(stops, directionsList, title, date, trips, notes)
   sqlite.savePacket(title, body, packet.toString(), trips, stopNames, id)
 }
