@@ -30,7 +30,7 @@ export async function post (req, res) {
   console.log(`Regenerating ${packets.length} packets`)
 
   // Collect all the regeneration promsises into a single packet
-  const promises = packets.map(packet => generatePacket(packet.query))
+  const promises = packets.map(packet => generatePacket(packet.query, packet.id))
   const results = await Promise.allSettled(promises)
 
   const allSuccess = !results.some(result => result.status === 'rejected')
@@ -38,10 +38,15 @@ export async function post (req, res) {
     console.log('Successfully regenerated all packets.')
     responses.serveSuccessMessage(req, res, 'Successfully regenerated all packets.')
   } else {
+    results
+      .filter(result => result.status === 'rejected')
+      .forEach((result) => console.error(result))
+
     // Get the packet names of all the promises that failed, filtering out all the successes
     const failedPacketNames = results
       .map((result, index) => (result.status === 'rejected' ? packets[index].name : undefined))
       .filter(name => name !== undefined)
+
     responses.serveHtml(req, res, generationError(failedPacketNames))
   }
 }

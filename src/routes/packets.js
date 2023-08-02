@@ -54,7 +54,6 @@ export async function put (req, res) {
   if (!id) return responses.serveBadRequest(req, res)
 
   try {
-    sqlite.deletePacket(id)
     await generatePacket(body, id)
     responses.hxRedirect(req, res, '/')
   } catch (err) {
@@ -77,6 +76,11 @@ export async function del (req, res) {
 }
 
 export async function generatePacket (body, id) {
+  if (id) {
+    console.log(`Packet #${id} already exists - replacing it`)
+    sqlite.deletePacket(id)
+  }
+
   console.log(`Generating packet from query:\n${body}`)
 
   const { name, date, stopNames, tripsOnboard, notes } = queries.parseQuery(body)
