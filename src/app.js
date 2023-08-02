@@ -10,8 +10,10 @@ const host = 'localhost'
 
 if (process.env.NODE_ENV === 'development') config.loadEnv()
 
+const databaseUrl = process.env.NODE_ENV === 'development' ? './packet-generator.db' : process.env.DATABASE_URL
+
 // Start the db and set the connection to close when it exists
-sqlite.start('./packet-generator.db')
+sqlite.start(databaseUrl)
 process.on('exit', () => sqlite.stop())
 process.on('SIGHUP', () => process.exit(128 + 1))
 process.on('SIGINT', () => process.exit(128 + 2))
