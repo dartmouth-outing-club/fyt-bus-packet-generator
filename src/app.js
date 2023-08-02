@@ -1,11 +1,14 @@
 import http from 'node:http'
 
+import * as config from './config.js'
 import * as responses from './responses.js'
 import * as routes from './routes.js'
 import * as sqlite from './clients/sqlite.js'
 
 const port = process.env.PORT || 3000
 const host = 'localhost'
+
+if (process.env.NODE_ENV === 'development') config.loadEnv()
 
 // Start the db and set the connection to close when it exists
 sqlite.start('./packet-generator.db')
