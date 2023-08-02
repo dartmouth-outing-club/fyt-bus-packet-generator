@@ -1,4 +1,4 @@
-import {html} from '../templates.js'
+import { html } from '../templates.js'
 import * as utils from '../utils.js'
 
 // Note: imports are relative to current file, but non-import FPs are relative to source root
