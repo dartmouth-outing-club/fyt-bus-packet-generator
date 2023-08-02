@@ -83,6 +83,11 @@ export function redirect (_req, res, url) {
   setCodeAndEnd(res, 302)
 }
 
+export function hxRedirect (_req, res, url) {
+  res.setHeader('HX-Redirect', url)
+  setCodeAndEnd(res, 200)
+}
+
 export const serveNoContent = (_req, res) => setCodeAndEnd(res, 204)
 export const serveBadRequest = (_req, res) => setCodeAndEnd(res, 400)
 export const serveNotFound = (_req, res) => setCodeAndEnd(res, 404)

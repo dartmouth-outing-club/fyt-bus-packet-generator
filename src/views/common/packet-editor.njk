@@ -1,0 +1,205 @@
+<!-- New Packet Form -->
+<h2>Generate new packet</h2>
+<form
+  {%- if packet %}
+  hx-put="/packets/{{ packet.id }}"
+  {% else %}
+  hx-post="/packets"
+  {% endif -%}
+  >
+<fieldset name=route-info>
+<legend>Route info</legend>
+<p>
+<label for=route-name>Bus route name: </label>
+<input type=text name=route-name id=route-name placeholder="Leave blank for default name">
+<p>
+<label for=route-date>Bus departure date: </label>
+<input type=date name=route-date id=route-date required>
+<script>document.getElementById('route-date').valueAsDate = new Date()</script>
+<p>
+<label for=route-time>Bus departure time (EDT): </label>
+<input type=time name=route-time id=route-time required>
+</fieldset>
+
+<!-- Select (and add) locations where the bus route will stop -->
+<fieldset name=route-stops>
+<legend>Route stops</legend>
+<p>
+<label for=origin-location>Start location: </label>
+<select
+		class="location"
+		id=origin-location
+		name=origin-location
+		onchange="setTripBoardingOptions()"
+		required>
+  <option value="" selected disabled hidden>---- Choose a location ----
+  {% for stop in stops -%}
+  <option>{{ stop.name }}
+  {% endfor %}
+</select>
+<button class="delete nodisplay" onclick="deleteWaypoint(this)" type=button>Remove</button>
+<p>
+<button id=add type=button onclick="addNewWaypoint()">&#10133; Insert another trip stop</button>
+<p>
+<label for=destination-location>End location: </label>
+<select
+		class="location"
+		id=destination-location
+		name=destination-location
+		onchange="setTripBoardingOptions()"
+		required>
+	<option value="" selected disabled hidden>---- Choose a location ----
+  {% for stop in stops -%}
+  <option>{{ stop.name }}
+  {% endfor %}
+</select>
+</fieldset>
+
+<!-- Add the trips that will be on the bus, along with the locations where they get on and off -->
+<fieldset name=trips>
+<legend>Trips onboard</legend>
+<p>
+<label for=add-trip>Add trip:</label>
+<select id=add-trip>
+  {% for trip in trips %}
+  <option>{{ trip.name }}</option>
+  {% endfor %}
+</select>
+<button type=button class=edit onclick="onAddTripClick()">Add</button>
+</fieldset>
+<button type=submit>Submit</button>
+</form>
+
+<script>
+const WINDOW_URL = new URL(window.location.href)
+
+function addNewWaypoint () {
+	// Grab the origin-location container and make a duplicate of it
+	const routeFieldset = document.querySelector('fieldset[name=route-stops]')
+	const newStopParagraph = routeFieldset.children[1].cloneNode(true)
+
+	// Insert the duplicate right before the "add button" container
+	// The newStopParagraph will have a duplicate ID - calling setWaypointNumbers()
+	// will fix that before it gets the chance to render incorrectly
+	const addButton = routeFieldset.children[routeFieldset.children.length - 2]
+	addButton.insertAdjacentElement('beforebegin', newStopParagraph)
+	setWaypointNumbers()
+}
+
+function deleteWaypoint (element) {
+	element.parentElement.remove()
+	setWaypointNumbers()
+}
+
+/**
+ * Number the stops on the page.
+ *
+ * A bus can make n additional stops in addition to its destination, and those
+ * should be labeled "Stop 1", "Stop 2" and so on. Calling this function ensures
+ * That the stops are labeled in the proper order, even if one of the stops in
+ * the middle was removed.
+ *
+ * For instance: if there are three additional stops in the packets and the user
+ * deletes "Stop 2", this function will leave "Stop 1" alone and rename "Stop 3"
+ * to "Stop 2".
+ */
+function setWaypointNumbers () {
+	// Select all the paragraphs in the fieldset except the first (start) and
+	// the last two ("add trip" button and destination)
+	const stops = Array
+		.from(document.querySelectorAll('fieldset[name=route-stops] > p'))
+		.slice(1, -2)
+
+	// The controls for each stop (select, delete button, etc.) are contained in a paragraph
+	stops.forEach((stopParagraph, index) => {
+		const [ label, select, deleteButton ] = stopParagraph.children
+		const stopNum = index + 1
+
+		label.textContent = `Stop ${stopNum}: `
+		label.htmlFor = `stop${stopNum}-location`
+		select.setAttribute('name', `stop${stopNum}-location`)
+		select.setAttribute('id', `stop${stopNum}-location`)
+		deleteButton.classList.remove('nodisplay')
+	})
+}
+
+function setTripBoardingOptions () {
+	// Available boarding options are the currently selected bus stops
+	const currentStops = Array
+		.from(document.querySelectorAll('.location'))
+		.map(item => item.value)
+
+	const options = currentStops
+		.map((item) => (`<option>${item}`))
+		.join('\n')
+
+	const tripStops = document.querySelectorAll('.trip-stop')
+	tripStops.forEach((item) => {
+		const currentSelection = item.value
+		const defaultIndex = item.classList.contains('start') ? 0 : currentStops.length -1
+		item.innerHTML = options
+		item.options.selectedIndex = currentStops.includes(currentSelection)
+			? currentStops.indexOf(currentSelection)
+			: defaultIndex
+	})
+}
+
+async function editPacket (name) {
+	const res = await fetch(`/packets/${name}?queryOnly`, { method: 'GET' })
+	const queryString = await res.text()
+	location.assign(`${WINDOW_URL.origin}?${queryString}`)
+}
+
+function addTrip (name) {
+	const tripsFieldset = document.querySelector('fieldset[name=trips]')
+	const newItem = `<p>
+<span>${name.toUpperCase()}</span>
+<select class="trip-stop start" name=trip-${name.toLowerCase()}-start></select>
+<select class="trip-stop end" name=trip-${name.toLowerCase()}-end></select>
+<button class=delete onclick="this.parentElement.remove()">Delete</button>`
+	tripsFieldset.insertAdjacentHTML('beforeend', newItem)
+}
+
+function onAddTripClick() {
+	const tripInput = document.querySelector('select#add-trip')
+	addTrip(tripInput.value)
+	setTripBoardingOptions()
+}
+
+// Though not in HTML source, packets populated via AJAX use this function to delete themselves
+async function deletePacket (name) {
+	if (!window.confirm('Are you sure you want to delete?')) return
+
+	fetch(`/packets/${name}`, { method: 'DELETE' })
+		.then(() => location.reload())
+		.catch(() => alert('Something went wrong trying to delete the packet.'))
+}
+
+function setFormValues(params) {
+	params.forEach(([key, value]) => {
+		const elements = document.getElementsByName(key)
+		if (elements.length > 0) elements[0].value = value
+	})
+}
+
+async function loadDocument () {
+	// Pre-populate form if there's a query in the window
+	const params = Array.from(WINDOW_URL.searchParams.entries())
+	params.filter(param => param[0].includes('stop')).forEach(addNewWaypoint)
+
+	params
+		.filter(param => param[0].match(/trip-.*-start/))
+		.map(param => param[0].split('-')[1])
+		.forEach((trip) => { addTrip(trip) })
+
+	// you can only choose currently-selected stops as trip boarding spots
+	// the first setFormValues sets the bus stops, setTripBoardingOptions sets possible boarding spots
+	// then the second setFormValues sets the selected boarding spots
+	// this might be a mild kludge - fine for now but refactor if it gets more complicated
+	setFormValues(params)
+	setTripBoardingOptions()
+	setFormValues(params)
+}
+
+loadDocument()
+</script>

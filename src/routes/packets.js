@@ -40,7 +40,7 @@ export async function post (req, res) {
 
   try {
     await generatePacket(body)
-    responses.redirect(req, res, '/')
+    responses.hxRedirect(req, res, '/')
   } catch (err) {
     // TODO: Add more granular errors
     // i.e. A query parse failure is a bad request, google maps is bad gateway, etc
