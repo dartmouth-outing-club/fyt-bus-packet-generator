@@ -151,9 +151,10 @@ export function getAllTripsWithStats () {
       trips.name,
       num_students,
       count(packet) as num_packets,
-      IFNULL(group_concat(packet, ', '), '(none)') as packets_present
+      IFNULL(group_concat(packets.name, ', '), '(none)') as packets_present
     FROM trips
     LEFT JOIN packet_trips ON trips.name = trip
+    LEFT JOIN packets ON packet_trips.packet = packets.id
     GROUP BY trips.name
 `
 
