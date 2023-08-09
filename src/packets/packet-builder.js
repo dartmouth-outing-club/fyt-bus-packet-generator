@@ -54,7 +54,7 @@ export function buildPacket (stops, directionsList, title, date, tripsOnboard, n
 }
 
 function packet (listItems, title, date, notes) {
-  const monthDay = `${date.getMonth()}/${date.getDate()}`
+  const monthDay = `${date.getMonth() + 1}/${date.getDate()}`
   const notesMemo = notes ? html`<h3>Notes</h3><p>${notes}</p>` : ''
 
   return `${emptyPacket}
