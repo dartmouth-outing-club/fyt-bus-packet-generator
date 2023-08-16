@@ -12,6 +12,9 @@ export async function get (req, res) {
   const trips = sqlite.getAllTrips()
   const stops = sqlite.getAllStopsWithStats()
 
+  // Because we insert this value directely into the javascript, we have to escape the single quotation
+  packet.query = packet.query.replace("'", "\\'")
+
   const html = nunjucks.render('src/views/edit.njk', { packet, trips, stops })
   return responses.serveHtml(req, res, html)
 }
