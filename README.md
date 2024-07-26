@@ -19,31 +19,27 @@ The first time you download the repo, you will need to run `npm install`.
 * `npm run validate` - Ensure that the assets in `/static` are valid (requires `vnu` installation)
 * `npm run format` Run the linter in `--fix` mode to format the codebase (requires `standard` installation)
 
-With the server running in dev mode, navigate to `http://localhost:3000` in browser to see the application.
-The dev mode server will also serve the files in `/static` for requests that do not start with `/api`.
-For example:
-
-```
-# Responds with the file in ./static/packets.html
-GET /packets.html
-
-# Responds with the API response found in ./src/routes/packets.js
-GET /api/packets
-
-# Responds with a 404 Not Found
-GET /packets
-```
-
-This makes development simpler while encouraging you to use a real static file server in production.
-*The first route is disable in production.*
-
 You will require a Google Maps API Key.
-It should be stored in a one-line `.env` file in the source root:
+In production, this key will need to be in the environment that runs the node process;
+in development, the program will load the `.env` file into the environment, so just make a `.env` file that looks like this.
 ```
 GOOGLE_API_KEY=your_key_here
 ```
 
+
 ## Deploying to Production
+
+### On Fly.io
+
+I have it set up on fly.io, and literally all you should have to do is `npm run deploy`. The data
+volume and server count should be set up already.
+
+Keep in mind, despite fly.io *really* wanting you you to scale up to 2 servers, you shouldn't do this.
+There's one database and one data volume per server, so if you added two they would have entirely
+different databases and the whole thing would break.
+
+
+### On a VPS
 On your desired host:
 1. `git clone` this repository
 1. `scp` your `.env` file into the repository root, and the font `.woff` files into `/static/fonts`
