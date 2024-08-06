@@ -19,7 +19,7 @@
     "lint": "eslint src",
     "start": "./db/init-db.sh && NODE_ENV=production node src/app.js",
     "test": "node --test",
-    "update_stops": "sqlite3 ./packet-generator.db '.read db/update-stops.sql'",
+    "update_stops": "sqlite3 \"$DB_FILEPATH\" '.read db/update-stops.sql'",
     "validate": "vnu --skip-non-html --also-check-css static"
   },
   "type": "module",
