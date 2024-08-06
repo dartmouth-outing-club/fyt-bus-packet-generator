@@ -6,11 +6,10 @@ Coordinates,Stop,Address,Special Instructions
 "43.69007, -72.15431",Baum Cabin,"69 Goss Rd, Enfield, NH 03748",shuttle
 "44.044353,-71.792144",Beaver Brook Trailhead,"Lost River Rd, North Woodstock, NH 03262","From WARREN, NH (and Rt. 25) take Rt. 118 North until you hit Rt. 112 at a T intersection. Take a left to go N on Rt. 112 for ~ 3 miles until you see a parking lot on your left. The Appalachian Trail crosses here as well."
 "43.996667,-72.122665",Bradford Boat Launch,Bradford Boat Launch,Before a large white church on right and at the Bradford Golf Club sign turn right and descend down to the river through playing fields. Shuttle only
-"43.88160, -71.59746",Burbank Hill Road,"Eddy Day Use Area, Thornton, New Hampshire",
 "43.649492,-71.877912",Cardigan AMC Lodge,"774 Shem Valley Rd, Alexandria, NH 03222","The turn from Washburn onto Mt. Cardigan road is a hairpin. If it's too tight, continue straight on Washburn and take your first right for a turnaround. The last 1.5 miles of Mt. Cardigan road are dirt, and has some steep sections. There is a turnaround at the lodge."
 "43.64422, -71.93490",Cardigan Mountain State Park,"Parking lot, 658 Cardigan Mountain Rd, Orange, NH 03741",shuttle
 "44.35786,-71.34403",Castle Ridge Trailhead,,"The drop off is in a parking lot with a trailhead for CASTLE RIDGE and/or ISRAEL RIDGE. Make sure not to drop off in the Appalachia Parking Lot (AMC lot), which is a very large lot further down Rt. 2 East."
-"43.80588, -72.18941",Cedar Circle,"225 Pavillion Rd, East Thetford, VT 05043",
+"43.798009, -72.194327",Cedar Circle,"225 Pavillion Rd, East Thetford, VT 05043",Bus cannot easily make the turn on the south side of pavillion road. Turn around in parking lot.
 "43.794150,-71.933048",D Acres,"218 Streeter Woods Rd, Dorchester, NH 03266",
 "43.736575, -72.251082",Dartmouth Organic Farm,,"If possible, pull off on the farm side of the road to prevent the need for trippees to cross the road."
 "43.787875, -72.100206",Dartmouth Skiway,"Dartmouth Skiway, 39 Grafton Turnpike, Lyme Center, NH 03769","Please pull up directly in front of the Skiway Lodge. If you are the first bus arriving, please pull forward to allow space for up to two buses behind you. If you are not the first bus arriving, please let students out directly behind the bus in front of you. Please be sure you are not blocking the Grafton Turnpike."
@@ -33,7 +32,7 @@ Coordinates,Stop,Address,Special Instructions
 "43.73722, -72.27026",Honey Field Farm,"55 Butternut Road Norwich, VT 05055",
 "43.944192,-71.6962",Hubbard Brook Hamlets,"45 Hamlet Drive, North Woodstock, NH",Stop by group of cottages at lakefront.
 "44.59730,-71.36738",Kilkenny Ridge Trailhead,"Kilkenny Ridge Trailhead, S Pond Rd, Stark, NH 03582",
-"44.142050, -71.681375",Lafayette Place,,"Take TRAILHEAD PARKING exit on 93 northbound. This parking lot can fill up on busy days. If you miss it, you'll need to go on the freeway for several miles to turn around. The roads in the parking lot on the southbound side are not large enough to accommodate buses."
+"44.142050, -71.681375",Lafayette Place,,"NORTHBOUND ONLY EXIT: Take TRAILHEAD PARKING exit on 93 northbound. This parking lot can fill up on busy days. If you miss it, you'll need to go on the freeway for several miles to turn around. The roads in the parking lot on the southbound side are not large enough to accommodate buses."
 "43.96709,-71.96438",Lake Tarleton,,"Small pull off to the left if coming from piermont, right if coming from warren. About 0.5 miles from Cape Moonshine rd "
 "44.063555,-71.589110",Lincoln Woods Visitor Center,,The parking lot is just after you cross the Pemigewasset River. There is a sign for Lincoln Woods Visitor Center/Trailhead
 "44.364717,-71.329192",Lowes Path Trailhead,Lowes Path Trailhead,"Drop off in the parking lot of Lowe's Garage & Cabin Store (on the left side of Route 2). The trip should cross the road and turn right, walking about 50 yards to the trailhead (which will be on the left, opposite the store). If you reach the Appalachia parking area (AMC lot) and trailhead, you've gone too far by a mile or 2."
@@ -64,3 +63,9 @@ Coordinates,Stop,Address,Special Instructions
 "43.1763,-72.0960",Washington Town Clerk,"7 Halfmoon Pond Rd, Washington, NH 03280",
 "44.41846,-71.46690",Waumbek Trailhead,"895 Presidential Hwy, Jefferson, NH 03583","Drop on the highway, not up the gravel road. "
 "44.265350, -71.499283",Zealand Trailhead,,"Buses will drop in CAMPGROUND, not at trailhead. Buses unable to go to trailhead lot because turnaround not guaranteed."
+"43.957485929523784, -71.51729858563286",Tripoli Road,"Ski Area Road, Thorton, NH 03285",Students will be in the fork where Tripoli goes from paved to dirt. Turn around in the skiway parking lot.
+"43.88502330801627, -71.58787198709253",Sandwich Notch Road,"1099 NH 48, Thorton NH, 03285",
+"43.90782101439992, -71.34948140489735",Wonalancet,"3436 Chinook Trail, Wonalancet, NH 03897",Drop at intersection of Ferncroft Road -- Church parking lot is appropriate.
+"43.33588167355988, -72.07428426472185",Sunapee Skiway,"277-1 Park Rd, Newbury, NH 03255",Drop in gravel ot
+"43.231551182708785, -72.12148261564244",Pillsbury State Park,"1 Clemac Trail, Washington, NH 03280",Don't go down gravel road. Just wait by gate.
+"43.70506636774051, -72.29062350956038",Blunt Hall,"9 Tuck Mall, Hanover, NH 03755",
