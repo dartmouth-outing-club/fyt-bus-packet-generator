@@ -5,7 +5,7 @@ import * as responses from './responses.js'
 import * as routes from './routes.js'
 import * as sqlite from './clients/sqlite.js'
 
-const port = process.env.PORT || 3000
+const port = 4000
 const host = '0.0.0.0'
 
 if (process.env.NODE_ENV === 'development') config.loadEnv()
