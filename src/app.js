@@ -11,7 +11,6 @@ const databaseUrl = './packet-generator.db'
 
 if (process.env.NODE_ENV === 'development') config.loadEnv()
 
-
 // Start the db and set the connection to close when it exists
 sqlite.start(databaseUrl)
 process.on('exit', () => sqlite.stop())
