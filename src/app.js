@@ -9,7 +9,8 @@ const port = 4000
 const host = '0.0.0.0'
 const databaseUrl = './packet-generator.db'
 
-if (process.env.NODE_ENV === 'development') config.loadEnv()
+// Load environemnt from .env
+config.loadEnv()
 
 // Start the db and set the connection to close when it exists
 sqlite.start(databaseUrl)
