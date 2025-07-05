@@ -2,7 +2,6 @@
   "author": "Alexander Petros",
   "description": "",
   "devDependencies": {
-    "@flydotio/dockerfile": "^0.4.1",
     "eslint": "^8.25.0",
     "eslint-config-standard": "^17.0.0",
     "nodemon": "^3.0.1"
@@ -13,7 +12,6 @@
   "main": "src/app.js",
   "name": "fyt-bus-packet-generator",
   "scripts": {
-    "deploy": "flyctl deploy --config ./fly/fly.toml --dockerfile ./fly/Dockerfile",
     "dev": "NODE_ENV=development nodemon -e js,njk,html src/app.js",
     "format": "eslint src --fix",
     "lint": "eslint src",
