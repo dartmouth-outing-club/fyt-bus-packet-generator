@@ -12,7 +12,7 @@ SET coordinates = NULL
 WHERE coordinates = "";
 
 INSERT OR REPLACE INTO stops
-SELECT coordinates, name, address, special_instructions
+SELECT coordinates, trim(name) as name, address, special_instructions
 FROM temp
 WHERE TRUE -- Required for the UPSERT clause that follows
 ON CONFLICT (name) DO UPDATE SET
