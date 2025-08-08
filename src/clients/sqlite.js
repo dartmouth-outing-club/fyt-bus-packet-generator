@@ -142,7 +142,7 @@ export function getTrip (name) {
 }
 
 export function getAllTrips () {
-  return db.prepare('SELECT name, num_students FROM trips').all()
+  return db.prepare('SELECT name, num_students FROM trips ORDER BY name').all()
 }
 
 export function getAllTripsWithStats () {
