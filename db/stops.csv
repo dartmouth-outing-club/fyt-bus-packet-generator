@@ -18,7 +18,7 @@ Coordinates,Stop,Address,Special Instructions
 "43.79112, -71.53281",Eastman Brook Trailhead,"Eastman Brook Trailhead, NH-113, Center, Sandwich, NH 03227","Trailhead is off to the left right before curve. No need to go up into the trailhead parking, drop by road."
 "44.095675,-71.682350",Flume Visitor Center,,Look through the parking lot for a trip
 "43.6357,-72.2324",Fox Run,"103 Prospect Street Lebanon, NH 03766",If coming from the east (middle school side) park in the first pull off by the woodshed if possible.
-"44.23263,-71.61058",Gale River Trailhead,,The parking lot is on the left side of the road. You can use the entrance of the parking lot to turn around
+"44.23263,-71.61058",Gale River Trailhead,,"The parking lot is on the left side of the road. You can use the entrance of the parking lot to turn around or drive through the Gale River Road, which exits onto Route 3"
 "43.718060, -72.272342",Garipay Lot,"Reservoir Rd, Hanover, NH 03755",
 "43.789440,-72.342701",Gile Mountain Trailhead,"Gile Mountain Trailhead, Norwich, VT","If coach bus, don't pull into trailhead, but rather drop on the road."
 "43.99805, -71.88230",Glencliff Trailhead,"Glencliff Trailhead, High St, Benton NH",
@@ -32,7 +32,7 @@ Coordinates,Stop,Address,Special Instructions
 "43.73722, -72.27026",Honey Field Farm,"55 Butternut Road Norwich, VT 05055",
 "43.944192,-71.6962",Hubbard Brook Hamlets,"25 Dobson Rd, Thornton, NH 03285",Stop by group of cottages at lakefront.
 "44.59730,-71.36738",Kilkenny Ridge Trailhead,"Kilkenny Ridge Trailhead, S Pond Rd, Stark, NH 03582",
-"44.142050, -71.681375",Lafayette Place,,"NORTHBOUND ONLY EXIT: Take TRAILHEAD PARKING exit on 93 northbound. This parking lot can fill up on busy days. If you miss it, you'll need to go on the freeway for several miles to turn around. The roads in the parking lot on the southbound side are not large enough to accommodate buses."
+"44.142050, -71.681375",Old Bridle Path Trailhead,,"NORTHBOUND ONLY EXIT: Take TRAILHEAD PARKING exit on 93 northbound. This parking lot can fill up on busy days. If you miss it, you'll need to go on the freeway for several miles to turn around. The roads in the parking lot on the southbound side are not large enough to accommodate buses. Trippees will cross on pedestrian path under the road"
 "43.96709,-71.96438",Lake Tarleton,,"Small pull off to the left if coming from piermont, right if coming from warren. About 0.5 miles from Cape Moonshine rd "
 "44.063555,-71.589110",Lincoln Woods Visitor Center,,The parking lot is just after you cross the Pemigewasset River. There is a sign for Lincoln Woods Visitor Center/Trailhead
 "44.364717,-71.329192",Lowes Path Trailhead,Lowes Path Trailhead,"Drop off in the parking lot of Lowe's Garage & Cabin Store (on the left side of Route 2). The trip should cross the road and turn right, walking about 50 yards to the trailhead (which will be on the left, opposite the store). If you reach the Appalachia parking area (AMC lot) and trailhead, you've gone too far by a mile or 2."
@@ -70,5 +70,9 @@ Coordinates,Stop,Address,Special Instructions
 "43.231551182708785, -72.12148261564244",Pillsbury State Park,"1 Clemac Trail, Washington, NH 03280",Don't go down gravel road. Just wait by gate.
 "43.70506636774051, -72.29062350956038",Blunt Hall,"9 Tuck Mall, Hanover, NH 03755",
 "43.20757, -72.11773",NH 31 Fletcher Pond,,"Drop off in front of yellow, black, red gate. "
-"44.12414, -71.78476",Reel Brook Trailhead,"Reel Brook Rd, Franconia, NH 03580",
-"44.1785, -71.756777",Coppermine Trailhead,"170 Coppermine Rd, Franconia, NH 03580",
+"44.133287, -71.785541",Reel Brook Trailhead,"Reel Brook Rd, Franconia, NH 03580",Drop off on 116 at pulloff on East side of road
+"44.17934, -71.75006",Coppermine Trailhead,"170 Coppermine Rd, Franconia, NH 03580",Drop off at pulloff
+"43.667235, -72.301703",Boston Lot Trailhead,"188 N Main St, West Lebanon, NH 03784",Large gravel parking lot on East side of NH-10
+"43.880339, -71.401043",Flat Mountain Pond Trailhead,"113A North Sandwich, NH 03259",Intersection with Whiteface Intervale Road and 113A
+"43.89214, -71.57464",Smarts Brook Trailhead,"Thornton, NH 03285",There is a pull-off parking area on the East side of the road
+"43.977329, -71.815484",MRL Access Road,"Warren, NH 03279",Where Ravine Road intersects with NH-118

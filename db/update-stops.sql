@@ -9,7 +9,7 @@ CREATE TABLE temp (
 
 UPDATE temp
 SET coordinates = NULL
-WHERE coordinates = "";
+WHERE coordinates = '';
 
 INSERT OR REPLACE INTO stops
 SELECT coordinates, trim(name) as name, address, special_instructions
